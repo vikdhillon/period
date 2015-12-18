@@ -1,0 +1,90 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1993-NOV-15)
+------------------------------------------------------------------------
+
+                        Command: NOISE
+
+BRIEF DESCRIPTION: Adds noise to or randomizes data. The latter 
+operation constructs an artificial dataset of the same mean value and 
+the same standard deviation as the original. The former option
+applies noise to data, creates errorbars on the data points and/or adds 
+noise to the data sampling (so that, for instance, an evenly sampled 
+dataset becomes unevenly sampled). This option is useful, not only in 
+creating realistic artificial datasets (in conjunction with FAKE), but 
+also in investigating the effects of noise on a period detection. 
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the input data to which noise
+         is to be added
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the output data to which noise 
+         has been added
+
+PROMPT3: [N]ew dataset or [O]ld dataset ? [O]
+TYPE   : CHARACTER*1
+OPTIONS: N or O
+DEFAULT: O
+PURPOSE: Specifies if either a new, randomized dataset is to 
+         be created or if noise is to be added to the old
+         dataset
+
+PROMPT4: Do you want to add noise to the Y data ? [N]
+TYPE   : CHARACTER*1
+OPTIONS: Y or N
+DEFAULT: N
+PURPOSE: Determines whether noise is to be added to the y-axis data
+
+PROMPT5: Enter number of sigma for data   
+TYPE   : REAL*8
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Noise is applied to the y-axis data by adding to it a factor
+         calculated by multiplying three numbers: the standard deviation 
+         of the data, a random number and this parameter, which 
+         specifies the number of standard deviations to apply
+
+PROMPT6: Do you want to add errors to the Y data ? [N]
+TYPE   : CHARACTER*1
+OPTIONS: Y or N
+DEFAULT: N
+PURPOSE: Determines whether errors on the y-axis (ie. errorbars) are
+         created. If they already exist, noise is applied to the 
+         existing errorbars
+
+PROMPT7: Enter number of sigma for errors (0 for SQRT)
+TYPE   : REAL*8
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Errorbars are created for the y-axis data by multiplying the 
+         standard deviation of the data by two numbers: a random 
+         number and this parameter, which specifies the number of 
+         standard deviations to apply. If this number is 0, the 
+         errorbar for each data point is calculated by taking its
+         square root
+
+PROMPT8: Do you want to add irregularities to the X data sampling ? [N]
+TYPE   : CHARACTER*1
+OPTIONS: Y or N
+DEFAULT: N
+PURPOSE: Determines whether the separation of the x-axis data points
+         is to be made uneven (or if already uneven, more irregular).
+
+PROMPT9: Enter number of sigma for sampling
+TYPE   : REAL*8 
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Irregularities are applied to the x-axis data points by adding 
+         to each point a factor calculated by multiplying 3 numbers: 
+         the standard deviation of the data sampling (which is usually 
+         small, use STATUS to check), a random number and this 
+         parameter, which specifies the number of standard deviations 
+         to apply
+------------------------------------------------------------------------

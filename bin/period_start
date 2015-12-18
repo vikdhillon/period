@@ -1,0 +1,50 @@
+#!/bin/tcsh -f
+#
+# Simple initialization script for native period.
+# Written by Vik Dhillon, Sheffield, 09-May-2003
+# Modified for MAC-OSX by Vik Dhillon, Tenerife, 21-Apr-2006
+#
+
+# Set the directory names for where the period and lheasoft
+# directories reside and the version number of the program.
+
+# Settings for mac
+set PERIOD_DIR=/Users/vsd/period
+# Initialize QDP/PLT
+setenv  EXT lnx
+setenv  XANTOP /Users/vsd/period/qdp
+source  $XANTOP/tools/qinitu.csh
+source  $XANTOP/tools/qinitp.csh
+
+# Settings for pulsar
+#set PERIOD_DIR=/local/vsd/backed_up_on_astro3/period
+# Initialize QDP/PLT
+#setenv  EXT lnx
+#setenv  XANTOP /local/vsd/backed_up_on_astro3/period/qdp
+#source  $XANTOP/tools/qinitu.csh
+#source  $XANTOP/tools/qinitp.csh
+
+# Settings for ULTRACAM data reduction PC
+#set PERIOD_DIR=/home/vsd/progs/period
+# Initialize QDP/PLT
+#setenv  EXT lnx
+#setenv  XANTOP /home/vsd/progs/period/qdp
+#source  $XANTOP/tools/qinitu.csh
+#source  $XANTOP/tools/qinitp.csh
+
+# Set the version number
+set PERIOD_VER=period_v10.0
+
+# Set the period help directory.
+
+setenv PERIOD_HELP $PERIOD_DIR/$PERIOD_VER/hlp
+
+# Disable STARLINK period and enable the native version.
+
+unalias period
+alias period $PERIOD_DIR/$PERIOD_VER/bin/$PERIOD_VER
+
+# Inform user of success.
+
+echo "$PERIOD_VER setup complete: using $PERIOD_DIR/$PERIOD_VER/bin/$PERIOD_VER"
+exit

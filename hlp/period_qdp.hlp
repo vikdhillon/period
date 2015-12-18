@@ -1,0 +1,15 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2004-APR-30)
+------------------------------------------------------------------------
+
+                        Command: QDP
+
+BRIEF DESCRIPTION: Turns QDP functionality on (if off) or off (if on)
+when plotting data using the PLT command. When on, the user is able to 
+type QDP/PLT commands at the period-plt prompt to manipulate the plot 
+and fit functions to the data. When off, the user is returned to the
+PERIOD (or PERIOD_PERIOD) menu once the data has been plotted using PLT.
+The latter setting therefore allows multiple slots to be viewed without
+having to type QUIT at the period-plt between each plot. 
+------------------------------------------------------------------------

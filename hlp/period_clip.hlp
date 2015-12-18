@@ -1,0 +1,45 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2005-MAY-11)
+------------------------------------------------------------------------
+
+                        Command: CLIP
+
+BRIEF DESCRIPTION: This option clips data by removing/replacing all 
+points greater than a user-defined number of standard deviations from 
+the mean (both positive and negative). This is useful to remove 
+discrepant points from a time-series, which can cause artifacts in 
+periodograms if not removed. Discrepant points can either be removed 
+entirely from the data, replaced by the mean y-value of the data, 
+replaced by zero, or replaced by the average of the two neighbouring 
+points. The routine provides information on the value of each point 
+removed, and the total number (and percentage) of points clipped.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data to be clipped
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the clipped data
+
+PROMPT3: [R]emove points or replace by [M]ean, [Z]ero, or [N]earest 
+         neighbour ? [R]
+TYPE   : CHARACTER*1
+OPTIONS: r, m, z, n
+DEFAULT: r
+PURPOSE: Determines whether clipped points are to be removed from the
+         data or replaced by the mean of the y-data, zero, or the 
+         average of the two neighbouring y-axis points
+
+PROMPT4: Enter upper and lower sigma for clipping (e.g. 3,2.5)
+TYPE   : REAL*8
+OPTIONS: Any pair of real numbers greater than zero
+DEFAULT: None
+PURPOSE: Determines the number of standard deviations above and 
+         below the mean which are to be clipped
+------------------------------------------------------------------------

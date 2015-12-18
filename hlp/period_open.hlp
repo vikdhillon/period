@@ -1,0 +1,24 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1993-MAR-17)
+------------------------------------------------------------------------
+
+                        Command: OPEN
+
+BRIEF DESCRIPTION: It is possible to store the fits calculated by the 
+SINE and PEAKS options in a log file. This option opens a new log file 
+(if it does not already exist), or else re-opens an old log file and 
+skips over the existing entries.
+
+PROMPT1: Enter name of log file 
+TYPE   : CHARACTER*72
+OPTIONS: Any valid linux filename
+DEFAULT: None
+PURPOSE: Requests name for log file
+
+PROMPT2: [N]ew or [O]ld file ? [N]
+TYPE   : CHARACTER*1
+OPTIONS: N or O
+DEFAULT: N
+PURPOSE: Determines whether log file already exists
+------------------------------------------------------------------------

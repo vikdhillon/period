@@ -1,0 +1,70 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2005-MAY-02)
+------------------------------------------------------------------------
+
+                        Command: TIME
+
+BRIEF DESCRIPTION: Applies heliocentric or barycentric timing
+correction. This routine uses a mixture of the SOFA and SLALIB
+libraries. The former is much more accurate - SLALIB gives a
+barycentric correction accurate to 23 milliseconds with respect to the
+JPL DE96 ephemeris, whereas SOFA is accurate to 45 microseconds with
+respect to the (newer) JPL DE405 ephemeris. Similarly the heliocentric
+correction given by SLALIB is accurate to only 5 milliseconds, whereas
+that of SOFA is accurate to 37 microseconds.  Therefore, SLALIB has
+only been used on those occasions when SOFA does not have the required
+functionality, e.g. when computing the telescope's position on the
+earth, which does not affect the accuracy of the results.
+
+By comparing the output of this routine with the example calculations
+given in the Jodrell Bank Crab Pulsar Monthly Ephemeris, it appears
+that the barycentric correction given here is accurate to 1.7 
+milliseconds, but this discrepancy could be due to the fact that
+Jodrell have used the full JPL DE200 ephemeris in their calculation,
+whereas SOFA uses (a fit to) the JPL DE405 ephemeris. The discrepancy
+could also be due to the fact that we have assumed zero parallax,
+proper motion and radial velocity for the Crab, whereas Jodrell may
+have included appropriate values for these quantities in their
+calculation.
+
+Note that this routine converts MJD (on the UTC timescale, as output
+by ULTRACAM) to either BMJD (i.e. the MJD at the solar system
+barycentre) on the TDB timescale or HJD (i.e. the MJD at the centre of
+the Sun) on the UTC timescale.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the input data to which a 
+         barycentric or heliocentric correction is to be applied
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the output data to which a
+         barycentric or heliocentric correction is to be applied
+
+PROMPT3: [B]arycentric or [H]eliocentric correction ? [B] : 
+TYPE   : CHARACTER*1
+OPTIONS: b or h
+DEFAULT: b
+PURPOSE: Determines whether to apply a barycentric or heliocentric 
+         correction to the times
+
+PROMPT4: Enter RA and Dec (J2000; e.g. 12 34 56.7 -12 34 56.7) : 
+TYPE   : INTEGER, INTEGER, REAL*8, INTEGER, INTEGER, REAL*8
+OPTIONS: Any valid RA and Dec in J2000 coordinates
+DEFAULT: None
+PURPOSE: Sets the position of the object so that the appropriate
+         vector from the Sun can be computed
+
+PROMPT5: Enter observatory identifier (<cr> for list) :
+TYPE   : CHARACTER*10
+OPTIONS: Any valid observatory identifier
+DEFAULT: <cr> - this lists all of the valid observatory identifiers
+PURPOSE: Sets the position of the observatory so that the appropriate
+         vector from the Sun to the telescope can be computed
+------------------------------------------------------------------------

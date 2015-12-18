@@ -1,0 +1,27 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1994-FEB-01)
+------------------------------------------------------------------------
+
+                        Command: SHOW
+
+BRIEF DESCRIPTION: Returns information on the data slots or on the 
+stored fits in the log file. This command is useful in order to check 
+which slots contain which datasets and also as a means of obtaining 
+some elementary statistics on the stored data. One can also use this 
+option to check the fits from the SINE and PEAKS options stored in the 
+log file without having to exit PERIOD.
+
+PROMPT1: Display information on [L]og file or [D]ata ? [D]
+TYPE   : CHARACTER*1
+OPTIONS: L or D
+DEFAULT: D
+PURPOSE: Determines the display option
+
+PROMPT2: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data to be listed
+         (if the D option is specified)
+------------------------------------------------------------------------

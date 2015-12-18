@@ -1,0 +1,18 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1994-FEB-01)
+------------------------------------------------------------------------
+
+                        Command: STRING
+
+BRIEF DESCRIPTION: The string-length method is an intuitively simple 
+method. The data is folded on a series of trial periods and at each 
+period the sum of the lengths of line segments joining successive 
+points (the string-length) is calculated. Minima in a plot of 
+string-length versus trial frequency indicate possible periods. The 
+string-length method is especially useful in the limit of a very small 
+number (about 20 or more) of randomly spaced observations of periodic 
+phenomena. Note that windowed data cannot be passed to this option due 
+to the y-data scaling process.
+
+------------------------------------------------------------------------

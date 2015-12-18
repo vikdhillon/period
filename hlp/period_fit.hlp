@@ -1,0 +1,58 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1993-MAR-17)
+------------------------------------------------------------------------
+
+                        Command: FIT
+
+BRIEF DESCRIPTION: Folds the data on a given period and zero point and
+then fits the data with a sine curve. The sine curve has the form:
+Y = GAMMA + (AMPLITUDE * SIN( ((2*PI)/PERIOD) * (X - ZEROPT) )).
+Outputs the fit parameters (which can be written to a log file) and 
+the resulting sine curve. 
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data to be fit
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the resulting sine curve fits
+
+PROMPT3: Enter period to fold data on
+TYPE   : REAL*8
+OPTIONS: Any real number greater than 0
+DEFAULT: None
+PURPOSE: Determines the period on which to fold the data on
+
+PROMPT4: Enter error in period
+TYPE   : REAL*8
+OPTIONS: Any real number greater than 0
+DEFAULT: None
+PURPOSE: Specifies the error in the period. This is used in the
+         error calculations.
+
+PROMPT5: Enter zero point (0 for first data point)
+TYPE   : REAL*8
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Determines the zero point of the data folding
+
+PROMPT6: Enter error in zero point
+TYPE   : REAL*8
+OPTIONS: Any real number greater than 0
+DEFAULT: None
+PURPOSE: Specifies the error in the zero point. This is used in 
+         the error calculations.
+
+PROMPT7: Do you want to log this fit ? [N]
+TYPE   : CHARACTER*1
+OPTIONS: Y or N
+DEFAULT: N
+PURPOSE: Determines whether the results of the fit are written
+         to the log file
+------------------------------------------------------------------------

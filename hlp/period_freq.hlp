@@ -1,0 +1,50 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2004-AUG-24)
+------------------------------------------------------------------------
+
+                        Command: FREQ
+
+BRIEF DESCRIPTION: Sets the frequency search parameters. The user can 
+specify the minimum frequency, maximum frequency and frequency interval. 
+Note that the maximum number of frequencies is MXROW, so the search 
+parameters should be selected accordingly. Alternatively, by entering 
+0's, default values can be accepted. Note that the default values are 
+set on entering the PERIOD package and thus the FREQ option need not 
+be run if default frequencies are required. The default values are 
+calculated as follows: minimum frequency, FMIN = 0, ie. infinite 
+period; maximum frequency, FMAX = 1 / (2*smallest data interval), ie. 
+Nyquist critical sampling; frequency interval, 
+FINT = (FMAX-FMIN)/(MXROW*0.5), i.e. half of the maximum number of 
+freqencies it is possible to store in period. Note that it is also 
+possible to specify the number of frequencies to be calculated, rather 
+than the frequency interval, by entering a negative number, e.g. -1000 
+would give 1000 frequencies netween FMIN and FMAX.
+
+PROMPT1: Enter number you wish to change (0 to quit)
+TYPE   : INTEGER
+OPTIONS: 0, 1, 2 or 3
+DEFAULT: NONE
+PURPOSE: Selects frequency search parameter to be changed
+
+PROMPT2: Enter minimum frequency  (0 for default)
+TYPE   : REAL*8
+OPTIONS: Any real number greater than or equal to 0
+DEFAULT: 0.0
+PURPOSE: Changes the minimum search frequency
+
+PROMPT3: Enter maximum frequency  (0 for default)
+TYPE   : REAL*8
+OPTIONS: Any real number greater than 0
+DEFAULT: 1 / (2 * smallest data interval) (ie. Nyquist)
+PURPOSE: Changes the maximum search frequency
+
+PROMPT4: Enter frequency interval (0 for default)
+TYPE   : REAL*8
+OPTIONS: Any real number
+DEFAULT: FINT = (FMAX-FMIN)/(MXROW*0.5), i.e. half of the maximum
+         number of frequencies it is possible to store in period.
+         Entering a negative number specifies the total number of
+         frequencies to be calculated
+PURPOSE: Changes the search frequency interval
+------------------------------------------------------------------------

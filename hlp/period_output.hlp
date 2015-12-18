@@ -1,0 +1,24 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1993-NOV-15)
+------------------------------------------------------------------------
+
+                        Command: OUTPUT
+
+BRIEF DESCRIPTION: Writes any selected slot to an ASCII file on disk. 
+This is the only way of saving data created by PERIOD, and should 
+therefore be run prior to exiting the package in order to store, say, 
+a power spectrum.
+
+PROMPT1: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data to be output
+
+PROMPT2: Enter output filename (q to quit)
+TYPE   : CHARACTER*32
+OPTIONS: Any valid linux filename
+DEFAULT: None
+PURPOSE: Determines the name of the output file
+------------------------------------------------------------------------

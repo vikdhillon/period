@@ -1,0 +1,19 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1994-FEB-01)
+------------------------------------------------------------------------
+
+                        Command: SCARGLE
+
+BRIEF DESCRIPTION: The Lomb-Scargle technique redefines the classical 
+periodogram (ie. the discrete Fourier periodogram) in such a manner 
+as to make it invariant to a shift of the origin of time. This makes 
+the method ideally suited to unevenly sampled data. The version 
+implemented here uses FFTs to increase the speed of computation 
+(although it is in no way equivalent to conventional FFT periodogram 
+analysis). Mathematically, the technique is identical to fitting sine curves
+on a set of trial frequencies, as in the CHISQ option. Note that windowed 
+data cannot be passed to this option since it needs to calculate the variance 
+(which is zero) to normalize the power of the periodogram.
+
+------------------------------------------------------------------------

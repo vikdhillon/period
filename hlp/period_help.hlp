@@ -1,0 +1,12 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1993-NOV-15)
+------------------------------------------------------------------------
+
+                        Command: HELP
+
+BRIEF DESCRIPTION: The HELP command provides on-line help for PERIOD. 
+Detailed information about individual commands can be obtained by typing 
+HELP 'COMMAND' (eg. HELP SCARGLE). A listing of the available commands
+can be obtained by typing a '?'.
+------------------------------------------------------------------------

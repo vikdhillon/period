@@ -1,0 +1,13 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1993-MAR-17)
+------------------------------------------------------------------------
+
+                        Command: PERIOD
+
+BRIEF DESCRIPTION: This is where all the work is done. On typing this 
+command, you will enter the PERIOD_PERIOD sub-menu containing the 
+various periodicity finding options. To obtain help on any one of the 
+options, simply type HELP 'COMMAND' (eg. HELP SCARGLE). 
+
+------------------------------------------------------------------------

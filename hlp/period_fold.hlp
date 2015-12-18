@@ -1,0 +1,56 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 1993-NOV-15)
+------------------------------------------------------------------------
+
+                        Command: FOLD
+
+BRIEF DESCRIPTION: Folds the data on a given period and zero point. 
+Hence, this option transforms the data onto a phase scale, where one 
+phase unit is equal to one period and phase zero is defined by the zero 
+point. If the zero point is not known, the data can be folded by taking 
+the first data point as the zero point. This option is useful for 
+checking whether derived periods actually give sensible results when 
+applied to the data. In addition to normal folding, it is also possible
+to phase bin the data, which folds the data and then averages all the 
+data points falling into each bin. It is also possible to plot a
+user-defined number of cycles.  
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data to be folded
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the folded data
+
+PROMPT3: Enter period to fold data on
+TYPE   : REAL*8
+OPTIONS: Any real number greater than 0
+DEFAULT: None
+PURPOSE: Determines the period on which to fold the data on
+
+PROMPT4: Enter zero point (0 for first data point)
+TYPE   : REAL*8
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Determines the zero point of the data folding
+
+PROMPT5: Enter number of phase bins (0 for simple folding)
+TYPE   : INTEGER
+OPTIONS: Any integer greater than or equal to 0
+DEFAULT: None
+PURPOSE: Determines the number of phase bins after folding. If 0,
+         the data is folded with no phase binning
+
+PROMPT6: Enter number of cycles
+TYPE   : INTEGER
+OPTIONS: Any integer greater than or equal to 1
+DEFAULT: None
+PURPOSE: Determines the number of cycles of folded data which 
+         are written to the output slot
+------------------------------------------------------------------------

@@ -1,0 +1,20 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2005-MAY-12)
+------------------------------------------------------------------------
+
+                        Command: BASE
+
+BRIEF DESCRIPTION: Determines whether or not the integer part of the
+x-axis is subtracted prior to plotting in QDP/PLT. This is required
+because QDP/PLT only operates on REAL*4 numbers, not the REAL*8 used by 
+PERIOD for data storage and manipulation. It will be of most use when 
+plotting ULTRACAM data (which has x-axis data of type f16.10). Without
+enabling BASE, this would cause QDP/PLT to fail. By enabling BASE, the 
+integer part of the first number in the x-axis array will be subtracted 
+from every number in the x-axis prior to plotting. Note, however, that 
+on leaving QDP/PLT, the data in the slots are unchanged. To prevent
+confusion when looking at periodograms with BASE enabled (which would
+cause peaks to appear at the wrong frequency), BASE is always disabled
+in the PERIOD_PERIOD menu. 
+------------------------------------------------------------------------

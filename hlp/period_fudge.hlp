@@ -1,0 +1,34 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2004-NOV-09)
+------------------------------------------------------------------------
+
+                        Command: FUDGE
+
+BRIEF DESCRIPTION: Routine to fudge data, in a variety of ways: 
+1. Remove first point from light curve (as in the case of ULTRACAM 
+data, this is usually corrupt). 2. Correct erroneous times (in the case 
+of ULTRACAM data, if there is a GPS timestamping error). This latter
+option ensures that all x-axis points have (approximately) the same 
+interval. If they don't, the corrupted points are replaced with a 
+predicted value based on the median x-axis interval. This option should 
+only be used with ULTRACAM data when there is a GPS timestamping error.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data to be fudged
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the fudged data
+
+PROMPT3: Strip first point [s] or correct times [t] ? [s]
+TYPE   : CHARACTER*1
+OPTIONS: S or T
+DEFAULT: S
+PURPOSE: Determines which of the two fudge operations to perform
+------------------------------------------------------------------------
