@@ -5,15 +5,17 @@
 
                         Command: DETREND
 
-BRIEF DESCRIPTION: This option removes the D.C. bias from data, which if 
-not removed gives rise to significant power at 0 Hz. There are two ways
-in which the data can be detrended: If the data show no long term 
-trends, it is best to simply subtract the mean and divide by the 
-standard deviation. This gives a dataset with a mean of zero and a 
-standard deviation of one. Otherwise, it is best to subtract a low-order 
-polynomial fit to the data, since if these are not removed, the Fourier 
-transform will inject a significant amount of power at the frequency of 
-the long term variations. 
+BRIEF DESCRIPTION: This option removes the D.C. bias from data, which
+if not removed gives rise to significant power at 0 Hz. There are two
+ways in which the data can be detrended: If the data show no long term
+trends, it is best to simply subtract the mean and divide by the
+standard deviation. This gives a dataset with a mean of zero and a
+standard deviation of one. Otherwise, it is best to subtract a
+low-order polynomial fit to the data, since if these are not removed,
+a Fourier transform will inject a significant amount of power at the
+frequency of the long term variations. Note that it isn't necessary to
+run DETREND if processing data using the SCARGLE option, as data are
+automatically detrended by this algorithm.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER
@@ -29,13 +31,14 @@ PURPOSE: Determines the location of the detrended data
 
 PROMPT3: Detrend using the [M]ean or a [P]olynomial fit ? [M]
 TYPE   : CHARACTER*1
-OPTIONS: M or P
-DEFAULT: M
+OPTIONS: m or p
+DEFAULT: m
 PURPOSE: Determines the detrending option
 
 PROMPT4: Enter order of polynomial
 TYPE   : INTEGER
 OPTIONS: Any integer between 1 and 20
 DEFAULT: None
-PURPOSE: Determines the polynomial order (if the P option is specified)
+PURPOSE: Determines the polynomial order (if the 'p' option is
+         specified)
 ------------------------------------------------------------------------

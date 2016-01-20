@@ -47,16 +47,16 @@ C Prompt for SINE option.
 C-----------------------------------------------------------------------------
 	
 	WRITE(*,*)' '
-10	WRITE(*,'(A,$)')'Enter period, semi-amplitude, zero point
-     + and gamma : '	    
+10      WRITE(*,'(A,$)')
+     + 'Enter period, semi-amplitude, zero point and gamma : '	    
 	READ(*,*,ERR=10)PERIOD, AMPLITUDE, ZEROPT, GAMMA
 	IF (PERIOD .LE. 0.) THEN
 		WRITE(*,*)ACHAR(7)
 		WRITE(*,*)'** ERROR: Invalid value for PERIOD.'
 		GOTO 10
 	END IF
-20	WRITE(*,'(A,$)')'[A]dd, [S]ubtract, [M]ultiply
-     + or [D]ivide sine curve ? [S] : '
+20	WRITE(*,'(A,$)')'[A]dd, [S]ubtract, [M]ultiply '//
+     + 'or [D]ivide sine curve ? [S] : '
 	READ(*,'(A)',ERR=20)OPTION
 	CALL PERIOD_CASE (OPTION, .TRUE.)
 	COUNTER = 0

@@ -1,0 +1,87 @@
+# input the two reduce log files, viewing the various errors and warnings.
+uinput
+run012.log
+y
+y
+
+# load the object counts versus MJD for all of the apertures on all
+# three CCDs, putting the light curves in slot 1 onwards. If each
+# of the three ULTRACAM CCDs has two apertures - one for the target star and
+# one for the comparison star - then slots 1 to 6 will be filled as follows:
+# slot 1: light curve of the target in CCD1 (red)
+# slot 2: light curve of the target in CCD2 (green)
+# slot 3: light curve of the target in CCD3 (blue)
+# slot 4: light curve of the comparison in CCD1 (red)
+# slot 5: light curve of the comparison in CCD2 (green)
+# slot 6: light curve of the comparison in CCD3 (blue)
+uslots
+1,1
+0
+0
+1
+
+# divide slot 1, which contains the target-star light curve in the red arm, by 
+# slot 4, which contains the comparison-star light curve in the red arm.
+# put the result in slot 11.
+arith
+s
+d
+1
+4
+11
+
+# divide slot 2, which contains the target-star light curve in the green arm, by 
+# slot 5, which contains the comparison-star light curve in the green arm.
+# put the result in slot 12.
+arith
+s
+d
+2
+5
+12
+
+# divide slot 3, which contains the target-star light curve in the blue arm, by 
+# slot 6, which contains the comparison-star light curve in the blue arm.
+# put the result in slot 13.
+arith
+s
+d
+3
+6
+13
+
+# subtract the integer part of the MJD for the plots.
+base
+
+# enable plotting of multiple slots in the same plot window.
+overplot
+
+# enter some PLT commands to format the plot nicely.
+# "pl vert" makes a three-panel plot with the red light curve at
+# the top, the green light curve in the middle and the blue
+# light curve at the bottom.
+# the "la" commands add labels to the axes.
+# "dev target.ps/cps" plots the light curve to a colour postscript
+# file (if this command is omitted, the plot will appear in an xwindow
+# instead).
+# the "win 2" and "win 3" commands move to the middle and bottom plot
+# panels, respectively.
+qdp
+pl vert
+la x MJD (52946+)
+la y target/comparison
+la t GJ896 in u'g'r' on 2003/11/03
+win 2
+la y target/comparison
+win 3
+la y target/comparison
+dev gj896.ps/cps
+pl
+q
+
+# now plot the light curves.
+pl 11 13
+
+# and quit PERIOD.
+q
+y

@@ -1,14 +1,39 @@
-   h1, h2, h3 { font-family: GillSans, gill-sans, Helvetica, helvetica, 
-                          sans-serif;
-             font-weight: bold;
-             color: #009; }
-   h1 { font-size: 160% }
-   h2 { font-size: 120% }
-   h3 { font-size: 90% }
-   ul li { list-style: disc; color: #009 }
-   menu li { list-style: disc; color: #009 }
-   body {
-         background: #ffffff;
-         text: #000000;
-         link: #000099;
-         vlink: #006699}
+/* PK CSS version 1 */
+/* 1/11/03 (1.1) */
+/* verified at http://jigsaw.w3.org/css-validator/validator-upload.html */
+/* #000000=black, #FF0000=red, #00FF00=green, #000099=blue ,#ffffff=white */
+
+
+body { 
+	color:#000000;
+	background: #ffffff;
+	font-family: GillSans, gill-sans, Helvetica, helvetica, sans-serif;
+}
+
+  a:link { color: #000099 }  /* for unvisited links */
+  a:visited { color: #000099 } /* for visited links */
+  a:active { color: #ff0000 } /* when link is clicked */
+/*  a:hover { color: #ffffff } /* when mouse is over link */
+
+h1, h2, h3, h4 {
+	color: #000099;
+	font-weight: bold;
+}
+h1 {
+	font-size: 150%
+}
+h2 {
+	font-size: 125%
+}
+h3 {
+	font-size: 100%
+}
+h4 {
+	font-size: 75%
+}
+ul li {
+	list-style: disc; color: #009
+}
+menu li {
+	list-style: disc; color: #009
+}

@@ -12,21 +12,21 @@ barycentric correction accurate to 23 milliseconds with respect to the
 JPL DE96 ephemeris, whereas SOFA is accurate to 45 microseconds with
 respect to the (newer) JPL DE405 ephemeris. Similarly the heliocentric
 correction given by SLALIB is accurate to only 5 milliseconds, whereas
-that of SOFA is accurate to 37 microseconds.  Therefore, SLALIB has
+that of SOFA is accurate to 37 microseconds. Therefore, SLALIB has
 only been used on those occasions when SOFA does not have the required
 functionality, e.g. when computing the telescope's position on the
 earth, which does not affect the accuracy of the results.
 
 By comparing the output of this routine with the example calculations
 given in the Jodrell Bank Crab Pulsar Monthly Ephemeris, it appears
-that the barycentric correction given here is accurate to 1.7 
+that the barycentric correction given here is accurate to 1.7
 milliseconds, but this discrepancy could be due to the fact that
-Jodrell have used the full JPL DE200 ephemeris in their calculation,
-whereas SOFA uses (a fit to) the JPL DE405 ephemeris. The discrepancy
-could also be due to the fact that we have assumed zero parallax,
-proper motion and radial velocity for the Crab, whereas Jodrell may
-have included appropriate values for these quantities in their
-calculation.
+Jodrell Bank have used the full JPL DE200 ephemeris in their
+calculation, whereas SOFA uses (a fit to) the JPL DE405 ephemeris. The
+discrepancy could also be due to the fact that we have assumed zero
+parallax, proper motion and radial velocity for the Crab, whereas
+Jodrell may have included appropriate values for these quantities in
+their calculation.
 
 Note that this routine converts MJD (on the UTC timescale, as output
 by ULTRACAM) to either BMJD (i.e. the MJD at the solar system
@@ -44,8 +44,8 @@ PROMPT2: Enter first and last slots for output (0,0 to quit)
 TYPE   : INTEGER
 OPTIONS: Any pair of integers between 0 and MXSLOT
 DEFAULT: None
-PURPOSE: Determines the location of the output data to which a
-         barycentric or heliocentric correction is to be applied
+PURPOSE: Determines the location of the output data to which the
+         barycentric or heliocentric correction has been applied
 
 PROMPT3: [B]arycentric or [H]eliocentric correction ? [B] : 
 TYPE   : CHARACTER*1

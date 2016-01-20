@@ -6,10 +6,12 @@
                         Command: SINE
 
 BRIEF DESCRIPTION: Adds, subtracts, multiplies or divides a sine curve
-from data. The sine curve has the form:
-Y = GAMMA + (AMPLITUDE * SIN( ((2*PI)/PERIOD) * (X - ZEROPT) )).
-This option is useful for removing or adding known periods from/to 
-data, thus enabling or testing the detection of other periods. 
+to/from/by the slot. The sine curve has the form:
+
+Y = GAMMA + (AMPLITUDE * SIN [(2.0*PI/PERIOD) * (X - ZEROPT)]).
+
+This option is useful for removing or adding known periods from/to
+data, thus enabling or testing the detection of other periods.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER
@@ -34,7 +36,7 @@ PURPOSE: Determines the PERIOD, AMPLITUDE, ZEROPT and GAMMA parameters
 
 PROMPT4: [A]dd, [S]ubtract, [M]ultiply or [D]ivide sine curve ? [S]
 TYPE   : CHARACTER*1
-OPTIONS: A, S, M or D
-DEFAULT: S
+OPTIONS: a, s, m or d
+DEFAULT: s
 PURPOSE: Determines which arithmetic operation to perform
 ------------------------------------------------------------------------

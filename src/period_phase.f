@@ -55,11 +55,11 @@ C-----------------------------------------------------------------------------
 10	WRITE(*,'(A,$)')'Enter period to fold data on : '
 	READ(*,*,ERR=10)PERIOD
 	IF (PERIOD .LE. 0.) GOTO 10
-20	WRITE(*,'(A,$)')'Enter zero point (0 for first
-     + data point) : '
+20      WRITE(*,'(A,$)')
+     + 'Enter zero point (0 for first data point) : '
 	READ(*,*,ERR=20)ZEROPT
-30	WRITE(*,'(A,$)')'Enter number of phase bins (0 for simple
-     + folding) : '
+30     WRITE(*,'(A,$)')
+     + 'Enter number of phase bins (0 for simple folding) : '
 	READ(*,*,ERR=30)NBIN
 40	WRITE(*,'(A,$)')'Enter number of cycles : '
 	READ(*,*,ERR=40)NCYCLES

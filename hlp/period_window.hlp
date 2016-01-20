@@ -5,15 +5,15 @@
 
                         Command: WINDOW
 
-BRIEF DESCRIPTION: One of the main problems with the classical 
-periodogram is spectral leakage, of which there are several forms. 
-Leakage to nearby frequencies (sidelobes) is due to the finite total 
-interval over which the data is sampled. Leakage to distant frequencies 
-is due to the finite size of the interval between samples. This option 
-sets all the y-axis data points to unity. A discrete Fourier transform 
-of the resulting data (using, for example, the FT option) yields the 
-window function (or spectrum), which shows the effects of spectral 
-leakage. 
+BRIEF DESCRIPTION: One of the main problems with the classical
+periodogram (see Scargle 1982 for a definition), is spectral leakage,
+of which there are several forms. Leakage to nearby frequencies
+(sidelobes) is due to the finite total interval over which the data is
+sampled. Leakage to distant frequencies is due to the finite size of
+the interval between samples. The WINDOW option sets all the y-axis
+data points to unity. A discrete Fourier transform of the resulting
+data (using, for example, the FT option) yields the window function
+(or spectrum), which shows the effects of spectral leakage.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER

@@ -1,0 +1,38 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2016-JAN-16)
+------------------------------------------------------------------------
+
+                        Command: HIST
+
+BRIEF DESCRIPTION: Calculate the histogram or the cumulative
+distribution function (CDF) of the y-axis data, with a user-defined
+number of x-axis bins.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data for which the histogram
+         or CDF will be calculated
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the histogram or CDF
+
+PROMPT3: [h]istogram or [c]umulative density function? [h]
+TYPE   : CHARACTER*1
+OPTIONS: h or c
+DEFAULT: h
+PURPOSE: Determines whether a histogram or CDF will be calculated
+
+PROMPT4: Enter number of bins (0 for number of y-axis points in first slot) 
+TYPE   : INTEGER
+OPTIONS: Any integer greater or equal to zero
+DEFAULT: None
+PURPOSE: Determines the number of bins in the histogram or CDF.
+         If a zero is entered, the number of points will be equal to the
+         number of y-axis points in the first slot
+------------------------------------------------------------------------

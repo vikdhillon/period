@@ -60,14 +60,14 @@ C-----------------------------------------------------------------------------
 20	WRITE(*,'(A,$)')'Enter error in period : '
 	READ(*,*,ERR=20)PERROR
 	IF (PERROR .LT. 0.) GOTO 20
-30	WRITE(*,'(A,$)')'Enter zero point (0 for first
-     + data point) : '
+30      WRITE(*,'(A,$)')
+     + 'Enter zero point (0 for first data point) : '
 	READ(*,*,ERR=30)ZEROPT
 40	WRITE(*,'(A,$)')'Enter error in zero point : '
 	READ(*,*,ERR=40)ZERROR
 	IF (ZERROR .LT. 0.) GOTO 40
-50	WRITE(*,'(A,$)')'Number of x-axis points in output slot ? (0 for
-     + same as input slot) : '
+50	WRITE(*,'(A,$)')'Number of x-axis points in output slot ?'// 
+     + ' (0 for same as input slot) : '
 	READ(*,*,ERR=50)NUMPTS
         IF (NUMPTS .LT. 0.) GOTO 50
         IF (NUMPTS .GT. MXROW) THEN

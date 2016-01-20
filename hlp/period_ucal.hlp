@@ -1,0 +1,47 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2016-JAN-19)
+------------------------------------------------------------------------
+
+                        Command: UCAL
+
+BRIEF DESCRIPTION: Routine to convert the ratio of target to
+comparison star counts into calibrated SDSS u'g'r'i'z' fluxes or
+magnitudes, given an input calibrated comparison star
+magnitude. Typical ULTRACAM input data are assumed, i.e.:
+
+1. y-axis is target/comparison star counts.
+2. Calibrated comparison star magnitude is known.
+3. The data are taken with an SDSS filter (u'g'r'i'z').
+
+Note that it doesn't matter what filter the data have been recorded
+in, as long as it is an SDSS u', g', r', i' or z' filter. The
+conversion uses the formula given in Eqn. 1 of Fukugita et
+al. (1996). The output units of flux are ergs/s/cm2/Hz.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data to be flux calibrated
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the flux calibrated data
+
+PROMPT3: Enter calibrated comparison star magnitude
+TYPE   : REAL*8
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Sets the calibrated magnitude of the comparison star that has
+         been used for the differential photometry
+
+PROMPT4: Output target flux in [e]rgs/s/cm2/Hz, [m]Jy or m[a]gnitude ? [e] 
+TYPE   : CHARACTER*1
+OPTIONS: e, m or a
+DEFAULT: e
+PURPOSE: Determines whether the units of the calibrated fluxes in the
+         output slot, or whether calibrated magnitudes should be output
+------------------------------------------------------------------------

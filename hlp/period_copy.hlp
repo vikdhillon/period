@@ -5,8 +5,9 @@
 
                         Command: COPY
 
-BRIEF DESCRIPTION: Slot manipulation: copies slots to another location, 
-skipping any slots which are empty. 
+BRIEF DESCRIPTION: Copies the contents of one slot (or a series of
+slots) to the contents of another slot (or series of slots), skipping
+any slots which are empty.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER

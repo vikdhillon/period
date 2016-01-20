@@ -1,0 +1,26 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2016-JAN-16)
+------------------------------------------------------------------------
+
+                        Command: DERIV
+
+BRIEF DESCRIPTION: This option calculates the derivative of a
+dataset. The derivative is centred on each x-axis point, i.e. the
+derivative of a point I is given by (Y[I+1]-Y[I-1])/(X[I+1]-X[I-1]).
+For the start and end points of the dataset, the derivative is
+one-sided, i.e. for the start: (Y[I+1]-Y[I])/(X[I+1]-X[I]).
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data of which the derivative
+         is to be calculated
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the derivative 
+------------------------------------------------------------------------

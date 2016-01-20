@@ -5,17 +5,22 @@
 
                         Command: SHOW
 
-BRIEF DESCRIPTION: Returns information on the data slots or on the 
-stored fits in the log file. This command is useful in order to check 
-which slots contain which datasets and also as a means of obtaining 
-some elementary statistics on the stored data. One can also use this 
-option to check the fits from the SINE and PEAKS options stored in the 
+BRIEF DESCRIPTION: Returns information on the data slots or on the
+stored fits in the log file. This command is useful in order to check
+which slots contain which datasets and also as a means of obtaining
+some elementary statistics on the stored data. You can also use this
+option to check the fits from the FIT and PEAKS options stored in the
 log file without having to exit PERIOD.
+
+SHOW also provides a quick summary of the slot contents from the
+PERIOD command line. So, for example, to get a summary of the contents
+of slots 1 to 4, type: period> sh 1 4. Alternatively, to get a summary
+of the contents of all of the slots, type: period> sh \.
 
 PROMPT1: Display information on [L]og file or [D]ata ? [D]
 TYPE   : CHARACTER*1
-OPTIONS: L or D
-DEFAULT: D
+OPTIONS: l or d
+DEFAULT: d
 PURPOSE: Determines the display option
 
 PROMPT2: Enter first and last slots for input (0,0 to quit)
@@ -23,5 +28,5 @@ TYPE   : INTEGER
 OPTIONS: Any pair of integers between 0 and MXSLOT
 DEFAULT: None
 PURPOSE: Determines the location of the data to be listed
-         (if the D option is specified)
+         (if the 'd' option is specified)
 ------------------------------------------------------------------------

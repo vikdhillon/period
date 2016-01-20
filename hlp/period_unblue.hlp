@@ -1,0 +1,25 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2016-JAN-19)
+------------------------------------------------------------------------
+
+                        Command: UNBLUE
+
+BRIEF DESCRIPTION: Routine to correct ULTRACAM data for NBLUE>1, which
+means that only 1 in NBLUE u'-band frames has valid data. This is
+indicated by error code 12 in the reduce log file, and by the fact
+that the flux and error are recorded as 0, -1 respectively - any
+data points which meet these criteria are stripped out.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data to be unblued
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the unblued data
+------------------------------------------------------------------------

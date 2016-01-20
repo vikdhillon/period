@@ -5,40 +5,48 @@
 
                         Command: PEAKS
 
-BRIEF DESCRIPTION: This option should be run once a periodogram has 
-been obtained. It finds the highest peak in the periodogram (or lowest 
-trough if it is a string-length, PDM or reduced-chi**2 plot) between 
-user-specified frequencies. The resulting period is calculated, along 
-with an error derived by calculating the half-size of a single
-frequency bin, centred on the peak (or trough) in the periodogram and
-then converting to period units. This error gives an indication of the
-accuracy to which a peak or trough in a periodogram can be located 
-(due to the frequency sampling). Clearly, with a larger frequency 
-search interval it is more difficult to locate a peak precisely and 
-this is reflected in the error estimate. However, this error estimate 
-does not take into account the fact that the peak (or trough) may not 
-represent the true period (which can be shifted due to a number of 
-effects) and it should therefore be regarded as a minimum error and
-not a formal error (which is notoriously difficult to calculate).
+BRIEF DESCRIPTION: This option should be run once a periodogram has
+been obtained. It finds the highest peak in the periodogram (or lowest
+trough if it is a string-length, PDM or reduced-chi-squared plot)
+between user-specified frequencies. The resulting period is
+calculated, along with an error. Errors on periods are not
+straightforward to estimate from periodograms and so, to keep things
+simple, PERIOD outputs an error derived by calculating the half-size
+of a single frequency bin, centred on the peak (or trough) in a
+periodogram, and then converting to period units. This error gives an
+indication of the accuracy to which a peak can be located in a
+periodogram (due to the frequency sampling). Clearly, with a larger
+frequency search interval it is more difficult to locate a peak
+precisely and this is reflected in the error estimate. However, this
+error estimate should only be regarded as a minimum error and not a
+formal error, as it does not take into account systematic or
+statistical errors, nor does it give any indication of the
+significance of a particular period. Schwarzenberg-Czerny (1991)
+presents a detailed account of the errors on period determinations and
+advises a post-mortem analysis by measuring the width and heights of
+peaks in a periodogram. It is possible to perform such an analysis
+within PERIOD using the fitting routines of PLT
 
-If the significance calculation is enabled (with the SIG command), two 
-false alarm probabilities are quoted alongside the period. The first 
-(FAP1) is the probability that, given the frequency search parameters, 
-there is no periodic component present in the data with this period. 
-The second (FAP2) is the probability that the period is not actually 
-equal to the quoted value but is equal to some other value. Note that 
-FAP1 is only output if the whole frequency range is specified in 
-answer to PROMPT2 (type HELP SIG for details). One sigma errors on 
-both significance values are also given. If the significance values 
-are zero, these errors are displayed as -1, implying that the false 
-alarm probabilities lie between 0.00 and 0.01 with 95% confidence. 
-Clearly, the lower a significance value and its error, the more 
-likely the quoted period is a correct one. If both the significances 
-and errors are displayed as -1, this means that the input periodogram 
-has not been subjected to a significance calculation (ie. the 
-significance calculation has been disabled). Note that the results may 
-be written to a log file if desired. For more information on the 
-significance calculation, type HELP SIG. 
+If the significance calculation is enabled with the SIG command, two
+false alarm probabilities are quoted alongside the period, calculated
+using a Fisher randomisation test. The first - FAP1 - is the
+probability that, given the frequency search parameters, there is no
+periodic component present in the data with this period. The second -
+FAP2 - is the probability that the period is not actually equal to the
+quoted value but is equal to some other value. Note that FAP1 is only
+output if the whole frequency range is specified to be analysed in
+PEAKS. One sigma errors on both significance values are also given. If
+the significance values are zero, these errors are displayed as -1,
+implying that the false alarm probabilities lie between 0.00 and 0.01
+with 95% confidence. Clearly, the lower a significance value and its
+error, the more likely the quoted period is a correct one. If both the
+significances and errors are displayed as -1, this means that the
+input periodogram has not been subjected to a significance calculation
+(i.e. SIG has been disabled). The results of PEAKS can be written to a
+log file if one is open. See the SIG option for more information. For
+useful discussions on errors and significances of period
+determinations, see Schwarzenberg-Czerny (1991) and Nemec and Nemec
+(1985).
 
 PROMPT1: Enter first and last slots containing periodograms (0,0 to quit)
 TYPE   : INTEGER
@@ -55,8 +63,8 @@ PURPOSE: Determines the periodogram frequency range to be searched
 
 PROMPT3: Write results to the log file ? [Y]
 TYPE   : CHARACTER*1
-OPTIONS: Y or N
-DEFAULT: N
-PURPOSE: Determines whether the results of PEAKS are written
+OPTIONS: y or n
+DEFAULT: n
+PURPOSE: Determines whether the output of PEAKS is to be written
          to the log file
 ------------------------------------------------------------------------

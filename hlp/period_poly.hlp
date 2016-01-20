@@ -1,0 +1,45 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2016-JAN-17)
+------------------------------------------------------------------------
+
+                        Command: POLY
+
+BRIEF DESCRIPTION: Fits a polynomial to data, with orders ranging from
+1 (i.e. a constant) to 20. It is possible to define up to 10 x-axis
+regions to mask from the fit. The number of points in the output slot
+containing the fit can be set by the user.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data to which the polynomial
+         will be fitted
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the polynomial fits to the data
+
+PROMPT3: Enter order of polynomial
+TYPE   : INTEGER
+OPTIONS: Any integer between 1 and 20
+DEFAULT: None
+PURPOSE: Determines the polynomial order
+
+PROMPT4: Enter number of points (0 for input slot values)
+TYPE   : INTEGER
+OPTIONS: Any integer greater than or equal to zero
+DEFAULT: None
+PURPOSE: Determines the number of points in the polynomical fit to the
+         data. If a zero is entered, the slot will contain the same
+         number of points as the input data slot
+
+PROMPT5: Enter x range to mask from fit (0,0 to continue)
+TYPE   : REAL*8
+OPTIONS: Any pair of real numbers
+DEFAULT: None
+PURPOSE: Determines the range of x-axis data to be omitted from the fit
+------------------------------------------------------------------------

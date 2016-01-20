@@ -59,7 +59,7 @@ C-----------------------------------------------------------------------------
            GOTO 99
 	END IF
         WRITE(*,*)' '
- 10     WRITE(*,'(A,$)')'Calculate [A]irmass, '// 
+ 10     WRITE(*,'(A,$)')'Calculate [A]irmass,'// 
      +       ' [Z]enith distance or [P]arallactic angle ? [Z] : '
         READ(*,'(A)',ERR=10)OPTION
         IF (OPTION .EQ. ' ') OPTION = 'z'

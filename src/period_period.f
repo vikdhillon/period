@@ -197,7 +197,8 @@ C-----------------------------------------------------------------------------
 203	WRITE(*,'(A,$)')'Enter maximum frequency  (0 for default) : '
 		READ(*,*,ERR=203)MAXFREQ
 	ELSE IF (NOPTION .EQ. 3) THEN
-204	WRITE(*,'(A,$)')'Enter frequency interval (0 for default) : '
+204	WRITE(*,'(A,$)')'Enter frequency interval (0 for default,'//
+     + ' -ve for number of points) : '
 		READ(*,*,ERR=204)FINTERVAL
 	ELSE IF (NOPTION .EQ. 0) THEN
 		GOTO 10
@@ -1048,55 +1049,26 @@ C Phase dispersion minimization (PDM) method.
 C-----------------------------------------------------------------------------
 
 800	IF (.NOT. LSELECT) THEN
-	   WRITE(*,*)ACHAR(7)
-	   WRITE(*,*)'** ERROR: No slots selected.'
-	   GOTO 10
-	END IF
-
-	IF (LSIG) THEN 
-	   WRITE(*,*)' '
-	   WRITE(*,*)'** OK: Significance calculation to be performed'//
-     + ' with samples = ',NPERMS
-	   WRITE(*,*)' '
-	   WRITE(*,*)'** OK: Output slot can contain either the'//
-     + ' periodogram'
-	   WRITE(*,*)'** OK: of the input slot or the lowest trough'//
-     + ' found at'
-	   WRITE(*,*)'** OK: each frequency in the set of randomised'//
-     + ' time series.'
-	   WRITE(*,*)'** OK: The CDF of the latter can be calculated'//
-     + ' using HIST'
-	   WRITE(*,*)'** OK: to determine significances.'
-	   WRITE(*,*)' '
-	   WRITE(*,'(A,$)')'Output slot to contain [p]eriodogram or'//
-     + ' [l]owest trough ? [p] (q to quit) : '
-	   READ(*,'(A)',ERR=10)REPLY
-	   CALL PERIOD_CASE (REPLY, .TRUE.)
-	   IF (REPLY .EQ. 'L') THEN
-	      LCDF = .TRUE.
-	   ELSE IF (REPLY .EQ. 'Q') THEN
-	      GOTO 10
-	   ELSE
-	      LCDF = .FALSE.
-	   END IF
-	END IF
-	
+		WRITE(*,*)ACHAR(7)
+		WRITE(*,*)'** ERROR: No slots selected.'
+		GOTO 10
+	END IF 	
 	WRITE(*,*)' '
 801     WRITE(*,'(A,$)')'Enter number of bins : '
         READ(*,*,ERR=801)NBIN
 	IF ((NBIN .LT. 2) .OR. (NBIN .GT. MXROW)) THEN
-	   WRITE(*,*)ACHAR(7)
-	   WRITE(*,*)'** ERROR: Number of bins must lie in the
+		WRITE(*,*)ACHAR(7)
+		WRITE(*,*)'** ERROR: Number of bins must lie in the
      + range 2 to ',MXROW
-	   GOTO 10
+		GOTO 10
 	END IF
-802	WRITE(*,'(A,$)')'Enter width of each bin : '
+802     WRITE(*,'(A,$)')'Enter width of each bin : '
         READ(*,*,ERR=802)WBIN
 	IF ((WBIN .LE. 0.) .OR. (WBIN .GE. 1.)) THEN
-	   WRITE(*,*)ACHAR(7)
-	   WRITE(*,*)'** ERROR: Width of bins must be greater
+		WRITE(*,*)ACHAR(7)
+		WRITE(*,*)'** ERROR: Width of bins must be greater
      + than 0 and less than 1'
-	   GOTO 10
+		GOTO 10
 	END IF
 
 C-----------------------------------------------------------------------------
@@ -1110,161 +1082,159 @@ C Loop through permutations.
 C-----------------------------------------------------------------------------
 
 	DO SAMPLE = 1, NPERMS+1
-	   IF (SAMPLE .EQ. 1) THEN
-	      IF (NPTSARRAY(SLOT) .EQ. 0) THEN
-		 WRITE(*,*)ACHAR(7)
-		 WRITE(*,*)'** ERROR: Slot empty =',SLOT
-		 GOTO 10
-	      END IF
-	      SLOTOUT = FIRSTOUT + (SLOT - FIRSTSLOT)
-	      NDATA = NPTSARRAY(SLOT)
+	IF (SAMPLE .EQ. 1) THEN
+	IF (NPTSARRAY(SLOT) .EQ. 0) THEN
+		WRITE(*,*)ACHAR(7)
+		WRITE(*,*)'** ERROR: Slot empty =',SLOT
+		GOTO 10
+	END IF
+	SLOTOUT = FIRSTOUT + (SLOT - FIRSTSLOT)
+	NDATA = NPTSARRAY(SLOT)
 
 C-----------------------------------------------------------------------------
 C Set frequency limits.
 C-----------------------------------------------------------------------------
 
-	      DO I = 1, NDATA
-		 FDATA(I) = Y(I,1,SLOT)
-	      END DO
-	      WRITE(*,*)' '
-	      CALL PERIOD_AUTOLIM (FDATA, NDATA, MXROW, MINFREQ, MAXFREQ, 
+	DO I = 1, NDATA
+		FDATA(I) = Y(I,1,SLOT)
+	END DO
+	WRITE(*,*)' '
+	CALL PERIOD_AUTOLIM (FDATA, NDATA, MXROW, MINFREQ, MAXFREQ, 
      +		             FINTERVAL, FMIN, FMAX, FINT, IFAIL)
-	      IF (IFAIL .EQ. 1) THEN
-		 GOTO 10
-	      END IF
-	      IF (FMIN .EQ. 0.) THEN
-		 WRITE(*,*)ACHAR(7)
-		 WRITE(*,*)'** ERROR: No PDM statistic for zero frequency.'
-		 GOTO 10
-	      END IF
+	IF (IFAIL .EQ. 1) THEN
+		GOTO 10
+	END IF
+	IF (FMIN .EQ. 0.) THEN
+		WRITE(*,*)ACHAR(7)
+		WRITE(*,*)'** ERROR: No PDM statistic for zero frequency.'
+		GOTO 10
+	END IF
 
 C-----------------------------------------------------------------------------
 C Set zero point to be the mean observation time.
 C-----------------------------------------------------------------------------
 
-	      CALL PERIOD_MOMENT (FDATA, NDATA, AVE, ADEV, SDEV, VARI)
-	      ZEROPT = AVE
-	      
+	CALL PERIOD_MOMENT (FDATA, NDATA, AVE, ADEV, SDEV, VARI)
+	ZEROPT = AVE
+
 C-----------------------------------------------------------------------------
 C Calculate variance of whole dataset.
 C-----------------------------------------------------------------------------
 
-	      DO I = 1, NDATA
-		 FDATA(I) = Y(I,2,SLOT)
-	      END DO
-	      CALL PERIOD_MOMENT (FDATA, NDATA, AVE, ADEV, SDEV, VARI)
-	      WRITE(*,*)' '
-	   END IF
+	DO I = 1, NDATA
+		FDATA(I) = Y(I,2,SLOT)
+	END DO
+	CALL PERIOD_MOMENT (FDATA, NDATA, AVE, ADEV, SDEV, VARI)
+	WRITE(*,*)' '
+	END IF
 
 C-----------------------------------------------------------------------------
 C Fold on trial frequencies and calculate PDM statistic.
 C-----------------------------------------------------------------------------
 
-	   COUNTER = 0
-	   LOOP = 1
-	   NFREQ = 1+NINT((FMAX - FMIN)/FINT)
-	   DO J = 1, NFREQ
-	      FREQ = FMIN + ((DBLE(J)-1.D0)*FINT)
-	      DO I = 1, NDATA
-		 XDATA(I) = Y(I,1,SLOT)
-		 IF (SAMPLE .EQ. 1) YRAN(I) = Y(I,2,SLOT)
-		 YDATA(I) = YRAN(I)
-	      END DO
-	      PERIOD = 1.0D0 / FREQ
-	      CALL PERIOD_FOLD (XDATA, YDATA, YERR, NDATA, 
+	COUNTER = 0
+	LOOP = 1
+	NFREQ = 1+NINT((FMAX - FMIN)/FINT)
+	DO J = 1, NFREQ
+	   FREQ = FMIN + ((DBLE(J)-1.D0)*FINT)
+	   DO I = 1, NDATA
+	      XDATA(I) = Y(I,1,SLOT)
+	      IF (SAMPLE .EQ. 1) YRAN(I) = Y(I,2,SLOT)
+	      YDATA(I) = YRAN(I)
+	   END DO
+	   PERIOD = 1.0D0 / FREQ
+	   CALL PERIOD_FOLD (XDATA, YDATA, YERR, NDATA, 
      + ZEROPT, PERIOD)
-	      IF (IFAIL .EQ. 1) THEN
-		 GOTO 10			
-	      END IF 	
-	      CALL PERIOD_PDM (XDATA, YDATA, NDATA, NBIN, WBIN,
+	   IF (IFAIL .EQ. 1) THEN
+	      GOTO 10			
+	   END IF 	
+	   CALL PERIOD_PDM (XDATA, YDATA, NDATA, NBIN, WBIN,
      + VARI, PDM, MXROW, IFAIL)
-	      IF (IFAIL .EQ. 1) THEN
-		 WRITE(*,*)ACHAR(7)
-		 WRITE(*,*)
+	   IF (IFAIL .EQ. 1) THEN
+	      WRITE(*,*)ACHAR(7)
+	      WRITE(*,*)
      + '** ERROR: PDM statistic calculation unsuccessful.'
-		 GOTO 10			
-	      END IF 	
-	      COUNTER = COUNTER + 1
-	      IF (SAMPLE .EQ. 1) THEN
-		 IF (COUNTER .EQ. (LOOP*ISTEP)+1) THEN
-		    WRITE(CFREQ,*)FREQ
-		    CFREQ_LEN = LEN_TRIM(CFREQ)
-		    WRITE(CSTAT,*)PDM
-		    CSTAT_LEN = LEN_TRIM(CSTAT)
-		    WRITE(*,*)
+	      GOTO 10			
+	   END IF 	
+	   COUNTER = COUNTER + 1
+	   IF (SAMPLE .EQ. 1) THEN
+	      IF (COUNTER .EQ. (LOOP*ISTEP)+1) THEN
+		 WRITE(CFREQ,*)FREQ
+		 CFREQ_LEN = LEN_TRIM(CFREQ)
+		 WRITE(CSTAT,*)PDM
+		 CSTAT_LEN = LEN_TRIM(CSTAT)
+		 WRITE(*,*)
      + 'Frequency = '//CFREQ(1:CFREQ_LEN)//
      + ', PDM statistic = '//CSTAT(1:CSTAT_LEN)
-		    LOOP = LOOP + 1
-		 END IF
+		 LOOP = LOOP + 1
 	      END IF
+	   END IF
 
 C-----------------------------------------------------------------------------
 C If the first permutation, load the output slot.
 C-----------------------------------------------------------------------------
 
-	      IF (SAMPLE .EQ. 1) THEN
-		 Y(COUNTER,1,SLOTOUT) = FREQ
-		 Y(COUNTER,2,SLOTOUT) = PDM
-		 Y(COUNTER,3,SLOTOUT) = 0.0D0
-	      END IF
-	      WK2(COUNTER) = PDM
-	   END DO
+	   IF (SAMPLE .EQ. 1) THEN
+	      Y(COUNTER,1,SLOTOUT) = FREQ
+	      Y(COUNTER,2,SLOTOUT) = PDM
+	      Y(COUNTER,3,SLOTOUT) = 0.0D0
+	   END IF
+	   WK2(COUNTER) = PDM
+	END DO
 
 C-----------------------------------------------------------------------------
 C Periodogram complete. If the first permutation, load the output arrays.
 C-----------------------------------------------------------------------------
 
-	   IF (SAMPLE .EQ. 1) THEN
-	      YERRORARRAY(SLOTOUT) = .FALSE.
-	      DETRENDARRAY(SLOTOUT) = .FALSE.
-	      INFILEARRAY(SLOTOUT) = 
+	IF (SAMPLE .EQ. 1) THEN
+	YERRORARRAY(SLOTOUT) = .FALSE.
+	DETRENDARRAY(SLOTOUT) = .FALSE.
+	INFILEARRAY(SLOTOUT) = 
      + 'PDM statistic vs frequency, '//INFILEARRAY(SLOT)
-	      NPTSARRAY(SLOTOUT) = COUNTER
-	      IF (.NOT. LCDF) THEN
-		 WRITE(*,*)' '
-		 WRITE(*,*)'** OK: Filled slot = ',SLOTOUT
-	      END IF
-	      IF (LSIG) THEN
-		 WRITE(*,*)' '
-	      END IF
-	   END IF
+	NPTSARRAY(SLOTOUT) = COUNTER
+	WRITE(*,*)' '
+	WRITE(*,*)'** OK: Filled slot = ',SLOTOUT
+	IF (LSIG) THEN
+	WRITE(*,*)' '
+	END IF
+	END IF
 
 C-----------------------------------------------------------------------------
 C Determine significance information if requested.
 C-----------------------------------------------------------------------------
 
-	   IF (LSIG) THEN
-	      STAT(SAMPLE) = 1.0D+32
-	      DO I = 1, COUNTER
-		 IF (WK2(I) .LT. STAT(SAMPLE)) THEN
-		    STAT(SAMPLE) = WK2(I)
-		 END IF
-		 IF (SAMPLE .GT. 1) THEN
-		    IF (WK2(I) .LE. Y(I,2,SLOTOUT)) THEN
-		       Y(I,3,SLOTOUT) = Y(I,3,SLOTOUT) + 1.0D0
-		    END IF
-		 END IF
-	      END DO
-	      IF (SAMPLE .GT. 1) THEN
-		 WRITE(*,*)'** OK: Processed permutation = ',SAMPLE-1
-	      END IF
+	IF (LSIG) THEN
+		STAT(SAMPLE) = 1.0D+32
+		DO I = 1, COUNTER
+		IF (WK2(I) .LT. STAT(SAMPLE)) THEN
+			STAT(SAMPLE) = WK2(I)
+		END IF
+		IF (SAMPLE .GT. 1) THEN
+		IF (WK2(I) .LE. Y(I,2,SLOTOUT)) THEN
+			Y(I,3,SLOTOUT) = Y(I,3,SLOTOUT) + 1.0D0
+		END IF
+		END IF
+		END DO
+		IF (SAMPLE .GT. 1) THEN
+		WRITE(*,*)'** OK: Processed permutation = ',SAMPLE-1
+		END IF
 
 C-----------------------------------------------------------------------------
 C Randomize time-series for next permutation.
 C-----------------------------------------------------------------------------
 
-	      CALL PERIOD_RAN1(SEED, IR, RANDOM, IY)
-	      DO J = 1, 1 + INT(RANDOM * 2.)
-		 DO I = 1, NDATA
-		    CALL PERIOD_RAN1(SEED, IR, RANDOM, IY)
-		    EL = 1 + INT(RANDOM * REAL(NDATA))
-		    SHUFFLE1 = YRAN(I) 
-		    SHUFFLE2 = YRAN(EL) 
-		    YRAN(I) = SHUFFLE2
-		    YRAN(EL) = SHUFFLE1
-		 END DO
-	      END DO
-	   END IF
+		CALL PERIOD_RAN1(SEED, IR, RANDOM, IY)
+		DO J = 1, 1 + INT(RANDOM * 2.)
+		   DO I = 1, NDATA
+		      CALL PERIOD_RAN1(SEED, IR, RANDOM, IY)
+		      EL = 1 + INT(RANDOM * REAL(NDATA))
+		      SHUFFLE1 = YRAN(I) 
+		      SHUFFLE2 = YRAN(EL) 
+		      YRAN(I) = SHUFFLE2
+		      YRAN(EL) = SHUFFLE1
+		   END DO
+		END DO
+	END IF
 	END DO
 
 C-----------------------------------------------------------------------------
@@ -1272,33 +1242,14 @@ C Permutations complete - calculate significance and load output arrays.
 C-----------------------------------------------------------------------------
 
 	IF (LSIG) THEN
-	   SIGNOISE = 0.0D0
-	   DO I = 2, NPERMS+1
-	      IF (STAT(I) .LE. STAT(1)) THEN
-		 SIGNOISE = SIGNOISE + 1.0D0
-	      END IF
-	   END DO
-	   SIG(1,SLOTOUT) = DBLE(NPERMS)
-	   SIG(2,SLOTOUT) = SIGNOISE / DBLE(NPERMS)
-
-	   IF (LCDF) THEN
-	      DO SAMPLE = 1, NPERMS+1
-		 Y(SAMPLE,1,SLOTOUT) = SAMPLE
-		 Y(SAMPLE,2,SLOTOUT) = STAT(SAMPLE)
-		 Y(SAMPLE,3,SLOTOUT) = 0.0D0	      
-	      END DO
-	      YERRORARRAY(SLOTOUT) = .FALSE.
-	      DETRENDARRAY(SLOTOUT) = .FALSE.
-	      INFILEARRAY(SLOTOUT) = 
-     + 'lowest trough vs permutation number, '//INFILEARRAY(SLOT)
-	      NPTSARRAY(SLOTOUT) = NPERMS+1
-	      SIG(1,SLOTOUT) = -1.0D0
-	      SIG(2,SLOTOUT) = -1.0D0
-	      WRITE(*,*)' '
-	      WRITE(*,*)'** OK: Filled slot = ',SLOTOUT
-	      WRITE(*,*)' '
-	   END IF
-
+	SIGNOISE = 0.0D0
+	DO I = 2, NPERMS+1
+		IF (STAT(I) .LE. STAT(1)) THEN
+		SIGNOISE = SIGNOISE + 1.0D0
+		END IF
+	END DO
+	SIG(1,SLOTOUT) = DBLE(NPERMS)
+	SIG(2,SLOTOUT) = SIGNOISE / DBLE(NPERMS)
 	END IF
 
 C-----------------------------------------------------------------------------
@@ -1320,8 +1271,8 @@ C Calculate periods from peaks (and troughs) in periodogram.
 C-----------------------------------------------------------------------------
 
 1000	WRITE(*,*)' '
-1001	WRITE(*,'(A,$)')'Enter first and last slots containing
-     + periodograms (0,0 to quit) : '
+1001	WRITE(*,'(A,$)')'Enter first and last slots containing'//
+     + ' periodograms (0,0 to quit) : '
 	READ(*,*,ERR=1001)SLOTFIRST, SLOTLAST
 	IF (SLOTFIRST .LE. 0 .OR. SLOTLAST .LE. 0) THEN
 		GOTO 10
@@ -1330,8 +1281,8 @@ C-----------------------------------------------------------------------------
 		WRITE(*,*)'** ERROR: Maximum slot number =',MXSLOT
 		GOTO 10
 	END IF
-1002	WRITE(*,'(A,$)')'Enter frequency range to analyse
-     + (0,0 for whole range) : '
+1002	WRITE(*,'(A,$)')
+     + 'Enter frequency range to analyse (0,0 for whole range) : '
 	READ(*,*,ERR=1002)MINF, MAXF
 	IF (LOG) THEN
 1003	WRITE(*,'(A,$)')'Write results to the log file ? [Y] : '
@@ -1848,7 +1799,7 @@ C-----------------------------------------------------------------------------
 	WRITE(*,*)'** OK: Maximum power in dataset = ',REAL(MAXWHITE)
 	WRITE(*,*)' '
 1350	WRITE(*,'(A,$)')'Enter black,white,xmin,xmax,ymin,ymax,'//
-     +  'pmin,pmax and replot (0''s to quit) : '
+     +  'pmin,pmax to replot (0''s to quit) : '
 	READ(*,*,ERR=1350)BLACK, WHITE, XMIN, XMAX, YMIN, YMAX,
      +  PMIN, PMAX
 	IF (BLACK .EQ. 0. .AND. WHITE .EQ. 0. .AND. XMIN .EQ. 0. 

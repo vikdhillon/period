@@ -5,6 +5,53 @@
 
                         Command: SLIDE
 
-BRIEF DESCRIPTION: To be written...
+BRIEF DESCRIPTION: Calculates a sliding SCARGLE periodogram. This
+routine splits the time series into a series of shorter time series
+and a SCARGLE periodogram of each shorter time series is then
+calculated. The length of each of the shorter time series, and the
+amount that they overlap with each other, are defined by the
+user. Each of the periodograms is then plotted as a greyscale as a
+function of time. This routine is particularly useful for studying
+transient periodic phenomena.
 
+PROMPT1: Enter first slot for input (0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any integer between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data for which the sliding
+         SCARGLE periodogram is to be calculated
+	 
+PROMPT2: Enter fraction of x-axis to process
+TYPE   : REAL*8
+OPTIONS: Any real number between 0 and 1
+DEFAULT: None
+PURPOSE: Determines the length of each of the time series that the
+         x-axis will be split up into. The SCARGLE periodogram of
+         each shorter time series will then be calculated
+	 
+PROMPT3: Enter fraction of x-axis to step (0 for every point)
+TYPE   : REAL*8
+OPTIONS: Any real number between 0 and 1
+DEFAULT: None
+PURPOSE: Determines the separation between each of the shorter
+         time series. For example, if 0.1 is entered to PROMPT2
+         and 0.05 to PROMPT3, then the following time series, in
+         fractional x-axis units, will have their SCARGLE
+         periodograms calculated: 0->0.1, 0.05->0.15, 0.1-0.2,
+         0.15-0.25, etc. Entering a zero sets the separation between
+         the shorter time series to only one data point
+
+PROMPT4: Graphics device/type (? to see list, default /xs)
+TYPE   : CHARACTER*
+OPTIONS: Any valid PGPLOT device name, or a ? to get a list of them
+DEFAULT: /xs
+PURPOSE: Sets the graphic device for the sliding periodogram plot
+
+PROMPT5: Enter black,white,xmin,xmax,ymin,ymax,pmin,pmax to
+         replot (0's to quit)
+TYPE   : REAL*8, REAL*8, REAL*4, REAL*4, REAL*4, REAL*4, REAL*4, REAL*4
+OPTIONS: Any real numbers
+DEFAULT: None
+PURPOSE: Prompts for a replot of the sliding periodogram with revised
+         plot parameters
 ------------------------------------------------------------------------

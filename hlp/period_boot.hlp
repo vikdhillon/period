@@ -1,0 +1,43 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2016-JAN-14)
+------------------------------------------------------------------------
+
+                        Command: BOOT
+
+BRIEF DESCRIPTION: Creates a bootstrapped version of the original
+dataset. N samples are randomly taken from a dataset containing N
+points. The same point can be selected more than once, and some points
+might not be selected at all. If the same point is selected more than
+once, two options are given:
+
+1. To divide the error bar, if present, by the square root of the
+number of the number of times the point has been selected. If a point
+is not selected at all, it is removed from the dataset.
+
+2. To have multiple points with the same x and y values. Any error
+bars are left unchanged.
+
+Since most of the period-finding routines do not use error bars, it is
+likely that option 2 will be of most use.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the input data from which the
+         bootstrapped version will be created
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the bootstrapped data
+
+PROMPT3: [R]epeat points or manipulate [E]rror bars ? [R]
+TYPE   : CHARACTER*1
+OPTIONS: r or e
+DEFAULT: r
+PURPOSE: Determines whether option 1 [E] or option 2 [R] is 
+         used to create the bootstrapped data.
+------------------------------------------------------------------------

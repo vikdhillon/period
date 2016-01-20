@@ -6,6 +6,5 @@
                         Command: CLOSE
 
 BRIEF DESCRIPTION: This option closes the currently open log file (if
-one has been opened). 
-
+one has been opened), preventing further output.
 ------------------------------------------------------------------------

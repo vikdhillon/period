@@ -59,8 +59,8 @@ C-----------------------------------------------------------------------------
 
 	IF (LSHOW) THEN
 	WRITE(*,*)' '
-5	WRITE(*,'(A,$)')'Display information on
-     + [L]og file or [D]ata ? [D] : '
+5	WRITE(*,'(A,$)')'Display information on '//
+     + '[L]og file or [D]ata ? [D] : '
 	READ(*,'(A)',ERR=5)OPTION
 	CALL PERIOD_CASE (OPTION, .TRUE.)
 
@@ -107,8 +107,8 @@ C-----------------------------------------------------------------------------
 
 	ELSE IF (OPTION .EQ. 'D' .OR. OPTION .EQ. ' ') THEN
 	WRITE(*,*)' '
-25	WRITE(*,'(A,$)')'Enter first and last slots for input
-     + (0,0 to quit) : '
+25	WRITE(*,'(A,$)')
+     + 'Enter first and last slots for input (0,0 to quit) : '
 	READ(*,*,ERR=25)FIRSTSLOT, LASTSLOT
 	IF (FIRSTSLOT .EQ. 0 .OR. LASTSLOT .EQ. 0) GOTO 99
 	IF (FIRSTSLOT .GT. MXSLOT .OR. LASTSLOT .GT. MXSLOT) THEN

@@ -5,10 +5,10 @@
 
                         Command: APPEND
 
-BRIEF DESCRIPTION: Slot manipulation: appends all of the slots between 
-the user-specified limits, skipping any slots which are empty. If any 
-slot to be appended does not have error bars, no error bars will be 
-copied to the final slot.
+BRIEF DESCRIPTION: Appends all of the slots between the user-specified
+limits, skipping any slots which are empty. If any slot to be appended
+does not have error bars, no error bars will be copied to the final
+slot.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER

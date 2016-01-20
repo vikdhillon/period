@@ -29,3 +29,7 @@
 
 # emacs backups
 *~
+
+# period stuff
+bin/period_v*
+**/.DS_Store

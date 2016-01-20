@@ -5,16 +5,17 @@
 
                         Command: QUIT (or EXIT)
 
-BRIEF DESCRIPTION: If this command is entered from the PERIOD_PERIOD
-sub-menu, it returns the user to the main PERIOD menu. If it is entered 
-from the main PERIOD menu, it quits the PERIOD session. It then offers 
-the user a last chance to stay in PERIOD. This is essential to prevent 
-accidental exit, since any data files created using PERIOD will be lost 
-on exit unless the data is first saved to disk using the OUTPUT command.
+BRIEF DESCRIPTION: This option quits a PERIOD session (the EXIT
+command is also accepted) if run from the main PERIOD menu. However,
+it does provide a last chance to stay in the package. This is
+essential to prevent accidental exit, since any data files created
+using PERIOD will be lost on exit from the package unless one has
+first saved them using OUTPUT. If this option is run from the
+PERIOD_PERIOD sub-menu, it returns the user to the main PERIOD menu.
 
 PROMPT1: Are you sure that you want to quit ?
 TYPE   : CHARACTER*1
-OPTIONS: Y or N
-DEFAULT: N
+OPTIONS: y or n
+DEFAULT: n
 PURPOSE: Offers last chance to stay in PERIOD. 
 ------------------------------------------------------------------------

@@ -1,0 +1,25 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2016-JAN-16)
+------------------------------------------------------------------------
+
+                        Command: INTEG
+
+BRIEF DESCRIPTION: Calculate the integral of the y-axis data. For
+example, if the slot contains a light curve, this routine will add up
+all of the flux values and output the running total as a function of
+time.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the data of which the integral
+         is to be calculated
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the integral
+------------------------------------------------------------------------

@@ -5,15 +5,24 @@
 
                         Command: CLIP
 
-BRIEF DESCRIPTION: This option clips data by removing/replacing all 
-points greater than a user-defined number of standard deviations from 
-the mean (both positive and negative). This is useful to remove 
-discrepant points from a time-series, which can cause artifacts in 
-periodograms if not removed. Discrepant points can either be removed 
-entirely from the data, replaced by the mean y-value of the data, 
-replaced by zero, or replaced by the average of the two neighbouring 
-points. The routine provides information on the value of each point 
-removed, and the total number (and percentage) of points clipped.
+BRIEF DESCRIPTION: Clips either x or y-axis data:
+
+x-axis - Removes all data lying outside a user-defined x-axis
+range. It is assumed that all input slots have the same x-axis range
+as the first input slot, and hence will all be x-clipped by the same
+amount.
+
+y-axis - Clips all data either lying outside a user-defined y-axis
+range, or lying a user-defined number of standard deviations above and
+below the mean. There are a number of clipping options: it is possible
+either to completely remove the clipped points from the dataset, or
+replace them by the mean of the entire dataset, by zero, by a
+user-defined value, or by the mean of the two nearest neighbours.
+
+This routine is useful to remove discrepant points from a time-series,
+which can cause artifacts in periodograms if not removed. The routine
+provides information on the value of each point removed, and the total
+number (and percentage) of points clipped.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER
@@ -27,19 +36,59 @@ OPTIONS: Any pair of integers between 0 and MXSLOT
 DEFAULT: None
 PURPOSE: Determines the location of the clipped data
 
-PROMPT3: [R]emove points or replace by [M]ean, [Z]ero, or [N]earest 
-         neighbour ? [R]
+PROMPT3: [X]-clip or [Y]-clip data? [Y]
 TYPE   : CHARACTER*1
-OPTIONS: r, m, z, n
+OPTIONS: x or y
+DEFAULT: y
+PURPOSE: Determines whether the x-axis or y-axis data are to be
+         clippped
+
+PROMPT4: [R]emove points or replace by [M]ean, [Z]ero, [V]alue 
+         or [N]earest neighbour ? [R]
+TYPE   : CHARACTER*1
+OPTIONS: r, m, z, v, n
 DEFAULT: r
 PURPOSE: Determines whether clipped points are to be removed from the
-         data or replaced by the mean of the y-data, zero, or the 
-         average of the two neighbouring y-axis points
+         data or replaced by the mean of the y-data, zero, a
+         user-defined value, or the average of the two neighbouring
+         y-axis points
 
-PROMPT4: Enter upper and lower sigma for clipping (e.g. 3,2.5)
+PROMPT5: Sigma clipping [Y/N] ? [N] 
+TYPE   : CHARACTER*1
+OPTIONS: y or n
+DEFAULT: n
+PURPOSE: Determines whether clipping will be performed using
+         a user-defined number of standard deviations from the
+         mean or using user-defined data values
+
+PROMPT6: Enter upper and lower sigma for clipping (e.g. 3,2.5)
 TYPE   : REAL*8
 OPTIONS: Any pair of real numbers greater than zero
 DEFAULT: None
 PURPOSE: Determines the number of standard deviations above and 
-         below the mean which are to be clipped
+         below the mean which are to be clipped. This is only
+         prompted for if PROMPT5 = 'y'
+
+PROMPT7: Enter upper and lower limits for clipping (e.g. 1000,0): 
+TYPE   : REAL*8
+OPTIONS: Any pair of real numbers greater than zero
+DEFAULT: None
+PURPOSE: Any data lying above or below the values entered here will be
+         clipped. This is only prompted for if PROMPT5 = 'n'
+
+PROMPT8: Enter replacement value
+TYPE   : REAL*8
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Any clipped data will be replaced by the value entered here.
+         This is only prompted for if PROMPT4 = 'v'
+
+PROMPT9: Enter new x-axis range (0,0 to quit, -1 for old value) : 
+TYPE   : REAL*8
+OPTIONS: Any pair of real numbers greater than zero
+DEFAULT: None
+PURPOSE: Any x-axis points lying outside the x-axis range entered here
+         will be removed. The full range of x-axis values in the slot
+         are listed to guide the user. Entering a value of -1 for either
+         end of the range will use the full value.
 ------------------------------------------------------------------------

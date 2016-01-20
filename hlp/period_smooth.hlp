@@ -5,7 +5,7 @@
 
                         Command: SMOOTH
 
-BRIEF DESCRIPTION: Smoothes the y-axis of data by median filtering.
+BRIEF DESCRIPTION: Smoothes the y-axis by median filtering.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER

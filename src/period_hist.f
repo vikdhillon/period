@@ -4,7 +4,7 @@
      +				INFILEARRAY, DETRENDARRAY) 
 
 C===========================================================================
-C Plot histogram or cumulative density function (CDF) of y-axis data. 
+C Plot histogram or cumulative distribution function (CDF) of y-axis data. 
 C
 C Written by Vikram Singh Dhillon @Sheffield 13-May-2010.
 C===========================================================================

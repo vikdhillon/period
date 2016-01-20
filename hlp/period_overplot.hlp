@@ -5,9 +5,9 @@
 
                         Command: OVERPLOT
 
-BRIEF DESCRIPTION: Turns overplotting in PLT on (if off) or off (if on).
-When on, multiple slots are plotted in the same panel. When off, PLT
-clears each plot before plotting the next slot. Note that if OVERPLOT
-is on, it is also possible to type PLOT VERTICAL in PLT and plot each
-slot in its own window.
+BRIEF DESCRIPTION: Toggles overplotting on and off. When on, multiple
+slots are plotted in the same plot window. When off, PLT clears each
+plot before plotting the next slot. Note that if OVERPLOT is on, it is
+also possible to type "plot vertical" in PLT, which plots each slot in
+its own panel.
 ------------------------------------------------------------------------

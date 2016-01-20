@@ -5,8 +5,9 @@
 
                         Command: HELP
 
-BRIEF DESCRIPTION: The HELP command provides on-line help for PERIOD. 
-Detailed information about individual commands can be obtained by typing 
-HELP 'COMMAND' (eg. HELP SCARGLE). A listing of the available commands
-can be obtained by typing a '?'.
+BRIEF DESCRIPTION: This command provides on-line help for
+PERIOD. Detailed information about individual commands can be obtained
+by typing, HELP 'COMMAND', e.g. HELP FOLD. A listing of the available
+commands can be obtained by typing a ?. HELP can be called from either
+the main PERIOD menu or the PERIOD_PERIOD sub-menu.
 ------------------------------------------------------------------------

@@ -1,0 +1,53 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2016-JAN-09)
+------------------------------------------------------------------------
+
+                        Command: AIRMASS
+
+BRIEF DESCRIPTION: Calculates airmass, zenith distance or parallactic
+angle of a list of MJDs (as contained in an ULTRACAM reduce log file,
+for example) for a large number of observatories around the world. A
+(non-foolproof) check is made to determine if the x-axis is in MJD
+units - if it isn't, the routine quits. This option also outputs the
+UTC date, azimuth and hour angle as a function of MJD to the screen,
+which might be of use for some applications.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the input data (MJDs) for which
+         the airmass/zenith distance/parallactic angle will be
+         calculated
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the output data
+         (the airmass/zenith distance/parallactic angle)
+	 
+PROMPT3: Calculate [A]irmass, [Z]enith distance or
+         [P]arallactic angle ? [Z] 
+TYPE   : CHARACTER*1
+OPTIONS: a, z or p
+DEFAULT: z
+PURPOSE: Determines whether to calculate the airmass, zenith
+         distance or parallactic angle from the input MJDs
+
+PROMPT4: Enter RA and Dec (J2000; e.g. 12 34 56.7 -12 34 56.7) 
+TYPE   : INTEGER, INTEGER, REAL*8, INTEGER, INTEGER, REAL*8
+OPTIONS: Any valid RA and Dec in J2000 coordinates
+DEFAULT: None
+PURPOSE: Sets the position of the object so that the appropriate
+         airmass, zenith distance or parallactic angle can be
+         calculated
+
+PROMPT5: Enter observatory identifier (<cr> for list) 
+TYPE   : CHARACTER*10
+OPTIONS: Any valid observatory identifier
+DEFAULT: <cr> - this lists all of the valid observatory identifiers
+PURPOSE: Sets the position of the observatory so that the appropriate
+         vector from the Sun to the telescope can be computed
+------------------------------------------------------------------------

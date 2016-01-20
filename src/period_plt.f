@@ -79,8 +79,8 @@ C Select slots to process.
 C-----------------------------------------------------------------------------
 
 	IF (.NOT. LCOMMAND) THEN
-1	   WRITE(*,'(A,$)')'Enter first and last slots for input
-     + (0,0 to quit) : '
+1	   WRITE(*,'(A,$)')
+     + 'Enter first and last slots for input (0,0 to quit) : '
 	   READ(*,*,ERR=1)FIRSTSLOT, LASTSLOT
 	END IF
 	IF (FIRSTSLOT .EQ. 0 .OR. LASTSLOT .EQ. 0) GOTO 99

@@ -17,7 +17,7 @@ C-----------------------------------------------------------------------------
 	WRITE(*,*)'|**************************************************|'
 	WRITE(*,*)'|**| PERIOD  :>  A time-series analysis package |**|'
 	WRITE(*,*)'|**| Version :>  10.0 (native) for ULTRACAM     |**|'
-	WRITE(*,*)'|**| Date    :>  04-July-2014                   |**|'
+	WRITE(*,*)'|**| Date    :>  09-January-2016                |**|'
 	WRITE(*,*)'|**************************************************|'
 	WRITE(*,*)'|**|'
 	WRITE(*,*)'|**| Please report bugs, problems or suggestions to:'

@@ -5,8 +5,8 @@
 
                         Command: DEL
 
-BRIEF DESCRIPTION: Slot manipulation: deletes all of the slots between
-the user-specified limits. 
+BRIEF DESCRIPTION: Deletes all of the slots between the user-specified
+limits.
 
 PROMPT1: Enter first and last slots for deletion (0,0 to quit)
 TYPE   : INTEGER

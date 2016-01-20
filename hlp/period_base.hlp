@@ -7,14 +7,21 @@
 
 BRIEF DESCRIPTION: Determines whether or not the integer part of the
 x-axis is subtracted prior to plotting in QDP/PLT. This is required
-because QDP/PLT only operates on REAL*4 numbers, not the REAL*8 used by 
-PERIOD for data storage and manipulation. It will be of most use when 
-plotting ULTRACAM data (which has x-axis data of type f16.10). Without
-enabling BASE, this would cause QDP/PLT to fail. By enabling BASE, the 
-integer part of the first number in the x-axis array will be subtracted 
-from every number in the x-axis prior to plotting. Note, however, that 
-on leaving QDP/PLT, the data in the slots are unchanged. To prevent
-confusion when looking at periodograms with BASE enabled (which would
-cause peaks to appear at the wrong frequency), BASE is always disabled
-in the PERIOD_PERIOD menu. 
+because PGPLOT (and hence QDP/PLT) only operates on REAL*4 numbers,
+not the REAL*8 used by PERIOD for data storage and manipulation. It
+will be of most use when plotting ULTRACAM data (which has x-axis data
+in MJDs of type f16.10). Without enabling BASE, this would cause
+QDP/PLT to corrupt the plot. By enabling BASE, the integer part of the
+first number in the x-axis array will be subtracted from every number
+in the x-axis prior to plotting, i.e. MJD 55555.5555555555 becomes
+0.5555555555. Note, however, that on leaving QDP/PLT, the data in the
+slots are unchanged.
+
+PERIOD has no way of knowing if your x-axis is in MJD units, so it may
+not always be appropriate to subtract a base, e.g. when plotting a
+periodogram, as it would give an unwanted offset in the frequencies of
+any plotted peaks. Hence, to prevent confusion when viewing
+periodograms, BASE is automatically turned off when running PLT from
+the PERIOD_PERIOD sub-menu. However, be careful when viewing
+periodograms with PLT from the main PERIOD menu when BASE is turned on.
 ------------------------------------------------------------------------

@@ -5,57 +5,60 @@
 
                         Command: UINPUT
 
-BRIEF DESCRIPTION: Loads data from the log files output by the 'reduce'
-program of the ULTRACAM pipeline data reduction system. This routine
-automatically skips the headers and determines the number of runs and
-the number of apertures (i.e. stars) on each of the three CCDs. As a 
-check, it outputs the first and last MJD values read from the file and 
-also offers the user the option of viewing both the non-fatal and fatal
-'reduce' errors (indicated by the "** WARNING:" and "** ERROR:" 
+BRIEF DESCRIPTION: Loads data from the log files output by the reduce
+program of the ULTRACAM pipeline data reduction software. This routine
+automatically skips the headers and determines the number of frames
+and the number of apertures (i.e. stars) on each of the CCDs. As a
+check, it outputs the first and last MJD values read from the file and
+also offers the user the option of viewing both the non-fatal and
+fatal reduce errors (indicated by the ** WARNING: and ** ERROR:
 strings, respectively). The error codes have the following meanings:
 
-Error code = 0:  All OK
-Error code = 1:  At least one attempt was made to remove a cosmic ray 
-                 from the star aperture (non-fatal)
-Error code = 2:  Sky annulus overlaps edge of data window (non-fatal)
-Error code = 3:  Sky annulus overlaps edge of data window and at least 
-                 one cosmic ray was zapped (non-fatal)
-Error code = 4:  Sky < -5: may indicate a bad bias frame which leads to 
-                 underestimated errors in the photon case (non-fatal).
-Error code = 5:  Counts in at least one pixel of the aperture exceeds 
-                 peppering level for the CCD (non-fatal)
-Error code = 6:  No sky pixels (non-fatal, although could be bad!)
-Error code = 7:  Aperture has extra apertures but these are ignored for 
-                 optimal extraction (non-fatal)
-Error code = 8:  Counts in at least one pixel of the aperture exceeds 
-                 saturation level for the CCD (non-fatal, but bad!)
-Error code = 9:  Aperture lies outside all data windows (fatal)
+Error code = 0: All OK
+Error code = 1: At least one attempt was made to remove a cosmic ray
+                from the star aperture (non-fatal)
+Error code = 2: Sky annulus overlaps edge of data window (non-fatal)
+Error code = 3: Sky annulus overlaps edge of data window and at least
+                one cosmic ray was zapped (non-fatal)
+Error code = 4: Sky < -5: may indicate a bad bias frame which leads to
+                underestimated errors in the photon case (non-fatal)
+Error code = 5: Counts in at least one pixel of the aperture exceeds
+                peppering level for the CCD (non-fatal)
+Error code = 6: No sky pixels (non-fatal, although could be bad!)
+Error code = 7: Aperture has extra apertures but these are ignored for
+                optimal extraction (non-fatal)
+Error code = 8: Counts in at least one pixel of the aperture exceeds
+                saturation level for the CCD (non-fatal, but bad!)
+Error code = 9: Aperture lies outside all data windows (fatal)
 Error code = 10: Target aperture overlaps edge of data window (fatal)
 Error code = 11: Aperture has been invalidated (fatal)
- 
-Note that the maximum number of frames in the log file is MXROW and 
-the maximum number of apertures on each CCD is MAXAPER. Note also
-that it is possible to load multiple log files using this option.
+Error code = 12: Blue frame is junk (fatal)
+
+Note that the maximum number of frames in the log file is set by MXROW
+and the maximum number of apertures on each CCD is MAXAPER (see the
+web-based user guide for how to increase these). Note also that it is
+possible to load multiple log files using this option, concatenating
+the light curve into a single slot.
 
 PROMPT1: Enter name of data file (<CR> to quit)
 TYPE   : CHARACTER*72
-OPTIONS: Any valid linux filename
-DEFAULT: Quit UINPUT and return to PERIOD_ULTRACAM menu
-PURPOSE: Specifies name of input ASCII file on disk. Prompted
-         for repeatedly (so that multiple log files can be loaded)
+OPTIONS: Any valid unix filename
+DEFAULT: Quit UINPUT and return to PERIOD menu
+PURPOSE: Specifies name of ULTRACAM reduce log file on disk. Prompted
+         for repeatedly (so that multiple log files can be appended)
          until <CR> is given to quit
 
 PROMPT2: Do you want to see a listing of the fatal errors? [N]
 TYPE   : CHARACTER*1
-OPTIONS: Y or N
-DEFAULT: N
+OPTIONS: y or y
+DEFAULT: n
 PURPOSE: Gives the user the option of seeing the fatal errors 
-         in the 'reduce' log file
+         in the reduce log file
 
 PROMPT3: Do you want to see a listing of the non-fatal errors? [N]
 TYPE   : CHARACTER*1
-OPTIONS: Y or N
-DEFAULT: N
+OPTIONS: y or n
+DEFAULT: n
 PURPOSE: Gives the user the option of seeing the non-fatal errors 
-         in the 'reduce' log file. 
+         in the reduce log file. 
 ------------------------------------------------------------------------

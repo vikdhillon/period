@@ -5,20 +5,21 @@
 
                         Command: OFF
 
-BRIEF DESCRIPTION: Applies an OFFset to the y-axis of each slot when
-plotting in PLT with the OVERPLOT flag enabled. Note that this option
-does NOT alter the data in the slots and does NOT apply an offset to
-plots when OVERPLOTting is turned off.
+BRIEF DESCRIPTION: When OVERPLOT is enabled, OFF adds a user-defined
+y-axis offset to each slot in the plot, which helps to separate the
+data in the plot. Note that this option does NOT alter the data in the
+slots and does NOT apply an offset to plots when OVERPLOTting is
+turned off.
 
-OFF accepts command-line entry of the offset. So, for example, to 
+OFF accepts command-line entry of the offset. So, for example, to
 apply a y-axis offset of 0.5 to each slot when plotting in PLT, simply
-type: " PERIOD> off 0.5". In this case, PROMPT1 (see below) is obviously 
+type: period> off 0.5. In this case, PROMPT1 (see below) is obviously
 not prompted for.
 
 PROMPT1: Enter y offset for plots
 TYPE   : REAL*8
-OPTIONS: Any real number.
+OPTIONS: Any real number
 DEFAULT: None
 PURPOSE: Specifies the y-axis offset to be applied to each slot when
-         plotting in PLT with OVERPLOT enabled.
+         plotting with OVERPLOT enabled
 ------------------------------------------------------------------------

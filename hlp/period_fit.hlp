@@ -7,9 +7,13 @@
 
 BRIEF DESCRIPTION: Folds the data on a given period and zero point and
 then fits the data with a sine curve. The sine curve has the form:
-Y = GAMMA + (AMPLITUDE * SIN( ((2*PI)/PERIOD) * (X - ZEROPT) )).
-Outputs the fit parameters (which can be written to a log file) and 
-the resulting sine curve. 
+
+Y = GAMMA + (AMPLITUDE * SIN[(2.0*PI/PERIOD) * (X - ZEROPT)]).
+
+Outputs the fit parameters (which can be written to a log file) and
+the resulting sine curve. This option is particularly useful for
+fitting radial-velocity curves of interacting binary stars, for
+example.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER
@@ -34,25 +38,34 @@ TYPE   : REAL*8
 OPTIONS: Any real number greater than 0
 DEFAULT: None
 PURPOSE: Specifies the error in the period. This is used in the
-         error calculations.
+         error calculations
 
 PROMPT5: Enter zero point (0 for first data point)
 TYPE   : REAL*8
 OPTIONS: Any real number
 DEFAULT: None
-PURPOSE: Determines the zero point of the data folding
+PURPOSE: Determines the zero point of the data folding. Entering
+         a zero uses the first data point for the zero point
 
 PROMPT6: Enter error in zero point
 TYPE   : REAL*8
 OPTIONS: Any real number greater than 0
 DEFAULT: None
 PURPOSE: Specifies the error in the zero point. This is used in 
-         the error calculations.
+         the error calculations
 
-PROMPT7: Do you want to log this fit ? [N]
+PROMPT7: Number of x-axis points in output slot ?
+         (0 for same as input slot) 
+TYPE   : INTEGER
+OPTIONS: Any integer greater than or equal to zero
+DEFAULT: None
+PURPOSE: Specifies the number of x-axis points in the output sine
+         curve
+
+PROMPT8: Do you want to log this fit ? [N]
 TYPE   : CHARACTER*1
-OPTIONS: Y or N
-DEFAULT: N
+OPTIONS: y or n
+DEFAULT: n
 PURPOSE: Determines whether the results of the fit are written
          to the log file
 ------------------------------------------------------------------------

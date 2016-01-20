@@ -5,56 +5,60 @@
 
                         Command: SIG
 
-BRIEF DESCRIPTION: This option works as a switch, either turning on or 
-turning off the significance calculation. The default on entering PERIOD 
-is for the significance calculation to be disabled. This means that no 
-significance values are calculated or attached to period determinations. 
-By typing SIG, the significance calculation is enabled. One is first
-prompted for the number of permutations in the sample. To ensure 
-reliable significance values, this should typically be set to a value of
-100 or more. The PERIOD random number generator is then automatically
-initialised using a seed extracted from the current date and time - 
-this determines the starting point in a number series of infinite 
-period. If SIG is already enabled, one can disable the significance 
-calculation by typing SIG again. 
+BRIEF DESCRIPTION: Arguably the most reliable means of determining the
+significance of a peak (or trough) in a periodogram is via some sort
+of Monte Carlo analysis. Such a method, known as a Fisher
+randomisation test (see, for example, Nemec and Nemec 1985), is
+employed in PERIOD.
+
+The SIG option works as a switch, either turning on or turning off the
+significance calculation in PERIOD. The default on entering PERIOD is
+for the significance calculation to be disabled. This means that no
+significance values are calculated or attached to period
+determinations. By typing SIG, the significance calculation is
+enabled. You are first prompted for the number of permutations in the
+sample. To ensure reliable significance values, this should typically
+be set to a value of 100 or more. The maximum number of permutations
+is currently 10000, which is set by the MAXPERMS parameter in
+period_period.f. The PERIOD random number generator is then
+automatically initialised using a seed extracted from the current date
+and time - this determines the starting point in a number series of
+infinite period. If SIG is already enabled, one can disable the
+significance calculation by typing SIG again.
 
 With the significance calculation enabled, every time a period-finding
-option is run (CHISQ, FT, SCARGLE, CLEAN, STRING, PDM) a Fisher
-randomization test is performed. This consists of calculating the 
-periodogram as usual and loading the specified output slot. The y-axis
-data is then shuffled to form a new, randomized time-series. The
-periodogram of this dataset is then calculated (but not stored in the
-output slot, which will always contain the periodogram of the real
-time-series). This randomization and periodogram calculation loop 
-is then performed for the number of permutations specified by the user. 
-This can take a considerable amount of time, depending on the 
-number of data points in the time-series, the frequency search 
-parameters and the number of permutations. 
+option is run (AMPLITUDE, CHISQ, CLEAN, FT, PDM, SCARGLE, STRING) a
+Fisher randomisation test is performed. This consists of calculating
+the periodogram as usual and loading the specified output slot. The
+y-axis data is then shuffled to form a new, randomised time-series
+with the same x-axis values as the original dataset. The periodogram
+of this dataset is then calculated (but not stored in the output slot,
+which will always contain the periodogram of the real
+time-series). This randomisation and periodogram calculation loop is
+then performed for the number of permutations specified by the
+user. This can take a considerable amount of time, depending on the
+number of data points in the time-series, the frequency search
+parameters and the number of permutations.
 
-Once the loop is complete, one should enter the PEAKS option to view 
-the resulting significances. Two significance estimates are given in 
-PEAKS. The first, denoted FAP1, represents the proportion of 
-permutations (ie. shuffled time-series) that contained a trough 
-lower than (in the case of the CHISQ, STRING and PDM options) or a peak 
-higher than (in the case of the FT, SCARGLE and CLEAN options) that of 
-the periodogram of the unrandomized dataset AT ANY FREQUENCY. This 
-therefore represents the probability that, given the frequency search
-parameters, no periodic component is present in the data with this 
-period and it is only output in PEAKS if the whole frequency range is 
-specified (see PROMPT2 in HELP PEAKS). The second significance, denoted 
-FAP2, represents the proportion of permutations that, AT THE FREQUENCY 
-GIVEN BY THE PERIOD OUTPUT BY PEAKS, contained troughs lower than (or 
-peaks higher than) the peak or trough in the periodogram of the real 
-dataset. This therefore represents the probability that the period is 
-not actually equal to the quoted value but is equal to some other 
-value, and is quoted for any frequency range specified at PROMPT2 in 
-PEAKS. Standard errors on both of these false alarm probabilities are 
-also given. 
-
-It should be noted that the only reliable method of estimating 
-significances from such non-parametric tests as CHISQ, FT, CLEAN,
-SCARGLE, STRING and PDM is by this kind of Monte Carlo or 
-randomization technique. 
+Once the loop is complete, you should enter the PEAKS option to view
+the resulting significances. Two significance estimates are given in
+PEAKS. The first, denoted FAP1, represents the proportion of
+permutations (i.e. shuffled time-series) that contained a trough lower
+than (in the case of the CHISQ, STRING, and PDM options) or a peak
+higher than (in the case of the AMPLITUDE, FT, SCARGLE and CLEAN
+options) that of the periodogram of the unrandomised dataset at any
+frequency. This therefore represents the probability that, given the
+frequency search parameters, no periodic component is present in the
+data with this period and it is only output in PEAKS if the whole
+frequency range is selected for analysis. The second significance,
+denoted FAP2, represents the proportion of permutations that, at the
+frequency given by the period output by PEAKS, contained troughs lower
+than (or peaks higher than) the peak or trough in the periodogram of
+the real dataset. This therefore represents the probability that the
+period is not actually equal to the quoted value but is equal to some
+other value, and is quoted for any frequency range specified in
+PEAKS. Standard errors on both of these false alarm probabilities are
+also given (see Nemec and Nemec 1985).
 
 PROMPT1: Enter number of permutations in sample
 TYPE   : INTEGER

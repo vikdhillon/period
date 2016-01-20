@@ -35,8 +35,8 @@ C Select slots to output.
 C-----------------------------------------------------------------------------
 
 	WRITE(*,*)' '
-10	WRITE(*,'(A,$)')'Enter first and last slots for output
-     + (0,0 to quit) : '
+10      WRITE(*,'(A,$)')
+     + 'Enter first and last slots for output (0,0 to quit) : '
 	READ(*,*,ERR=10)FIRSTSLOT, LASTSLOT
 	IF (FIRSTSLOT .EQ. 0 .OR. LASTSLOT .EQ. 0) GOTO 99
 	IF (FIRSTSLOT .GT. MXSLOT .OR. LASTSLOT .GT. MXSLOT) THEN

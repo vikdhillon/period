@@ -6,22 +6,29 @@
                         Command: PLT
 
 BRIEF DESCRIPTION: Calls PLT, the subroutine mode of the plotting and
-fitting package QDP (see SUN 128 or the QDP/PLT manual). This option is 
-used to plot any desired data slots. One can then manipulate the plot 
-(just as if one were using QDP) and create publication-ready diagrams. 
-In addition, PLT contains an excellent set of fitting routines which 
-can be used to fit a variety of different functions to the data (such
-as a Gaussian in order to estimate the error in a period determined 
-from a periodogram). To receive on-line help for PLT, simply type HELP 
-at the period-plt prompt. To plot to a postscript file for printing, 
-type "period-plt>dev /ps" followed by "period-plt>pl" (or type 
-"period-plt>dev ?" for a list of available plot devices).  To exit 
-period-plt and return to the PERIOD menu, type "period-plt>exit".
+fitting package QDP (see the PLT online help). This option is used to
+plot any desired data slots. Once in the period-plt> menu, one can
+manipulate the plot (just as if one were using QDP) and create
+publication-ready diagrams. In addition, PLT contains an excellent set
+of fitting routines which can be used to fit a variety of different
+functions to the data (such as a Gaussian to a peak in a periodogram,
+for example). To receive on-line help for PLT, simply type:
+period-plt> help or period-plt> ?. To plot to a colour postscript file
+for printing, type period-plt> dev /cps followed by period-plt> pl (or
+type period-plt> dev ? for a list of available plot devices). To exit
+PLT and return to the PERIOD menu, type: period-plt> exit or
+period-plt> q.
+
+PLT can be called from either the main PERIOD menu or the
+PERIOD_PERIOD sub-menu. If PLT is called from the PERIOD_PERIOD
+sub-menu, BASE is automatically turned off to prevent confusion when
+viewing periodograms. This is not the case when viewing periodograms
+if PLT is called from the main PERIOD menu, so great care is required
+in this case if BASE is turned on.
 
 Note that PLT accepts command-line slot selection from the main PERIOD
 menu and the PERIOD_PERIOD sub-menu. So, for example, to plot slots 3
-and 4, simply type: "period> plt 3,4" or "period_period> pl 3 4". 
-In this case, PROMPT1 (see below) is obviously not prompted for.
+and 4, simply type: period> plt 3,4 or period_period> pl 3 4.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER

@@ -5,16 +5,26 @@
 
                         Command: FAKE
 
-BRIEF DESCRIPTION: Creates fake data with which to test PERIOD. Two 
-options are catered for: periodic data or chaotic data. The periodic 
-data are created by summing a user-specified number of sine curves 
-of the form:
-Y = GAMMA + (AMPLITUDE * SIN( ((2*PI)/PERIOD) * (X - ZEROPT) )).
-The chaotic data are created using a simple logistic equation of 
-the form: 
+BRIEF DESCRIPTION: Creates fake data with which to test PERIOD. Three
+options are catered for: periodic data, chaotic data or random data.
+
+The periodic data are created by summing a user-specified number of
+sine curves of the form:
+
+Y = GAMMA + (AMPLITUDE * SIN[(2.0*PI)/PERIOD) * (X - ZEROPT)]).
+
+The chaotic data are created using a simple logistic equation of the
+form:
+
 Xn+1 = LAMBDA * Xn * (1-Xn)
-Values of 4 and 0.125 for lambda and the initial value of Xn, 
+
+Values of 4 and 0.125 for lambda and the initial value of Xn,
 respectively, work well.
+
+The random data are calculated using a Gaussian random number
+generator from a user-defined mean and standard deviation. The seed
+for the random number generator is set to the current date and time,
+so is never the same twice.
 
 PROMPT1: Enter first and last slots for output (0,0 to quit)
 TYPE   : INTEGER
@@ -22,18 +32,19 @@ OPTIONS: Any pair of integers between 0 and MXSLOT
 DEFAULT: None
 PURPOSE: Determines the location of the fake data
 
-PROMPT2: [P]eriodic or [C]haotic data ? [P]
+PROMPT2: [P]eriodic, [C]haotic or [R]andom data ? [P]
 TYPE   : CHARACTER*1
-OPTIONS: P or C
-DEFAULT: P
-PURPOSE: Determines whether fake data is to be periodic or chaotic
+OPTIONS: p, c or r
+DEFAULT: p
+PURPOSE: Determines whether fake data is to be periodic, chaotic
+         or random
 
 PROMPT3: Enter number of sine curves
 TYPE   : INTEGER
 OPTIONS: Any integer between 1 and 20
 DEFAULT: None
 PURPOSE: Determines number of sine functions in fake data
-         (if the P option is specified)
+         (if the 'p' option is specified)
 
 PROMPT4: Enter number of data points
 TYPE   : INTEGER
@@ -52,19 +63,34 @@ TYPE   : REAL*8
 OPTIONS: Any 4 real numbers (the value of period must be greater than 0)
 DEFAULT: None
 PURPOSE: Determines the PERIOD, AMPLITUDE, ZEROPT and GAMMA parameters
-         of the sine curve (if the P option is specified)
+         of the sine curve (if the 'p' option is specified)
 
 PROMPT7: Enter LAMBDA
 TYPE   : REAL*8
 OPTIONS: Any real number between 0 and 4. Try 4.
 DEFAULT: None
 PURPOSE: Specifies the LAMBDA parameter in the logistic equation
-         (if the C option is specified)
+         (if the 'c' option is specified)
 
 PROMPT8: Enter initial value
 TYPE   : REAL*8
 OPTIONS: Any real number. Try 0.125.
 DEFAULT: None
 PURPOSE: Specifies the initial value of Xn in the logistic equation
-         (if the C option is specified)
+         (if the 'c' option is specified)
+
+PROMPT9: Enter mean 
+TYPE   : REAL*8
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Specifies the mean of the Gaussian distribution for the random
+         number generator (if the 'r' option is specified)
+
+PROMPT10: Enter standard deviation 
+TYPE    : REAL*8
+OPTIONS : Any real number
+DEFAULT : None
+PURPOSE : Specifies the standard deviation of the Gaussian distribution
+          for the random number generator (if the 'r' option is
+          specified)
 ------------------------------------------------------------------------

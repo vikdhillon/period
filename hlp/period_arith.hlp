@@ -7,8 +7,8 @@
 
 BRIEF DESCRIPTION: Performs slot arithmetic. It is possible to add, 
 subtract, multiply or divide the x- or y-values in a slot by a constant
-or take the logarithm of the x- or y-values in a slot (the latter is 
-useful to convert counts into magnitudes). This operation can be 
+or take logs (base 10), square root or 10** of the x- or y-values in a
+slot (useful to convert counts into magnitudes). This operation can be 
 performed on any number of slots simultaneously. It is also possible 
 to add, subtract, multiply or divide the y-axis data of one slot 
 to/from/by the y-axis data of another. This operation can only be
@@ -23,13 +23,14 @@ DEFAULT: c
 PURPOSE: Determines whether a constant is to be added/subtracted/
          divided/multipled to a slot (c) or whether one slot is to 
          be added/subtracted/divided/multiplied by another slot (s).
-         Note that the 'c' option also allows the logarithm to be
-         taken
+         Note that the 'c' option also allows allows logs (base 10),
+         square roots or 10** to be taken.
 
-PROMPT2: [a]dd, [s]ub, [d]iv, [m]ul by constant or take [l]og? [d]
+PROMPT2: [a]dd, [s]ub, [d]iv, [m]ul by constant, or take [l]og10,
+         [t]en** or s[q]uare root? [d]
 TYPE   : CHARACTER*1
-OPTIONS: a, s, d, m or l
-DEFAULT: None
+OPTIONS: a, s, d, m, l, t or s
+DEFAULT: d
 PURPOSE: Determines which arithmetic operation to perform. Only
          prompted for if PROMPT1 = 'c'
 
@@ -39,7 +40,7 @@ OPTIONS: Any real number
 DEFAULT: None
 PURPOSE: The constant to be added/subtracted/divided/multipled. 
          Only prompted for if PROMPT1 = 'c' and not prompted for 
-         if PROMPT2 = 'l'
+         if PROMPT2 = 'l', 't' or 's'
 
 PROMPT4: Operate on x-axis? [n]
 TYPE   : CHARACTER*1
@@ -55,8 +56,8 @@ OPTIONS: Any pair of integers between 0 and MXSLOT
 DEFAULT: None
 PURPOSE: Determines the location of the input data to which a 
          constant is to be added, subtracted, divided or 
-         multiplied (or the logarithm taken). Only prompted for 
-         if PROMPT1 = 'c'
+         multiplied (or the log/sqrt/10** taken). Only prompted
+         for if PROMPT1 = 'c'
 
 PROMPT6: Enter first and last slots for output (0,0 to quit)
 TYPE   : INTEGER
@@ -64,12 +65,12 @@ OPTIONS: Any pair of integers between 0 and MXSLOT
 DEFAULT: None
 PURPOSE: Determines the location of the output data to which a
          constant has been added, subtracted, divided or multiplied
-         (or the logarithm taken). Only prompted for if PROMPT1 = 'c'
+         (or the log/sqrt/10**). Only prompted for if PROMPT1 = 'c'
 
 PROMPT7: [a]dd, [s]ub, [d]iv, or [m]ul slots? [d]
 TYPE   : CHARACTER*1
 OPTIONS: a, s, d, or m
-DEFAULT: None
+DEFAULT: d
 PURPOSE: Determines which arithmetic operation to perform. Only
          prompted for if PROMPT1 = 's'
 

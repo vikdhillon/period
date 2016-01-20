@@ -43,8 +43,8 @@ C Select slots to load.
 C-----------------------------------------------------------------------------
 
 	WRITE(*,*)' '
-1	WRITE(*,'(A,$)')'Enter first and last slots for input
-     + (0,0 to quit) : '
+1	WRITE(*,'(A,$)')
+     + 'Enter first and last slots for input (0,0 to quit) : '
 	READ(*,*,ERR=1)FIRSTSLOT, LASTSLOT
 	IF (FIRSTSLOT .EQ. 0 .OR. LASTSLOT .EQ. 0) GOTO 99
 	IF (FIRSTSLOT .GT. MXSLOT .OR. LASTSLOT .GT. MXSLOT) THEN
@@ -140,14 +140,14 @@ C-----------------------------------------------------------------------------
 			GOTO 20
 		ELSE
 		WRITE(*,*)' '
-18		WRITE(*,'(A,$)')'Enter number of column containing X data  : '
+18		WRITE(*,'(A,$)')'Enter number of column containing X data : '
 		READ(*,*,ERR=18)XCOL
 		IF (XCOL .GT. NUMCOLS) THEN
 			GOTO 18
 		ELSE IF (XCOL .LE. 0) THEN
 			GOTO 18
 		END IF
-19		WRITE(*,'(A,$)')'Enter number of column containing Y data  : '
+19		WRITE(*,'(A,$)')'Enter number of column containing Y data : '
 		READ(*,*,ERR=19)YCOL
 		IF (YCOL .GT. NUMCOLS) THEN
 			GOTO 19
@@ -158,8 +158,8 @@ C-----------------------------------------------------------------------------
 		READ(*,'(A)',ERR=31)REPLY
 		CALL PERIOD_CASE (REPLY, .TRUE.)
 		IF (REPLY .EQ. 'Y' .OR. REPLY .EQ. ' ') THEN
-21		WRITE(*,'(A,$)')'Enter number of column containing Y data
-     + errors : '
+21		        WRITE(*,'(A,$)')
+     + 'Enter number of column containing Y data errors : '
 			READ(*,*,ERR=21)YCOLERR
 			IF (YCOLERR .GT. NUMCOLS) THEN
 				GOTO 21
@@ -175,14 +175,14 @@ C-----------------------------------------------------------------------------
 		END IF
 	ELSE IF (NUMCOLS .GE. 4) THEN
 		WRITE(*,*)' '
-22		WRITE(*,'(A,$)')'Enter number of column containing X data  : '
+22		WRITE(*,'(A,$)')'Enter number of column containing X data : '
 		READ(*,*,ERR=22)XCOL
 		IF (XCOL .GT. NUMCOLS) THEN
 			GOTO 22
 		ELSE IF (XCOL .LE. 0) THEN
 			GOTO 22
 		END IF
-23		WRITE(*,'(A,$)')'Enter number of column containing Y data  : '
+23		WRITE(*,'(A,$)')'Enter number of column containing Y data : '
 		READ(*,*,ERR=23)YCOL
 		IF (YCOL .GT. NUMCOLS) THEN
 			GOTO 23
@@ -193,8 +193,8 @@ C-----------------------------------------------------------------------------
 		READ(*,'(A)',ERR=32)REPLY
 		CALL PERIOD_CASE (REPLY, .TRUE.)
 		IF (REPLY .EQ. 'Y' .OR. REPLY .EQ. ' ') THEN
-24		WRITE(*,'(A,$)')'Enter number of column containing Y data
-     + errors : '
+ 24		        WRITE(*,'(A,$)')
+     + 'Enter number of column containing Y data errors : '
 			READ(*,*,ERR=24)YCOLERR
 			IF (YCOLERR .GT. NUMCOLS) THEN
 				GOTO 24

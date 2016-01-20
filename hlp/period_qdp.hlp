@@ -5,11 +5,23 @@
 
                         Command: QDP
 
-BRIEF DESCRIPTION: Turns QDP functionality on (if off) or off (if on)
-when plotting data using the PLT command. When on, the user is able to 
-type QDP/PLT commands at the period-plt prompt to manipulate the plot 
-and fit functions to the data. When off, the user is returned to the
-PERIOD (or PERIOD_PERIOD) menu once the data has been plotted using PLT.
-The latter setting therefore allows multiple slots to be viewed without
-having to type QUIT at the period-plt between each plot. 
+BRIEF DESCRIPTION: Toggles QDP functionality on and off when plotting
+data using the PLT command. When QDP is on, the user is able to type
+QDP/PLT commands interactively at the period-plt prompt to manipulate
+the plot and fit functions to the data. When off, the user is prompted
+for a sequence of QDP/PLT commands which will be applied to the plot
+of the data in a non-interactive mode. Hence, once these commands have
+been applied in PLT, and the plot created, the user is returned to the
+PERIOD (or PERIOD_PERIOD) menu. The QDP off setting therefore allows
+multiple slots to be viewed without having to type quit at the
+period-plt prompt between each plot, and is particularly useful when
+automating things.
+
+PROMPT1: Enter extra plot commands (<cr> to quit)
+TYPE   : CHARACTER*12
+OPTIONS: Any valid QDP/PLT command
+DEFAULT: None
+PURPOSE: Allows the user to enter a sequence of QDP/PLT commands which
+         will be applied to the plot of the data in a non-interactive
+         mode
 ------------------------------------------------------------------------

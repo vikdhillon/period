@@ -5,14 +5,12 @@
 
                         Command: FT
 
-BRIEF DESCRIPTION: This option performs a classical discrete Fourier 
-transform on the data and sums the mean-square-amplitudes of the result 
-to form a power spectrum. This discrete Fourier transform is defined 
-for arbitrary data spacing and is equal to the convolution of the true 
-Fourier transform with a spectral window. Hence, the effects of data
-spacing, such as aliasing, are all contained in the spectral window, 
-which can be generated using the WINDOW option. This spectral window 
-should be analysed in conjunction with the discrete Fourier transform 
-generated here in order to estimate the effects of aliasing.
-
+BRIEF DESCRIPTION: This option performs a classical discrete Fourier
+transform on the data and sums the mean-square-amplitudes of the
+result to form a power spectrum (see, for example, Deeming 1975). This
+discrete Fourier transform is defined for arbitrary data spacing and
+is equal to the convolution of the true Fourier transform with a
+spectral window. Hence, the effects of data spacing, such as aliasing,
+are all contained in the spectral window, which can be generated using
+the WINDOW option.
 ------------------------------------------------------------------------

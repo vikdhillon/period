@@ -1,0 +1,62 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2016-JAN-17)
+------------------------------------------------------------------------
+
+                        Command: JIGGLE
+
+BRIEF DESCRIPTION: 'Jiggles' data by adding Gaussian noise to the
+x-and/or y-axis data. The former effectively adds irregularities to the
+x-data sampling intervals, the latter increases the total noise in the
+y-axis data. This routine is useful, not only in creating realistic
+artificial datasets (in conjunction with FAKE), but also in
+investigating the effects of noise on a period detection.
+
+PROMPT1: Enter first and last slots for input (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the input data to which noise
+         is to be added
+
+PROMPT2: Enter first and last slots for output (0,0 to quit)
+TYPE   : INTEGER
+OPTIONS: Any pair of integers between 0 and MXSLOT
+DEFAULT: None
+PURPOSE: Determines the location of the output data to which noise 
+         has been added
+
+PROMPT3: Add noise to the X or Y data ? [Y]
+TYPE   : CHARACTER*1
+OPTIONS: x or y
+DEFAULT: y
+PURPOSE: Specifies whether noise is to be added to the x-axis data
+         (i.e. irregularities in the data spacing) or y-axis data
+
+PROMPT4: Calculate sigma from [D]ata or enter a sigma [V]alue ? [D]
+TYPE   : CHARACTER*1
+OPTIONS: d or v
+DEFAULT: d
+PURPOSE: Specifies how the noise is to be calculated. The 'd' option
+         calculates the noise from the standard deviation of the data.
+         The 'v' option calculates the error bar from a user-defined
+         value for the standard deviation of the data
+
+PROMPT5: Enter number of sigma
+TYPE   : REAL*8
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Noise is applied to the data by adding to it a factor
+         calculated by multiplying three numbers: the standard deviation 
+         (sigma) of the data, a random number and this parameter, which 
+         specifies the number of standard deviations to apply
+
+PROMPT6: Enter sigma value
+TYPE   : REAL*8 
+OPTIONS: Any real number
+DEFAULT: None
+PURPOSE: Only prompted for if 'v' is entered for PROMPT4. This is the
+         user-defined standard deviation (sigma) of the data. It is
+         multiplied by the number of sigma entered for PROMPT5 to
+         calculate the error bars
+------------------------------------------------------------------------

@@ -17,8 +17,8 @@ C-----------------------------------------------------------------------------
 C Select input and output data 
 C-----------------------------------------------------------------------------
 
-10	WRITE(*,'(A,$)')'Enter first and last slots for input 
-     + (0,0 to quit) : '
+10	WRITE(*,'(A,$)')
+     + 'Enter first and last slots for input (0,0 to quit) : '
 	READ(*,*,ERR=10)FIRSTSLOT, LASTSLOT
 	IF (FIRSTSLOT .EQ. 0 .OR. LASTSLOT .EQ. 0) THEN
 		GOTO 99
@@ -27,8 +27,8 @@ C-----------------------------------------------------------------------------
 		WRITE(*,*)'** ERROR: Maximum slot number =',MXSLOT
 		GOTO 99
 	END IF
-20	WRITE(*,'(A,$)')'Enter first and last slots for output
-     + (0,0 to quit) : '
+20	WRITE(*,'(A,$)')
+     + 'Enter first and last slots for output (0,0 to quit) : '
 	READ(*,*,ERR=20)FIRSTOUT, LASTOUT
 	IF (FIRSTOUT .EQ. 0 .OR. LASTOUT .EQ. 0) THEN
 		GOTO 99

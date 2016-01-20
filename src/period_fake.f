@@ -49,8 +49,8 @@ C Select slots to process.
 C-----------------------------------------------------------------------------
 
 	WRITE(*,*)' '
-1	WRITE(*,'(A,$)')'Enter first and last slots for output
-     + (0,0 to quit) : '
+1	WRITE(*,'(A,$)')
+     + 'Enter first and last slots for output (0,0 to quit) : '
 	READ(*,*,ERR=1)FIRSTSLOT, LASTSLOT
 	IF (FIRSTSLOT .EQ. 0 .OR. LASTSLOT .EQ. 0) GOTO 99
 	IF (FIRSTSLOT .GT. MXSLOT .OR. LASTSLOT .GT. MXSLOT) THEN
@@ -96,8 +96,8 @@ C-----------------------------------------------------------------------------
 	    WRITE(*,*)' '
 	    WRITE(*,*)'SINE CURVE NUMBER = ',J
 	    WRITE(*,*)' '
-40	    WRITE(*,'(A,$)')'Enter period, semi-amplitude, zero point
-     + and gamma : '	    
+40	    WRITE(*,'(A,$)')
+     + 'Enter period, semi-amplitude, zero point and gamma : '	    
 	    READ(*,*,ERR=40)PERIOD(J), AMPLITUDE(J), ZEROPT(J), GAMMA(J)
 	    IF (PERIOD(J) .LE. 0.) THEN
 		WRITE(*,*)ACHAR(7)

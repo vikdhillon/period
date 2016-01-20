@@ -7,27 +7,28 @@
 
 BRIEF DESCRIPTION: Loads data from ASCII files on disk into data
 slots. The input files may contain up to a maximum of MXROW rows and
-MXCOL columns. Data is stored and processed within PERIOD using a slot
+MXCOL columns (see the web-based user guide for how to increase
+these). Data is stored and processed within PERIOD using a slot
 system.  A data slot is simply an array holding one dataset. The
 maximum number of data slots which can be handled at any one time is
-MXSLOT. In order to load the first slot with a single dataset, you
-should reply 1,1 to PROMPT1. Similarly, if you wish to load slots 4
-through to 9 with 6 datasets, you should reply 4,9 to PROMPT1. Note
-that slots can be overwritten. Once the slot numbers are specified,
-the number of columns in the input files are determined and the user
-is then prompted for which columns refer to the x-axis, y-axis and the
-y-axis errors (optional). If, for example, you are inputting radial
-velocity data, the x-axis should be the heliocentric Julian dates, the
-y-axis should be the corresponding radial velocity values, and if you
-wish errors to be taken into account, the y-axis errors should be the
-errors on the radial velocity measurements. These errors are used (or
-handled) by all options in the main PERIOD menu, but the only
-periodicity-finding option in the PERIOD_PERIOD sub-menu which
-actually uses the errors on data points is CHISQ. The remaining five
-techniques (CLEAN, FT, PDM, SCARGLE, STRING) ignore errorbars if they
-are present. Note also that the input file MUST contain x-axis values
-which are in ascending order, otherwise INPUT will report a warning
-and either sort the data (if requested to do so) or abort the input.
+MXSLOT (again, see the user guide for how to increase this). In order
+to load the first slot with a single dataset, you should reply 1,1 to
+PROMPT1. Similarly, if you wish to load slots 4 through to 9 with 6
+datasets, you should reply 4,9 to PROMPT1. Note that slots can be
+overwritten.
+
+Once the slot numbers are specified, the number of columns in the
+input files are determined and the user is then prompted for which
+columns refer to the x-axis, y-axis and the y-axis errors
+(optional). For example, if the user is inputting radial-velocity
+data, the x-axis would most probably be HJD's, the y-axis the
+heliocentric radial velocities and there would most likely be errors
+associated with each radial-velocity value. Note that the x-axis
+values must be in ascending order, otherwise INPUT will report a
+warning and either sort the data (if requested to do so) or
+abort. Note also that the y-axis errors are used by all options in the
+main PERIOD menu, but by only the CHISQ and AMPLITUDE
+periodicity-finding options in the PERIOD_PERIOD sub-menu.
 
 PROMPT1: Enter first and last slots for input (0,0 to quit)
 TYPE   : INTEGER
@@ -37,7 +38,7 @@ PURPOSE: Determines the location of the input data
 
 PROMPT2: Enter name of data file (<CR> to quit)
 TYPE   : CHARACTER*72
-OPTIONS: Any valid linux filename
+OPTIONS: Any valid unix filename
 DEFAULT: Quit INPUT and return to menu
 PURPOSE: Specifies name of input ASCII file on disk
 
@@ -57,8 +58,8 @@ PURPOSE: Specifies which column in the input file corresponds
 
 PROMPT5: Are there errors on the Y axis data ? [Y]
 TYPE   : CHARACTER*1
-OPTIONS: Y or N
-DEFAULT: Y
+OPTIONS: y or n
+DEFAULT: y
 PURPOSE: Gives the user the option of including errors on the
          y-axis data points
 
@@ -71,8 +72,8 @@ PURPOSE: Specifies which column in the input file corresponds
 
 PROMPT7: Does this agree with the data file ? [Y]
 TYPE   : CHARACTER*1
-OPTIONS: Y or N
-DEFAULT: Y
+OPTIONS: y or n
+DEFAULT: y
 PURPOSE: Allows speedy loading of data into PERIOD by
          accepting default column assignments; column 1
          = x-axis, column 2 = y-axis and column 3 = 
@@ -80,8 +81,8 @@ PURPOSE: Allows speedy loading of data into PERIOD by
 
 PROMPT8: Would you like to sort the data ? [N]
 TYPE   : CHARACTER*1
-OPTIONS: Y or N
-DEFAULT: N
+OPTIONS: y or n
+DEFAULT: n
 PURPOSE: INPUT has found x-axis data which is not in ascending
          order. INPUT will either sort the data or abort the
          input, depending on the response to this prompt.

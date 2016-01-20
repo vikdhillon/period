@@ -7,8 +7,8 @@
 
 BRIEF DESCRIPTION: This option bins data in the x-axis (i.e. time, in
 most cases) in order to reduce the number of data points and/or 
-increase the signal-to-noise of the resulting points. Note that only a 
-straight-forward average of the x- and y-values is performed (i.e. no
+increase the signal-to-noise of the resulting points. Only a 
+straight-forward average of the x- and y-values is performed, so no
 account is taken of the errors on the points during the averaging, 
 although any error-bars, if present, are correctly propagated. Note
 that, unless the total number of points is an integer multiple of the 

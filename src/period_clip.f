@@ -307,8 +307,8 @@ C-----------------------------------------------------------------------------
 
               ELSE IF (OPTION2 .EQ. 'V') THEN
                  IF (I .EQ. 1) THEN
-                    WRITE(*,'(A,$)')'Enter replacement value : '
-                    READ(*,*)VALUE
+ 55                 WRITE(*,'(A,$)')'Enter replacement value : '
+                    READ(*,*,ERR=55)VALUE
                  END IF
 
                  IF (LSIGMA) THEN
@@ -465,9 +465,12 @@ C-----------------------------------------------------------------------------
 C Prompt for new x-axis range.
 C-----------------------------------------------------------------------------
 
-60      WRITE(*,'(A,$)')'Enter new x-axis range (0,0 to quit) : '
+ 60     WRITE(*,'(A,$)')
+     + 'Enter new x-axis range (0,0 to quit, -1 for old value) : '
         READ(*,*,ERR=60)NEW_XMIN, NEW_XMAX
         IF (NEW_XMIN .EQ. 0. .AND. NEW_XMAX .EQ. 0.) GOTO 99
+        IF (NEW_XMIN .EQ. -1) NEW_XMIN = XMIN
+        IF (NEW_XMAX .EQ. -1) NEW_XMAX = XMAX
         IF (NEW_XMIN .LT. XMIN .OR. NEW_XMAX .GT. XMAX) THEN
            WRITE(*,*)ACHAR(7)
            WRITE(*,*)'** ERROR: New range must lie inside old one.'

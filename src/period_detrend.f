@@ -48,8 +48,8 @@ C-----------------------------------------------------------------------------
 		GOTO 99
 	END IF
 	WRITE(*,*)' '
-10	WRITE(*,'(A,$)')'Detrend using the [M]ean or a
-     + [P]olynomial fit ? [M] : '
+10	WRITE(*,'(A,$)')'Detrend using the [M]ean or a'//
+     + ' [P]olynomial fit ? [M] : '
 	READ(*,'(A)',ERR=10)OPTION
 	CALL PERIOD_CASE (OPTION, .TRUE.)
 	IF (OPTION .EQ. 'P' .OR. OPTION .EQ. 'M' 

@@ -1,0 +1,1945 @@
+<html>
+<head>
+<title>PERIOD user guide</title>
+<link rel=stylesheet href="period.css" type="text/css">
+</head>
+<body>
+
+<p>
+<h1>PERIOD: A time-series analysis package</h1>
+</p>
+
+<h2>Vik Dhillon, 19 January 2016</h2>
+
+<hr noshade>
+
+<p>
+<ol>
+<li><a href="#Introduction">Introduction</a>
+<li><a href="#Installation">Installation</a>
+<li><a href="#Initializing and running">Initializing and running</a>
+<li><a href="#Data format and storage">Data format and storage</a>
+<li><a href="#Menu options">Menu options</a>
+<li><a href="#Alphabetical list of commands">Alphabetical list of commands</a>
+<li><a href="#Classified list of commands">Classified list of commands</a>
+<li><a href="#A simple recipe">A simple recipe</a>
+<li><a href="#Automating things">Automating things</a>
+<li><a href="#References and further reading">References and further reading</a>
+</ol>
+</p>
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="Introduction">
+<h2>Introduction</h2>
+
+<p>
+PERIOD is a fortran package designed to search for periodicities in
+data.  I originally released the program to
+<a href=http://starlink.eao.hawaii.edu/starlink/2015ADownload
+target="_blank">Starlink</a> for distribution in 1993 (v3.0-v4.0). In
+1995, Grant Privett (Starlink) ported PERIOD from VMS to unix (v4.1),
+and in 1997 to linux (v4.2). Then, in 2003, PERIOD was converted by
+Martin Bly (Starlink) to handle double precision data (v5.0). The
+Starlink version lost the QDP/PLT plotting/fitting capability,
+unfortunately, and remains more or less unchanged in functionality
+since 1995.
+</p>
+
+<p>
+The development of
+<a href=http://www.vikdhillon.staff.shef.ac.uk/ultracam/
+target="_blank">ULTRACAM</a> prompted me to convert my original VMS
+version (v4.0) to linux in 2002, including the QDP/PLT capability, and
+adding functionality to process the log files output by Tom Marsh's
+<a href=http://deneb.astro.warwick.ac.uk/phsaap/software/ultracam/html/index.html
+target="_blank">ULTRACAM pipeline data reduction software</a>. I also
+converted PERIOD entirely into double precision. This "native" version
+of PERIOD is now unrecognisable from the Starlink version, with more
+than double the number of options for manipulating, fitting,
+calibrating and viewing data, and for finding periods in it. The
+latest version is v10.0. The software is available on request,
+primarily to my research collaborators as I can only support it on a
+best-efforts basis, i.e. please feel free to send any bug reports or
+enhancement requests to me, but don't expect me to act on them in a
+timely manner. Since I also distribute the source code, please feel
+free to make any modifications yourself and send them to me for
+possible inclusion in the distributed version.
+</p>
+
+<p>
+Throughout the PERIOD package and this user guide, the terms
+<em>power spectrum</em> and <em>periodogram</em> are used
+interchangeably, although strictly speaking the power spectrum is a
+theoretical quantity defined as an integral over continuous time, of
+which the periodogram is merely an estimate based on a finite amount
+of discrete data (Scargle 1982).
+</p>
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="Installation">
+<h2>Installation</h2>
+
+I have successfully installed PERIOD on both mac and linux
+systems. The trickiest bit is ensuring that the third-party software
+required by PERIOD - <a href=http://www.astro.caltech.edu/~tjp/pgplot/
+target="_blank">PGPLOT</a>, <a href=http://www.iausofa.org
+target="_blank">SOFA</a> and
+<a href=http://wwwastro.msfc.nasa.gov/qdp/ target="_blank">QDP/PLT</a>
+- are properly installed. So let's start with that:
+
+<h4>PGPLOT</h4>
+
+<p>
+On my mac (MacBook Pro running OS X El Capitan, Version 10.11.1) I installed PGPLOT using homebrew:
+<pre>brew install pgplot</pre>
+Alternatively, you can get PGPLOT by installing <a href=http://starlink.eao.hawaii.edu/starlink/2015ADownload target="_blank">Starlink</a>, or by installing it
+from Tim Pearson's own <a href=http://www.astro.caltech.edu/~tjp/pgplot/ target="_blank">PGPLOT web site.</a>
+</p>
+
+<p>
+If you get stuck, check out <a href=http://deneb.astro.warwick.ac.uk/phsaap/software/html/index.html target="_blank">Tom Marsh's software pages</a> for some useful tips, and if you're really desperate look at <a href=VIK_PGPLOT_NOTES.TXT target="_blank">these notes</a> I wrote for installing PGPLOT on my old mac.
+</p>
+
+<h4>SOFA</h4>
+
+This should be relatively straightforward:
+<ol>
+<li><a href=http://www.iausofa.org/current_F.html#Downloads
+       target="_blank">Download</a> the latest SOFA release for <em>fortran77</em>. It doesn't matter where you install this - I install it in my <em>/Users/vsd/period/</em> directory.
+<li>Edit the <em>f77/src/makefile</em> to ensure it is using your preferred <em>fortran77</em>
+  compiler (I use gfortran on my mac).
+<li>Type <em>make</em> in the <em>src</em> directory. Then
+    type <em>make test</em>. If all is ok, type <em>make clean</em>.  You
+    will have created the library <em>libsofa.a</em>.
+<li>To test all has worked, compile and run this <a href=test_sofa.f
+  target="_blank">test program</a>. The answer it gives should be 36
+  if the most recent <a href=https://en.wikipedia.org/wiki/Leap_second
+  target="_blank">leap second</a> on 30 June 2015 has been
+  added correctly.
+</ol>
+
+<h4>QDP/PLT</h4>
+
+QDP/PLT is an interactive plotting and fitting program, based on the
+PGPLOT graphics library. QDP (the Quick and Dandy Plotter), which is
+<em>not</em> used by PERIOD, is a fortran program that reads ASCII
+files and then calls the PLT subroutine. PERIOD does much the same -
+it calls the PLT subroutine to provide all of its plotting and fitting
+functionality. Installing PLT is probably the trickiest bit of the
+entire PERIOD installation:
+
+<ol>
+<li>Download the file <em>lexsrc.tgz</em> from the
+<a href=http://wwwastro.msfc.nasa.gov/qdp/ target="_blank">QDP/PLT
+homepage</a>. It doesn't matter where you install this - I install it in my <em>/Users/vsd/period/</em> directory.
+<li>Follow the installation instructions in <em>doc/install.txt</em>. You may find the following notes useful:
+<ol type='i'>
+<li>Even on a mac, I set the operating system to <em>lnx</em>.
+<li>Edit the <em>tools/qinitp.csh</em> file to force it to use your
+  fortran compiler and PGPLOT installation. Compare <a href=qinitp.csh
+  target="_blank">my version</a> of the file with the default for
+  guidance.
+<li>You may also need to make some changes to the linking libraries in
+<em>plot/qdp/makefile.xan</em>. Compare <a href=makefile.xan
+  target="_blank">my version</a> of the file with the default for
+guidance.
+<li>Don't bother putting the 4 recommended commands into your
+bash/csh/tcsh login files - these will be included in the <em>period_start</em>
+file - see below. You do have to run these commands during
+  installation, though.
+<li>I had problems with terminal input on my mac after setting
+<em>setenv GTBUF_EDIT on</em>, so I don't execute the command now.
+<li>I had to edit the <em>xanlib/termio/ciolnx.c</em> file and convert
+  the <em>return; </em> commands to <em>return 0;</em> to avoid the error
+ <em>non-void function 'ttinit_' should return a value
+   [-Wreturn-type]</em> when running <em>./mkqlib.sh</em>. The
+   remaining warnings in these 3 routines can be ignored as long as
+   you don't set the <em>GTBUF_EDIT</em> variable described above.
+  Compare <a href=ciolnx.c target="_blank">my version</a>
+  of the file with the default for guidance.
+<li>When running <em>./mkqlib.sh</em>, I found that you can safely
+  ignore the following warning: <em>f951: warning: command line option
+  '-Wimplicit' is valid for C/ObjC but not for Fortran [enabled by
+    default]</em>.
+<li>I install the CFITSIO and PGPLOT libraries and
+  files by making symbolic links (i.e. using <em>ln -s</em>) to the
+  homebrew versions of these files in <em>lnx/lib</em>.
+<li>I found that I had to give the full path to <em>hlpdhf</em> to run it.
+<li>I ignore steps 11 and 12 of <em>doc/install.txt</em>, which are
+  only required if you want to use <em>lextrct</em>.
+<li>QDP/PLT comes with its own version of
+  <a href=http://star-www.rl.ac.uk/docs/sun67.htx/sun67.html
+  target="_blank">SLALIB</a>, including the source code.  The SLALIB
+  library is automatically built if you follow the instructions in
+  <em>doc/install.txt</em>. It is a good idea to check the file
+  <em>xanlib/sla/dat.f</em> to ensure it is up to date with the latest 
+  <a href=https://en.wikipedia.org/wiki/Leap_second target="_blank">leap second</a>. To test all is ok, compile and run
+  this <a href=test_sla.f target="_blank">test program</a>. The answer
+  it gives should be 36 if the most recent leap second on 30 June 2015
+  has been added correctly.
+</ol>
+</ol>
+
+<h4>PERIOD</h4>
+
+This should hopefully be straightforward once you've got PGPLOT, SOFA
+and QDP/PLT installed:
+
+<ol>
+<li>You can get PERIOD from <em>github</em>. In the directory where
+you want to install PERIOD (I install it in my <em>/Users/vsd/period/</em> directory), type: <pre>git clone https://github.com/vikdhillon/period.git</pre> This will download
+    the package in a sub-directory called
+    <em>period</em> (so, on my mac, the full path to this
+is <em>/Users/vsd/period/period</em>), which itself contains the
+sub-directories <em>bin</em> (containing the <em>period</em>
+executable and the startup script <em>period_start</em>), <em>doc</em>
+(containing this user guide), <em>hlp</em> (containing the program's
+help files) and <em>src</em> (containing the makefile and f77 source
+files).
+<li>Edit the following lines in the <em>period/bin/period_start</em>
+script: <em>set PERIOD_DIR=/Users/vsd/period</em> and <em>setenv
+XANTOP /Users/vsd/period/qdp</em>. Replace the paths with the full
+paths to your
+<em>period</em> and <em>qdp</em> directories.
+<li>Add the following line to your shell startup script (e.g. your <em>.cshrc</em> file): <em>alias period_start "source /Users/vsd/period/bin/period_start"</em>, replacing the path with the
+  full path to the <em>period_start</em> script. Source this file and then type:
+<em>period_start</em>.
+<li>Now <em>cd period/src</em> and edit the <em>makefile</em>. You will have to
+  edit the following lines to use your preferred compiler/options and to give
+  the full paths to the PERIOD, PGPLOT, SOFA and QDP/SLALIB installations:
+<pre>COMPILER = gfortran
+OPTIONS = -Wall -Wno-character-truncation -Wtabs
+PERIOD_DIR = /Users/vsd/period
+PGPLOT = -L/usr/local/lib -lpgplot -L/usr/local/Cellar/libpng -lpng -L/opt/X11/lib -lX11
+SLALIB = -L/Users/vsd/period/qdp/lnx/lib -lsla
+QDP = -L/Users/vsd/period/qdp/lnx/lib -lxanlib
+SOFA = -L/Users/vsd/period/sofa/20150209_a/f77/src -lsofa
+</pre>
+<li>Now compile and link PERIOD by typing <em>make period</em> in
+the <em>period/src</em> directory. A <em>period_vxx.x</em>
+executable should now appear in the <em>period/bin</em> directory,
+where <em>xx.x</em> is the version number. PERIOD is now installed.
+</ol>
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="Initializing and running">
+<h2>Initializing and running</h2>
+
+<p>
+Every time you open a new xterm you need to initialize PERIOD by typing:
+<pre>period_start</pre>
+To then run PERIOD, type:
+<pre>period</pre>
+Note that if you forget to initialize PERIOD before
+running it, you may mistakenly end up running the Starlink version of
+the program (assuming it has been installed on your system). It is
+easy to recognise which is which on startup - the latest Starlink
+version is v5.0-2 and dated 2003.
+</p>
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="Data format and storage">
+<h2>Data format and storage</h2>
+
+<h3>Inputting ASCII files</h3>
+
+<p>
+The simplest form of input for PERIOD is an ASCII file.  The maximum
+number of rows and columns that a file may contain are given by the
+MXROW and MXCOL parameters in the
+file <em>period/src/period_main.f</em>. By default, these are set to
+150000 and 10, respectively, which are the maximum sizes allowed on my
+mac. You may find that your computer does not have sufficient memory
+to allow arrays of this size, or that your computer allows
+substantially bigger arrays than this. If you do need to change the
+MXROW and MXCOL parameters, e.g. because your computer has memory
+problems when compiling or running PERIOD, or if you need to load data
+files with more rows but fewer columns than these limits, edit the
+parameter values in <em>period/src/period_main.f</em> and
+type <em>make period</em> to rebuild the package. A useful command to
+run prior to PERIOD is <em>unlimit stacksize</em> which will free up
+the maximum available memory for use by PERIOD. I put this in my
+<em>.cshrc</em> file.
+</p>
+
+<p>
+It is possible to specify which column refers to the <em>x</em>-axis,
+which column refers to the <em>y</em>-axis and which column refers to
+the <em>y</em>-axis errors.  The <em>y</em>-axis errors are optional
+and if included are used (or handled) by all operations in
+the <a href="#Menu options">main PERIOD menu</a>.  However, the only
+periodicity-finding option in
+the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu which actually
+uses the errors on data points are <a href=#CHISQ>CHISQ</a> and
+<a href=#AMPLITUDE>AMPLITUDE</a>. The remaining five techniques
+(<a href=#CLEAN>CLEAN</a>, <a href=#FT>FT</a>, <a href=#PDM>PDM</a>, <a href=#SCARGLE>SCARGLE</a>, <a href=#STRING>STRING</a>)
+ignore errorbars if they are present. Note also that the input file
+must contain <em>x</em>-axis values which are in ascending order,
+otherwise the program will report a warning and either sort the data
+(if requested to do so) or abort the input.
+</p>
+
+<p>
+Data are stored and processed within PERIOD using a slot system.  A
+data slot is simply an array holding one dataset. The maximum number
+of data slots which can be handled at any one time in PERIOD is 50;
+hence PERIOD has the capability of analysing a large amount of data
+simultaneously. If you need more slots, you can increase the MXSLOT
+parameter in <em>period/src/period_main.f</em>, but you may then need
+to reduce the MXROW and/or MXCOL parameters to avoid overfilling your
+computer memory.
+</p>
+
+<p>
+The first command that is usually run in PERIOD
+is <a href=#INPUT>INPUT</a>, which loads datasets into data slots:
+</p>
+
+<p>
+<em>
+Enter first and last slots for input (0,0 to quit) :
+</em>
+</p>
+
+<p>
+In order to load the first slot with a single dataset, you should reply 
+1,1 to the above prompt. Similarly, if you want to load slots
+4 through to 9 with 6 datasets, you should reply 4,9 to the above
+prompt. It is important to note that slots can be overwritten.
+Typing 0,0 will return you to the menu. 
+</p>
+
+<p>
+Most PERIOD commands prompt not only for an input slot, but also for
+an output slot:
+</p>
+
+<p>
+<em>
+Enter first and last slots for input  (0,0 to quit) : <br>
+Enter first and last slots for output (0,0 to quit) : 
+</em>
+</p>
+
+<p>
+The input should contain the dataset (or datasets) and the output will
+contain the result of the operation on the dataset (or datasets). For
+example, given a set of 5 time-series (which have previously been
+loaded into slots 1 to 5 using <a href=#INPUT>INPUT</a>) which need to
+be fitted with a sine curve (using the command <a href=#FIT>FIT</a>),
+you would type 1,5 in reply to the first prompt and 6,10 in reply to
+the second. PERIOD will then fit sine curves to the data files loaded
+in slots 1 to 5 and put the fits in slots 6 to 10. Clearly, the number
+of output slots must be equal to the number of input slots. In
+addition, if any selected input slot is empty, PERIOD will abort the
+operation and return you to the main menu. It should be noted that in
+order to save on storage space you could have typed 1,5 in reply to
+the second prompt and the original data-files would have been
+overwritten by the resulting sine curves.
+</p>
+
+<a name="Data format and storage: ULTRACAM">
+<h3>Inputting ULTRACAM files</h3>
+
+<p>
+It is also possible to use PERIOD to load data from the log files
+output by the <em>reduce</em> program of the
+<a href=http://deneb.astro.warwick.ac.uk/phsaap/software/ultracam/html/index.html target="_blank">ULTRACAM pipeline data reduction software</a>. To do
+this, it is first necessary to use the <a href=#UINPUT>UINPUT</a> option (instead of the
+<a href=#INPUT>INPUT</a> option described above - all such
+ULTRACAM-related options begin with the letter
+U). <a href=#UINPUT>UINPUT</a> reads in the log file, automatically
+skips the headers, and determines the number of runs and the number of
+apertures (i.e. stars) on each of the CCDs. PERIOD can handle anything
+from one CCD, e.g. for
+<a href=http://www.vikdhillon.staff.shef.ac.uk/ultraspec/ultraspec.html
+target="_blank">ULTRASPEC</a> or
+<a href=https://sites.google.com/site/point5metre/home
+target="_blank">pt5m</a> data, to three CCDs, e.g. for
+<a href=http://www.vikdhillon.staff.shef.ac.uk/ultracam/
+target="_blank">ULTRACAM</a> data. As a check, it outputs the first
+and last MJD values read from the file and also offers users the
+option of viewing both the non-fatal and fatal <em>reduce</em> errors
+(indicated by the <em>** WARNING:</em> and <em>** ERROR:</em> strings,
+respectively). The error codes have the following meanings:
+</p>
+
+<ul>
+<li><b>Error code = 0</b>, meaning: All OK
+<li><b>Error code = 1</b>, meaning: At least one attempt was made to remove a cosmic ray from the star aperture (non-fatal)
+<li><b>Error code = 2</b>, meaning: Sky annulus overlaps edge of data window (non-fatal)
+<li><b>Error code = 3</b>, meaning: Sky annulus overlaps edge of data window and at least one cosmic ray was zapped (non-fatal)
+<li><b>Error code = 4</b>, meaning: Sky < -5: may indicate a bad bias frame which leads to underestimated errors in the photon case (non-fatal).
+<li><b>Error code = 5</b>, meaning: Counts in at least one pixel of the aperture exceeds peppering level for the CCD (non-fatal)
+<li><b>Error code = 6</b>, meaning: No sky pixels (non-fatal, although could be bad!)
+<li><b>Error code = 7</b>, meaning: Aperture has extra apertures but these are ignored for optimal extraction (non-fatal)
+<li><b>Error code = 8</b>, meaning: Counts in at least one pixel of the aperture exceeds saturation level for the CCD (non-fatal, but bad!)
+<li><b>Error code = 9</b>, meaning: Aperture lies outside all data windows (fatal)
+<li><b>Error code = 10</b>, meaning: Target aperture overlaps edge of data window (fatal)
+<li><b>Error code = 11</b>, meaning: Aperture has been invalidated (fatal)
+<li><b>Error code = 12</b>, meaning: Blue frame is junk (fatal)
+</ul>
+
+
+<p> Note that the maximum number of times and apertures for each CCD
+that can be read from a <em>reduce</em> log file is 150000 and 10, respectively,
+given by the MXROW parameter and MAXAPER parameters
+in <em>period/src/period_main.f</em>, respectively. Increasing
+MAXAPER, for example, may require a reduction in the other parameters
+defined in <em>period/src/period_main.f</em>.
+</p>
+
+<p>
+Once ULTRACAM data has been successfully loaded into PERIOD using the
+<a href=#UINPUT>UINPUT</a> command, it is then necessary to run the
+<a href=#USLOTS>USLOTS</a> option.  This routine is essential because
+a single <em>reduce</em> log file contains a great deal of information
+and the user must select the relevant items for processing within
+PERIOD from the following list:
+</p>
+
+<ul>
+<li><b><em>x</em>-axis options</b>
+</ul>
+<ol>
+<li><b>MJD -</b>  Modified Julian Date (UTC) at the centre of the exposure, 
+          i.e. MJD = JD-2400000.5. No correction for light travel, etc, 
+          is made on the basis that the key thing is to have a well-understood and correct time.
+<li><b>Run number -</b> The frame number for data from the ULTRACAM .dat 
+                  files.
+</ol>
+
+<ul>
+<li><b><em>y</em>-axis options</b>
+</ul>
+<ol>
+<li><b>Object counts (with errors) -</b> Estimate of the target counts
+                                   and the associated 1&sigma;
+                                   uncertainties.
+<li><b>Sky counts -</b> Sky background in counts.
+<li><b><em>x</em>-position of aperture used -</b> <em>x</em> aperture
+position actually used, in pixels.
+<li><b><em>y</em>-position of aperture used -</b> <em>y</em> aperture
+position actually used, in pixels.
+<li><b>Number of sky pixels rejected -</b> The number of sky pixels rejected.
+<li><b>FWHM for profile fits -</b> The fitted FWHM of the PSF; 0 if no
+fit is made.
+<li><b>Beta exponent for Moffat fits -</b> The fitted Moffat exponent;
+0 if no Moffat fit is made.
+<li><b>Number of GPS satellites detected -</b> The number of
+                                         satellites associated with
+                                         the timestamp.  (Not quite
+                                         true in drift mode).
+<li><b>Exposure time -</b> The exposure time in seconds.
+<li><b><em>x</em>-position of aperture measured (with errors)  -</b> The measured <em>x</em> aperture position and the associated 1&sigma; uncertainties, in pixels; 0 for invalid and/or linked apertures.
+<li><b><em>y</em>-position of aperture measured (with errors) -</b> The measured <em>y</em> aperture position and the associated 1&sigma; uncertainties, in pixels; 0 for invalid and/or linked apertures.
+<li><b>Number of sky pixels available -</b> The number of sky pixels
+available.
+<li><b>Worst bad pixel value -</b> The value of the worst bad pixel
+within the star aperture (0 is OK).
+</ol>
+
+<p>
+Note that not all of the above options will be available - it depends
+on when the ULTRACAM data were obtained and what version of the
+pipeline is being used to reduce the data.
+</p>
+  
+<p>
+It is possible to load one or all of the apertures and one or all of
+the CCDs present in the <em>reduce</em> log file. Note that the input
+file MUST contain <em>x</em>-axis values which are in ascending order.
+Because this should always be true if inputting ULTRACAM data, if
+non-ascending data are input the user is simply warned to check the
+input file and allowed to continue. (The user is not forced to sort
+the <em>x</em>-axis data, as occurs when
+running <a href=#INPUT>INPUT</a>). Care should therefore be taken with
+the unreliable times sometimes reported for the first frame in an
+ULTRACAM .dat file, or in the first few frames in the case of drift
+mode. If present, the offending lines should be removed from
+the <em>reduce</em> log file prior to inputting to PERIOD.
+</p>
+
+<p>
+In the remainder of this user guide, the word "ULTRACAM" will
+generally refer to the pipeline software, <em>not</em> the instrument
+- the various ULTRACAM-related options described below can equally be
+used with ULTRASPEC and pt5m data, or any data that has been reduced
+using the pipeline.
+</p>
+
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="Menu options">
+<h2>Menu options</h2>
+
+<p>
+PERIOD is a menu-driven monolith program. On entering PERIOD, you will
+be confronted with the following introductory text: 
+</p>
+
+<pre>
+ |**************************************************|
+ |**| PERIOD  :>  A time-series analysis package |**|
+ |**| Version :>  10.0 (native) for ULTRACAM     |**|
+ |**| Date    :>  30-December-2015               |**|
+ |**************************************************|
+ |**|
+ |**| Please report bugs, problems or suggestions to:
+ |**|
+ |**| Author  :>  Vik Dhillon
+ |**| Address :>  University of Sheffield
+ |**| E-mail  :>  vik.dhillon@sheffield.ac.uk
+ |**| 
+ |**| Type '?' for a list of options.
+
+period>   
+</pre>
+
+<p>
+Typing <em>?</em> gives a list of the options, as shown below. Click
+on any of the commands to jump to extra information on it. Note that
+any of the commands can be entered by typing anything from the
+shortest unambiguous string up to the full command
+name. Therefore, <em>P</em> would be ambiguous, but <em>PE</em> would
+not. The command names are case insensitive, so typing <em>pe</em>
+would be equivalent to typing <em>PE</em>.
+</p>
+
+<pre>
+period> ?
+  
+ Options.
+ --------
+  
+    <a href=#AIRMASS>AIRMASS</a>  --  Calculate airmass.
+    <a href=#APPEND>APPEND</a>   --  Append slot.
+    <a href=#ARITH>ARITH</a>    --  Slot arithmetic.
+    <a href=#BASE>BASE</a>     --  Not subtracting integer part in PLT.
+    <a href=#BIN>BIN</a>      --  Bin data.
+    <a href=#BOOT>BOOT</a>     --  Bootstrap data.
+    <a href=#CLIP>CLIP</a>     --  Clip data.
+    <a href=#CLOSE>CLOSE</a>    --  Close log file.
+    <a href=#COPY>COPY</a>     --  Copy slots.
+    <a href=#DEL>DEL</a>      --  Delete slots.
+    <a href=#DERIV>DERIV</a>    --  Derivative of data.
+    <a href=#DETREND>DETREND</a>  --  Detrend data.
+    <a href=#ERRORS>ERRORS</a>   --  Calculate error bars.
+    <a href=#FAKE>FAKE</a>     --  Create fake data.
+    <a href=#FIT>FIT</a>      --  Fit sine curve to folded data.
+    <a href=#FOLD>FOLD</a>     --  Fold data on given period.
+    <a href=#HELP>HELP</a>     --  On-line help.
+    <a href=#HIST>HIST</a>     --  Histogram or CDF of data.
+    <a href=#INPUT>INPUT</a>    --  Input ASCII data.
+    <a href=#INTEG>INTEG</a>    --  Integrate data.
+    <a href=#JIGGLE>JIGGLE</a>   --  Jiggle data.
+    <a href=#NOISE>NOISE</a>    --  Randomise data.
+    <a href=#OFF>OFF</a>      --  Add y-offset to plots = 0.000
+    <a href=#OPEN>OPEN</a>     --  Open log file.
+    <a href=#OUTPUT>OUTPUT</a>   --  Output data.
+    <a href=#OVERPLOT>OVERPLOT</a> --  Overplotting OFF.
+    <a href=#PERIOD>PERIOD</a>   --  Find periodicities.
+    <a href=#PLT>PLT</a>      --  Call PLT.
+    <a href=#POLY>POLY</a>     --  Polynomial fit to data.
+    <a href=#QDP>QDP</a>      --  QDP functionality ON.
+    <a href=#QUIT>QUIT</a>     --  Quit PERIOD.
+    <a href=#SHOW>SHOW</a>     --  Slot information.
+    <a href=#SINE>SINE</a>     --  +, -, /, * sine curves.
+    <a href=#SMOOTH>SMOOTH</a>   --  Smooth data.
+    <a href=#TIME>TIME</a>     --  Barycentric/heliocentric correction.
+    <a href=#UCAL>UCAL</a>     --  Flux calibrate ULTRACAM data.
+    <a href=#UINPUT>UINPUT</a>   --  Input ULTRACAM data.
+    <a href=#UNBLUE>UNBLUE</a>   --  Correct ULTRACAM data for NBLUE>1.
+    <a href=#USLOTS>USLOTS</a>   --  Loads slots with ULTRACAM data.
+    <a href=#WINDOW>WINDOW</a>   --  Set y-data to unity.
+    <a href=#XCOR>XCOR</a>     --  Cross-correlate slots.
+   
+period> 
+</pre>
+
+<p>
+Typing <em>period</em> in the main menu allows you to enter
+the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub menu, which enables the following
+additional options:
+</p>
+
+<a name="PERIOD_PERIOD">
+<pre>
+period> period
+period_period> ?
+  
+ Options.
+ --------
+  
+    <a href=#SELECT>SELECT</a>    --  Select data slots.
+    <a href=#FREQ>FREQ</a>      --  Set/show frequency search limits.
+    <a href=#AMPLITUDE>AMPLITUDE</a> --  Amplitude spectrum.
+    <a href=#CHISQ>CHISQ</a>     --  Chi-squared of sine fit vs freq.
+    <a href=#CLEAN>CLEAN</a>     --  CLEANed power spectrum.
+    <a href=#FT>FT</a>        --  Discrete Fourier power spectrum.
+    <a href=#PDM>PDM</a>       --  Phase dispersion minimization.
+    <a href=#SCARGLE>SCARGLE</a>   --  Lomb-Scargle normalized periodogram.
+    <a href=#SLIDE>SLIDE</a>     --  Sliding Scargle periodogram.
+    <a href=#STRING>STRING</a>    --  String-length vs frequency.
+    <a href=#PEAKS>PEAKS</a>     --  Calculate period from periodogram.
+    <a href=#SIG>SIG</a>       --  Enable/disable significance calc.
+    <a href=#PLT>PLT</a>       --  Call PLT.
+    <a href=#HELP>HELP</a>      --  On-line help.
+    <a href=#QUIT>QUIT</a>      --  Quit PERIOD_PERIOD.
+   
+period_period>  
+</pre>
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="Alphabetical list of commands">
+<h2>Alphabetical list of commands</h2>
+
+<p>
+Detailed descriptions of the individual PERIOD commands are given in
+the alphabetically-ordered list below.  Note that PERIOD also has an
+extensive in-program help facility, which provides information at a
+level of detail similar to that found below, as well as providing a
+detailed description of the individual prompts (something which cannot
+be found in this section).
+</p>
+
+<!------------------------->
+<a name="AIRMASS"></a>
+<h3>AIRMASS</h3>
+
+<p>
+Calculates airmass, zenith distance or parallactic angle of a list of
+MJDs (as output by ULTRACAM, for example) for a large number of
+observatories around the world. A (non-foolproof) check is made to
+determine if the <em>x</em>-axis is in MJD units - if it isn't, the
+routine quits. This option also outputs the UTC date, azimuth and hour
+angle as a function of MJD to the screen, which might be of use for
+some applications - please let me know if you'd like the option of
+also writing these values to slots.  This routine uses the SLALIB
+library.
+</p>
+
+<!------------------------->
+<a name="AMPLITUDE"></a>
+<h3>AMPLITUDE</h3>
+
+<p>
+Calculates the amplitude spectrum of a dataset. The data are
+normalised and folded on a series of trial periods. At each trial
+period, the data are fitted with a sine curve. The resulting
+semi-amplitude of the sine curve is plotted as a function of trial
+frequency and the maxima in the plot suggest the most likely
+periods. This technique is particularly useful if one wishes to know
+the fractional amplitude of any variability present in the data. Note that
+windowed data cannot be processed by this option since no sine fit is
+possible.
+</p>
+
+<!------------------------->
+<a name="APPEND"></a>
+<h3>APPEND</h3>
+
+<p>
+Appends the contents of a series of input slots into a single output
+slot, skipping any slots which are empty. If any slot to be appended
+does not have error bars, no error bars will be copied to the final
+slot.
+</p>
+
+<!------------------------->
+<a name="ARITH"></a>
+<h3>ARITH</h3>
+
+<p>
+Perform slot arithmetic, with the following two options:
+</p>
+
+<ol>
+<li><b>slot-slot operations: </b> +, -, *, or / one slot by another slot.
+<li><b>constant-slot operations> </b> +, -, *, or / a constant from a
+  slot, or take the square root, 10<sup>**</sup> or log<sub>10</sub>
+  of the <em>y</em>-values of the slot (useful to convert counts into
+  magnitudes, for example).
+</ol>
+
+<p>
+Any errorbars present in the slots being operated upon are correctly
+propagated during the arithmetic operation.
+</p>
+
+<!------------------------->
+<a name="BASE"></a>
+<h3>BASE</h3>
+
+<p>
+PGPLOT (and hence QDP/PLT) can only handle REAL*4 (single precision)
+numbers, whereas PERIOD uses REAL*8 (double precision) numbers
+throughout. Converting from REAL*8 to REAL*4 is not an option for
+ULTRACAM data, as the times are recorded in days and yet can vary by a
+few millisecond from one another. Hence, <em>for plotting purposes
+only</em>, it is possible to toggle on/off the subtraction of the
+integer part of the MJD using the BASE command, i.e. MJD
+55555.5555555555 becomes 0.5555555555.
+</p>
+
+<p>
+PERIOD has no way of knowing if your <em>x</em>-axis is in MJD units,
+so it may not always be appropriate to subtract a base, e.g.  when
+plotting a periodogram, as it would give an unwanted offset in the
+frequencies of any plotted peaks. Hence, to prevent confusion when
+viewing periodograms, <a href=#BASE>BASE</a> is automatically turned
+off when running <a href=#PLT>PLT</a> from
+the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a>
+sub-menu. <font color=red>However, be careful when viewing
+periodograms with <a href=#PLT>PLT</a> from the
+<a href="#Menu options">main PERIOD menu</a> when
+<a href=#BASE>BASE</a> is turned on.
+</font>
+</p>
+
+<!------------------------->
+<a name="BIN"></a>
+<h3>BIN</h3>
+
+<p>
+Bins data in the <em>x</em>-axis (i.e. time, in most cases) in order
+to reduce the number of data points and/or increase the
+signal-to-noise of the resulting points. Only a
+straight-forward average of the <em>x</em>- and <em>y</em>-values is
+performed, so no account is taken of the errors on the points during
+the averaging, although any error-bars, if present, are correctly
+propagated. Note that, unless the total number of points is an integer
+multiple of the number of points per bin, the last bin will contain
+fewer points than specified - a warning to this effect is issued to
+the user.
+</p>
+
+<!------------------------->
+<a name="BOOT"></a>
+<h3>BOOT</h3>
+
+<p>
+Creates a bootstrapped version of the original dataset. <em>N</em>
+samples are randomly taken from a dataset containing <em>N</em>
+points.  The same point can be selected more than once, and some
+points might not be selected at all. If the same point is selected
+more than once, two options are given:
+<ol>
+<li>To divide the error bar, if present, by the square root of the
+number of the number of times the point has been selected. If a point
+is not selected at all, it is removed from the dataset.
+<li>To have multiple points with the same x and y values. Any error
+bars are left unchanged.
+</ol> 
+Since most of the period-finding routines do not use error bars, it is 
+likely that option 2 will be of most use.
+</p>
+
+<!------------------------->
+<a name="CHISQ"></a>
+<h3>CHISQ</h3>
+
+<p>
+The input data are folded on a series of trial periods. At each trial
+period, the data are fitted with a sine curve. The resulting
+reduced-&chi;<sup>2</sup> values are plotted as a function of trial
+frequency and the minima in the plot suggest the most likely
+periods. See Horne, Wade and Szkody (1986) for an example of the use
+of this method, which is ideally suited to the study of radial
+velocity data, for example. This technique is formally equivalent
+to <a href=#SCARGLE>SCARGLE</a> and they should give identical
+results. Note that windowed data cannot be processed by this option
+since no sine fit is possible.
+</p>
+
+<!------------------------->
+<a name="CLEAN"></a>
+<h3>CLEAN</h3>
+
+<p>
+The CLEAN algorithm was originally developed by Roberts, Lehar and
+Dreher (1987). A slightly-modified version of Lehar's code is used
+here.  The algorithm deconvolves the spectral window from the discrete
+Fourier power spectrum (or dirty spectrum). This produces a CLEAN
+spectrum, which is largely free of the effects
+of <a href=#WINDOW>spectral leakage</a>. In order to prevent small
+errors from destabilizing the CLEAN procedure, the user is prompted
+for two parameters - the loop gain and the number of iterations. On
+each iteration, some fraction (governed by the loop gain) of the
+window function is removed from the dirty spectrum. For convergence,
+the loop gain must lie between 0 and 2, typical values being between
+0.1 and 1. Values at the bottom of this range require more iterations,
+but should provide more stability.  Hence, the number of iterations
+should be large if the loop gain is small, typical values lying
+between 1 and 100. Note that an increase in the number of cleans
+produces a less noisy spectrum but, in general, the amplitude of the
+peaks is decreased, sometimes by a substantial amount. See Roberts,
+Lehar and Dreher (1987) for further details on choosing these
+parameters. Although it gives very clean-looking power spectra, I
+prefer not to use CLEAN as it can be easy to fool oneself with it.
+</p>
+
+<!------------------------->
+<a name="CLIP"></a>
+<h3>CLIP</h3>
+
+<p>
+Clips either <em>x</em> or <em>y</em>-axis data:
+<ol>
+<li><b><em>x</em>-axis -</b> Removes all data lying outside a
+user-defined <em>x</em>-axis range. It is assumed that all input slots
+have the same <em>x</em>-axis range as the first input slot, and hence
+will all be <em>x</em>-clipped by the same amount.
+<li><b><em>y</em>-axis -</b> Clips all data either lying outside a
+user-defined <em>y</em>-axis range, or lying a user-defined number of
+standard deviations above and below the mean. There are a number of
+clipping options: it is possible either to completely remove the
+clipped points from the dataset, or replace them by the mean of the
+entire dataset, by zero, by a user-defined value, or by the mean of
+the two nearest neighbours.
+</ol>
+</p>
+
+<!------------------------->
+<a name="CLOSE"></a>
+<h3>CLOSE</h3>
+
+<p>
+If a log file is currently open (see <a href=#OPEN>OPEN</a>), this
+option closes it, preventing further output.
+</p>
+
+<!------------------------->
+<a name="COPY"></a>
+<h3>COPY</h3>
+
+<p>
+Copies the contents of one slot (or a series of slots) to the
+contents of another slot (or series of slots), skipping any slots
+which are empty.
+</p>
+
+<!------------------------->
+<a name="DEL"></a>
+<h3>DEL</h3>
+
+<p>
+Delete the contents of one slot (or a series of slots).
+</p>
+
+<!------------------------->
+<a name="DERIV"></a>
+<h3>DERIV</h3>
+
+<p>
+Routine to calculate the derivative of a dataset. The derivative is
+centred on each <em>x</em>-axis point, i.e. the derivative of a
+point <em>I</em> is given
+by <em>(Y[I+1]-Y[I-1])/(X[I+1]-X[I-1])</em>. For the start and end
+points of the dataset, the derivative is one-sided, i.e. for the
+start:
+<em>(Y[I+1]-Y[I])/(X[I+1]-X[I])</em>.
+</p>
+
+<!------------------------->
+<a name="DETREND"></a>
+<h3>DETREND</h3>
+
+<p>
+This option removes the DC bias from the <em>y</em>-axis data, which
+if not removed gives rise to significant power at 0 Hz. There are two
+options: If the data show no long term trends, it is best to simply
+subtract the mean and divide by the standard deviation (the <em>M</em>
+option). This gives a dataset with a mean of zero and a standard
+deviation of one. Otherwise, it is best to subtract a low-order
+polynomial fit to the data (the <em>P</em> option), since if this is
+not removed, a Fourier transform will inject a significant amount of
+power at the frequency of the long-term variations. Note that it isn't
+necessary to run DETREND if processing data using the
+<a href=#SCARGLE>SCARGLE</a> option, as data are automatically
+detrended by this algorithm.
+
+</p>
+
+<!------------------------->
+<a name="ERRORS"></a>
+<h3>ERRORS</h3>
+
+<p>
+Calculate error bars, either from the standard deviation of
+the <em>y</em>-axis data, the square root of the <em>y</em>-axis data,
+or from a user-defined value. If error bars are already present in the
+slot, they are overwritten.
+</p>
+
+<!------------------------->
+<a name="FAKE"></a>
+<h3>FAKE</h3>
+
+<p>
+Allows you to create fake data with which to test or experiment with
+PERIOD.  Three options are catered for: periodic data, chaotic data
+and random data.
+</p>
+
+<p>
+Periodic data are created by summing a user-specified number of sine
+curves of the form:
+</p>
+
+<pre>
+Y = GAMMA + (AMPLITUDE * SIN [(2.0*PI/PERIOD) * (X - ZEROPT)]).
+</pre>
+
+<p>
+The chaotic data are created using a simple logistic equation of the form:
+</p>
+
+<pre>
+X<sub>n+1</sub> = LAMBDA * X<sub>n</sub> * (1-X<sub>n</sub>),
+</pre>
+
+<p>
+(see, for example, Scargle 1990ab). Values of 4 and 0.125 for <em>LAMBDA</em>
+and the initial value of <em>X<sub>n</sub></em>, respectively, work well.
+</p>
+
+<p>
+The random data are calculated using a Gaussian random number
+generator from a user-defined mean and standard deviation. The seed
+for the random number generator is set to the current date and time,
+so is never the same twice.
+</p>
+
+<!------------------------->
+<a name="FIT"></a>
+<h3>FIT</h3>
+
+<p>
+Folds the data on a given period and zero point and then fits the data
+with a sine curve. The sine curve has the form:
+</p>
+
+<pre>
+Y = GAMMA + (AMPLITUDE * SIN [(2.0*PI/PERIOD) * (X - ZEROPT)]).
+</pre>
+
+<p>
+Outputs the fit parameters to the screen and, optionally, to a log
+file. The resulting sine curve is written to a slot. This option is
+particularly useful for fitting radial-velocity curves of interacting
+binary stars, for example.
+</p>
+
+<!------------------------->
+<a name="FOLD"></a>
+<h3>FOLD</h3>
+
+<p>
+Folds the data on a given period and zero point. Hence, this option
+transforms the data onto a phase scale, where one phase unit is equal
+to one period and phase zero is defined by the zero point. If the zero
+point is not known, the data can be folded by taking the first data
+point as the zero point. This option is useful for checking whether
+derived periods actually give sensible results when applied to the
+data. In addition to normal folding, it is also possible to phase bin
+the data, which folds the data and then averages all the data points
+falling into each bin. It is also possible to plot a user-defined
+number of cycles.
+</p>
+
+<!------------------------->
+<a name="FREQ"></a>
+<h3>FREQ</h3>
+
+<p>
+Sets the frequency search parameters. The user can specify the minimum
+frequency, maximum frequency and frequency interval.  Note that the
+maximum number of frequencies is 150000, so the search parameters
+should be selected accordingly (see <a href="#Data format and storage">Data
+format and storage</a> for how to change
+this). Alternatively, by entering zeroes, default values can be
+accepted. The default values are set on entering the PERIOD package
+and thus the FREQ option need not be run if default frequencies are
+required. The default values are calculated as follows: minimum
+frequency, FMIN = 0, ie. infinite period; maximum frequency, FMAX = 1
+/ ( 2 * Smallest Data Interval), ie.  Nyquist critical sampling;
+frequency interval, FINT = (FMAX-FMIN)/(MXROW*0.5), i.e. half of the
+maximum number of freqencies it is possible to store in PERIOD. Note
+that it is also possible to specify the number of frequencies to be
+calculated, rather than the frequency interval, by entering a negative
+number, e.g. -1000 would give 1000 frequencies between FMIN and FMAX.
+</p>
+
+<!------------------------->
+<a name="FT"></a>
+<h3>FT</h3>
+
+<p>
+This option performs a classical discrete Fourier transform on the
+data and sums the mean-square-amplitudes of the result to form a power
+spectrum (see, for example, Deeming 1975). This discrete Fourier
+transform is defined for arbitrary data spacing and is equal to the
+convolution of the true Fourier transform with a spectral
+window. Hence, the effects of data spacing, such as aliasing, are all
+contained in the spectral window, which can be generated using the
+<a href=#WINDOW>WINDOW</a> option.
+</p>
+
+<!------------------------->
+<a name="HELP"></a>
+<h3>HELP</h3>
+
+<p>
+This command provides on-line help for PERIOD. Detailed information
+about individual commands can be obtained by typing, HELP 'COMMAND',
+e.g. HELP FOLD. A listing of the available commands can be obtained by
+typing a <em>?</em>. HELP can be called from either the 
+<a href="#Menu options">main PERIOD menu</a> or the
+<a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu.
+</p>
+
+<!------------------------->
+<a name="HIST"></a>
+<h3>HIST</h3>
+
+<p>
+Calculate the histogram or the cumulative distribution function (CDF) of the
+<em>y</em>-axis data, with a user-defined number of <em>x</em>-axis bins.
+</p>
+
+<!------------------------->
+<a name="INPUT"></a>
+<h3>INPUT</h3>
+
+<p>
+As described in <a href="#Data format and storage">Data format and
+storage</a>, this option allows you to input ASCII data into
+PERIOD. The routine determines the number of columns in the input
+file and then prompts the user for which columns refer to the <em>x</em>-axis,
+<em>y</em>-axis and <em>y</em>-axis errors (if present). For example,
+if the user is inputting radial-velocity data, the <em>x</em>-axis
+would most probably be HJD's, the <em>y</em>-axis the heliocentric
+radial velocities and there would most likely be errors associated
+with each radial-velocity value. Note that the <em>x</em>-axis values
+must be in ascending order, otherwise INPUT will report a warning and
+either sort the data (if requested to do so) or abort.  Note also that
+the <em>y</em>-axis errors are used by all options in the 
+<a href="#Menu options">main PERIOD menu</a>, 
+but by only the <a href=#CHISQ>CHISQ</a> and
+<a href=#AMPLITUDE>AMPLITUDE</a> periodicity-finding options
+in the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu.
+</p>
+
+<!------------------------->
+<a name="INTEG"></a>
+<h3>INTEG</h3>
+
+<p>
+Calculate the integral of the <em>y</em>-axis data. For example, if
+the slot contains a light curve, this routine will add up all 
+of the flux values and output the running total as a function of time.
+</p>
+
+<!------------------------->
+<a name="JIGGLE"></a>
+<h3>JIGGLE</h3>
+
+<p>
+'Jiggles' data by adding Gaussian noise to the <em>x</em>-
+and/or <em>y</em>-axis data. The former effectively adds
+irregularities to the <em>x</em>-data sampling intervals, the latter
+increases the total noise in the <em>y</em>-axis data.  This routine
+is useful, not only in creating realistic artificial datasets (in
+conjunction with <a href=#FAKE>FAKE</a>), but also in investigating
+the effects of noise on a period detection.
+</p>
+
+<!------------------------->
+<a name="NOISE"></a>
+<h3>NOISE</h3>
+
+<p>
+Form a random dataset with the same mean and standard deviation as the 
+original, and the same <em>x</em>-axis sampling.
+</p>
+
+<!------------------------->
+<a name="OFF"></a>
+<h3>OFF</h3>
+
+<p>
+When <a href=#OVERPLOT>OVERPLOT</a> is enabled, OFF adds a
+user-defined <em>y</em>-axis offset to each slot in the plot, which
+helps to separate the data in the plot. Note that this offset is
+applied to the data for <em>plotting purposes only</em> and is not
+applied for any other operation in PERIOD.
+</p>
+
+<p>
+OFF accepts command-line entry of the offset. So, for example, to
+apply a <em>y</em>-axis offset of 0.5 to each slot when plotting in
+<a href=#PLT>PLT</a>, simply type: <em>period> off 0.5</em>.
+</p>
+
+<!------------------------->
+<a name="OPEN"></a>
+<h3>OPEN</h3>
+
+<p>
+It is possible to store the fits calculated by <a href=#FIT>FIT</a>
+and <a href=#PEAKS>PEAKS</a> in an ASCII log file. This option opens a
+new log file (if it does not already exist), or else re-opens an old
+log file and skips over the existing entries to append any new data.
+</p>
+
+<!------------------------->
+<a name="OUTPUT"></a>
+<h3>OUTPUT</h3>
+
+<p>
+Writes any selected slot to an ASCII file on disk. This is the only
+way of saving data created by PERIOD (PERIOD does not currently write
+FITS files), and should therefore be run before
+typing <a href=#QUIT>QUIT</a> in order to store, say, a periodogram.
+</p>
+
+<!------------------------->
+<a name="OVERPLOT"></a>
+<h3>OVERPLOT</h3>
+
+<p>
+Toggles OVERPLOT on and off. When on, multiple slots are plotted in
+the same plot window. When off, <a href=#PLT>PLT</a> clears each plot before plotting the
+next slot. Note that if OVERPLOT is on, it is also possible to type
+<em>plot vertical</em> in <a href=#PLT>PLT</a>, which plots each slot
+in its own panel.
+</p>
+
+<!------------------------->
+<a name="PDM"></a>
+<h3>PDM</h3>
+
+<p>
+The phase dispersion minimization (PDM) technique is an automated
+version of the classical method of distinguishing between possible
+periods, in which the period producing the least observational scatter
+about the mean light curve is chosen. This technique, which is
+described in detail by Stellingwerf (1978), is well suited to cases in
+which the variability is highly non-sinusoidal. For an example
+application, see Dhillon et al. (2011).
+</p>
+
+<p>
+The data are first folded on a series of trial frequencies. For each
+trial frequency, the full phase interval (0,1) is divided into a
+user-specified number of bins. The width of each bin is specified by
+the user, such that a point need not be picked (if a bin width
+narrower than the bin spacing is selected) or a point can belong to
+more than one bin (if a bin width wider than the bin spacing is
+selected). The variance of each of these bins (or samples) is then
+calculated. This gives a measure of the scatter around the mean light
+curve defined by the means of the data in each sample. The PDM
+statistic can then be calculated by dividing the overall variance of
+all the samples by the variance of the original (unbinned)
+dataset. This process is then repeated for the next trial
+frequency. Note that windowed data cannot be passed to this option
+since its variance is zero. If the trial period is not a true period,
+then the overall sample variance will be approximately equal to the
+variance of the original dataset (i.e. the PDM statistic will be
+approximately equal to 1). If the trial period is a correct period,
+the PDM statistic will reach a local minimum compared with
+neighbouring periods, hopefully near zero.
+</p>
+
+<!------------------------->
+<a name="PEAKS"></a>
+<h3>PEAKS</h3>
+
+<p>
+This option should be run once a periodogram has been obtained. It
+finds the highest peak in the periodogram (or lowest trough if it is a
+string-length, PDM or reduced-&chi;<sup>2</sup> plot) between
+user-specified frequencies. The resulting period is calculated, along
+with an error. Errors on periods are not straightforward to estimate
+from periodograms and so, to keep things simple, PERIOD outputs an
+error derived by calculating the half-size of a single frequency bin,
+centred on the peak (or trough) in a periodogram, and then converting
+to period units. This error gives an indication of the accuracy to
+which a peak can be located in a periodogram (due to the frequency
+sampling). Clearly, with a larger frequency search interval it is more
+difficult to locate a peak precisely and this is reflected in the
+error estimate. However, this error estimate should only be regarded
+as a <em>minimum</em> error and not a formal error, as it does not
+take into account systematic or statistical errors, nor does it give
+any indication of the significance of a particular period.
+Schwarzenberg-Czerny (1991) presents a detailed account of the errors
+on period determinations and advises a <em>post-mortem</em> analysis
+by measuring the width and heights of peaks in a periodogram. It is
+possible to perform such an analysis within PERIOD using the fitting
+routines of <a href=#PLT>PLT</a>
+</p>
+
+<p>
+If the significance calculation is enabled with
+the <a href=#SIG>SIG</a> command, two false alarm probabilities are
+quoted alongside the period, calculated using a Fisher randomisation
+test.  The first - <em>FAP1</em> - is the probability that, given the
+frequency search parameters, there is no periodic component present in
+the data with this period. The second - <em>FAP2</em> - is the
+probability that the period is not actually equal to the quoted value
+but is equal to some other value. Note that
+<em>FAP1</em> is only output if the whole frequency range is specified
+to be analysed in <a href=#PEAKS>PEAKS</a>. One sigma errors on both
+significance values are also given. If the significance values are
+zero, these errors are displayed as -1, implying that the false alarm
+probabilities lie between 0.00 and 0.01 with 95% confidence. Clearly,
+the lower a significance value and its error, the more likely the
+quoted period is a correct one. If both the significances and errors
+are displayed as -1, this means that the input periodogram has not
+been subjected to a significance calculation (i.e. <a href=#SIG>SIG</a>
+has been disabled). The results of PEAKS can be written
+to a log file if one is open. See the <a href=#SIG>SIG</a> option for
+more information. For useful discussions on errors and significances
+of period determinations, see Schwarzenberg-Czerny (1991) and Nemec
+and Nemec (1985).
+</p>
+
+<!------------------------->
+<a name="PERIOD"></a>
+<h3>PERIOD</h3>
+
+<p>
+Opens the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu, giving access to
+the various period-search algorithms in PERIOD.  
+</p>
+
+<!------------------------->
+<a name="PLT"></a>
+<h3>PLT</h3>
+
+<p>
+Calls PLT, the subroutine mode of the plotting and fitting package QDP
+(see the <a href=http://wwwastro.msfc.nasa.gov/qdp/help/plt.html
+target="_blank">PLT online help</a>). This option is used to plot any
+desired data slots. Once in the <em>period-plt></em> menu, one can
+manipulate the plot (just as if one were using QDP) and create
+publication-ready diagrams. In addition, PLT contains an excellent set
+of fitting routines which can be used to fit a variety of different
+functions to the data (such as a Gaussian to a peak in a periodogram,
+for example). To receive on-line help for PLT, simply
+type: <em>period-plt> help</em> or <em>period-plt> ?</em>.  To plot to
+a colour postscript file for printing, type <em>period-plt> dev
+/cps</em> followed by <em>period-plt> pl</em> (or
+type <em>period-plt> dev ?</em>  for a list of available plot
+devices). To exit PLT and return to the PERIOD menu,
+type: <em>period-plt> exit</em> or <em>period-plt> q</em>.
+</p>
+
+<p>
+PLT can be called from either the <a href="#Menu options">main PERIOD menu</a>
+or the
+<a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu. If PLT is called
+from the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu,
+<a href=#BASE>BASE</a> is automatically turned off to prevent
+confusion when viewing periodograms. This is not the case when viewing
+periodograms if PLT is called from the 
+<a href="#Menu options">main PERIOD menu</a>, so great care
+is required in this case if <a href=#BASE>BASE</a> is turned on.
+</p>
+
+<p>
+Note that PLT accepts command-line slot selection from the 
+<a href="#Menu options">main PERIOD menu</a> 
+and the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu. So,
+for example, to plot slots 3 and 4, simply type: <em>period> plt
+3,4</em> or <em>period_period> pl 3 4</em>.
+</p>
+
+
+<!------------------------->
+<a name="POLY"></a>
+<h3>POLY</h3>
+
+<p>
+Fits a polynomial to data, with orders ranging from 1 (i.e. a
+constant) to 20.  It is possible to define up to 10
+<em>x</em>-axis regions to mask
+from the fit. The number of points in the output slot containing the
+fit can be set by the user.
+</p>
+
+<!------------------------->
+<a name="QDP"></a>
+<h3>QDP</h3>
+
+<p>
+Toggles QDP functionality on and off when plotting data using
+the <a href=#PLT>PLT</a> command. When QDP is on, the user is able to
+type QDP/PLT commands interactively at the <em>period-plt</em> prompt
+to manipulate the plot and fit functions to the data. When off, the
+user is returned to the PERIOD
+(or <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a>) sub-menu once the data has
+been plotted using <a href=#PLT>PLT</a>. The latter setting is useful when
+<a href="#Automating things">Automating things</a>.
+</p>
+
+<!------------------------->
+<a name="QUIT"></a>
+<h3>QUIT</h3>
+
+<p>
+This option quits a PERIOD session (the EXIT command is also accepted)
+if run from the <a href="#Menu options">main PERIOD menu</a>.
+However, it does provide a last
+chance to stay in the package. This is essential to prevent accidental
+exit, since any data files created using PERIOD will be lost on exit
+from the package unless one has first saved them using
+<a href=#OUTPUT>OUTPUT</a>. If this option is run from
+the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu, it returns the
+user to the <a href="#Menu options">main PERIOD menu</a>.
+</p>
+
+<!------------------------->
+<a name="SCARGLE"></a>
+<h3>SCARGLE</h3>
+
+<p>
+By redefining the classical periodogram (i.e. the discrete Fourier
+periodogram) in such a manner as to make it invariant to a shift of
+the origin of time, Lomb (1976) and Scargle (1982) developed a novel
+type of periodogram analysis, quite powerful for finding, and testing
+the significance of, weak periodic signals in otherwise random, 
+<em>unevenly sampled</em> data. Horne and Baliunas (1986) have
+elaborated on the method and Press and Rybicki (1989) present a fast
+implementation of the algorithm, which is used here. This
+implementation uses FFTs to increase the speed of computation
+(although it is in no way equivalent to conventional FFT periodogram
+analysis). Note that windowed data cannot be passed to this option
+since it needs to calculate the variance (which is zero) to normalize
+the power of the periodogram.
+</p>
+
+<!------------------------->
+<a name="SELECT"></a>
+<h3>SELECT</h3>
+
+<p>
+Selects input and output slots for processing, as described in
+<a href="#Data format and storage">Data format and storage</a>. The
+input slots should contain the time-series, the output slots will
+contain, for example, the power spectra.  SELECT must be
+run <em>every</em> time the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a>
+sub-menu is entered; although tedious, this helps to avoid
+accidentally overwriting slots.
+</p>
+
+<!------------------------->
+<a name="SHOW"></a>
+<h3>SHOW</h3>
+
+<p>
+Returns information on the data slots or on the stored fits in the log
+file.  This command is useful in order to check which slots contain
+which datasets and also as a means of obtaining some elementary
+statistics on the stored data.  You can also use this option to check
+the fits from the <a href=#FIT>FIT</a> and <a href=#PEAKS>PEAKS</a>
+options stored in the log file without having to exit PERIOD.
+</p>
+
+<p>
+SHOW also provides a quick summary of the slot contents from the
+PERIOD command line. So, for example, to get a summary of the contents
+of slots 1 to 4, type: <em>period> sh 1 4</em>. Alternatively, to get
+a summary of the contents of <em>all</em> of the slots,
+type: <em>period> sh \</em>.
+</p>
+
+<!------------------------->
+<a name="SIG"></a>
+<h3>SIG</h3>
+
+<p>
+Arguably the most reliable means of determining the significance of a
+peak (or trough) in a periodogram is via some sort of Monte Carlo
+analysis. Such a method, known as a Fisher randomisation test (see,
+for example, Nemec and Nemec 1985), is employed in PERIOD.
+</p>
+
+<p>
+The SIG option works as a switch, either turning on or turning off the
+significance calculation in PERIOD. The default on entering PERIOD is
+for the significance calculation to be disabled. This means that no
+significance values are calculated or attached to period
+determinations. By typing SIG, the significance calculation is
+enabled. You are first prompted for the number of permutations in the
+sample. To ensure reliable significance values, this should typically
+be set to a value of 100 or more. The maximum number of permutations
+is currently 10000, which is set by the MAXPERMS parameter in
+<em>period_period.f</em>. The PERIOD random number generator is then
+automatically initialised using a seed extracted from the current date
+and time - this determines the starting point in a number series of
+infinite period. If SIG is already enabled, one can disable the
+significance calculation by typing SIG again.
+</p>
+
+<p>
+With the significance calculation enabled, every time a period-finding
+option is run (<a href=#AMPLITUDE>AMPLITUDE</a>,
+<a href=#CHISQ>CHISQ</a>,
+<a href=#CLEAN>CLEAN</a>,
+<a href=#FT>FT</a>,
+<a href=#PDM>PDM</a>,
+<a href=#SCARGLE>SCARGLE</a>,
+<a href=#STRING>STRING</a>) a Fisher randomisation test is performed.
+This consists of calculating the periodogram as usual and loading the
+specified output slot. The <em>y</em>-axis data are then shuffled to
+form a new, randomised time-series with the same <em>x</em>-axis
+values as the original dataset. The periodogram of this dataset is
+then calculated (but not stored in the output slot, which will always
+contain the periodogram of the real time-series). This randomisation
+and periodogram calculation loop is then performed for the number of
+permutations specified by the user. This can take a considerable
+amount of time, depending on the number of data points in the
+time-series, the frequency search parameters and the number of
+permutations.
+</p>
+
+<p>
+Once the loop is complete, you should enter
+the <a href=#PEAKS>PEAKS</a> option to view the resulting
+significances. Two significance estimates are given in <a href=#PEAKS>PEAKS</a>.
+The first, denoted <em>FAP1</em>, represents the proportion of
+permutations (i.e.  shuffled time-series) that contained a trough lower
+than (in the case of the <a href=#CHISQ>CHISQ</a>,
+<a href=#STRING>STRING</a>, and <a href=#PDM>PDM</a> options) or a
+peak higher than (in the case of the <a href=#AMPLITUDE>AMPLITUDE</a>, 
+<a href=#FT>FT</a>, <a href=#SCARGLE>SCARGLE</a>
+and <a href=#CLEAN>CLEAN</a> options) that of the periodogram of the
+unrandomised dataset <em>at any frequency</em>. This therefore
+represents the probability that, given the frequency search
+parameters, no periodic component is present in the data with this
+period and it is only output in <a href=#PEAKS>PEAKS</a> if the whole
+frequency range is selected for analysis. The second significance,
+denoted <em>FAP2</em>, represents the proportion of permutations that,
+<em>at the frequency given by the period output
+by</em> <a href=#PEAKS>PEAKS</a>, contained troughs lower than (or
+peaks higher than) the peak or trough in the periodogram of the real
+dataset. This therefore represents the probability that the period is
+not actually equal to the quoted value but is equal to some other
+value, and is quoted for any frequency range specified
+in <a href=#PEAKS>PEAKS</a>. Standard errors on both of these false
+alarm probabilities are also given (see Nemec and Nemec 1985).
+</p>
+
+<!------------------------->
+<a name="SINE"></a>
+<h3>SINE</h3>
+
+<p>
+Adds, subtracts, multiplies or divides a sine curve to/from/by the
+slot. The sine curve has the form:
+</p>
+
+<pre>
+Y = GAMMA + (AMPLITUDE * SIN [(2.0*PI/PERIOD) * (X - ZEROPT)]).
+</pre>
+
+<p>
+This option is useful for removing or adding known periods from/to
+data, thus enabling or testing the detection of other periods.
+</p>
+
+<!------------------------->
+<a name="SLIDE"></a>
+<h3>SLIDE</h3>
+
+<p>
+Calculates a sliding <a href=#SCARGLE>SCARGLE</a> periodogram. This routine
+splits the time series into a series of shorter time series and a
+<a href=#SCARGLE>SCARGLE</a> periodogram of each shorter time series
+is then calculated. The length of each of the shorter time series, and
+the amount that they overlap with each other, are defined by the
+user. Each of the periodograms is then plotted as a greyscale as a
+function of time. This routine is particularly useful for studying
+transient periodic phenomena.
+</p>
+
+<!------------------------->
+<a name="SMOOTH"></a>
+<h3>SMOOTH</h3>
+
+<p>
+Smoothes the <em>y</em>-axis by median filtering.
+</p>
+
+<!------------------------->
+<a name="STRING"></a>
+<h3>STRING</h3>
+
+<p>
+The string-length method is described in detail by Dworetsky
+(1983). For example applications, see Friend et al. (1990) and
+Crowther et al. (2010). The data are folded on a series of trial
+periods and at each period the sum of the lengths of line segments
+joining successive points (the string-length) is calculated. Minima in
+a plot of string-length versus trial frequency indicate possible
+periods. The string-length method is especially useful if the time
+series has only a small number of randomly-spaced observations of
+sinusoidal-like variability, such as a sparse radial-velocity curve.
+Note that windowed data cannot be passed to this option due to
+the <em>y</em>-data scaling process (see Dworetsky 1983).
+</p>
+
+<!------------------------->
+<a name="TIME"></a>
+<h3>TIME</h3>
+
+<p>
+Applies heliocentric or barycentric timing correction. This routine
+uses a mixture of the SOFA and SLALIB libraries. The former is much
+more accurate - SLALIB gives a barycentric correction accurate to 23
+milliseconds with respect to the JPL DE96 ephemeris, whereas SOFA is
+accurate to 45 microseconds with respect to the (newer) JPL DE405
+ephemeris. Similarly the heliocentric correction given by SLALIB is
+accurate to only 5 milliseconds, whereas that of SOFA is accurate to
+37 microseconds.  Therefore, SLALIB has only been used on those
+occasions when SOFA does not have the required functionality,
+e.g. when computing the telescope's position on the earth, which does
+not affect the accuracy of the results.
+</p>
+
+<p>
+By comparing the output of this routine with the example calculations
+given in the Jodrell Bank Crab Pulsar Monthly Ephemeris, it appears
+that the barycentric correction given here is accurate to 1.7
+milliseconds, but this discrepancy could be due to the fact that
+Jodrell Bank have used the full JPL DE200 ephemeris in their calculation,
+whereas SOFA uses (a fit to) the JPL DE405 ephemeris. The discrepancy
+could also be due to the fact that we have assumed zero parallax,
+proper motion and radial velocity for the Crab, whereas Jodrell may
+have included appropriate values for these quantities in their
+calculation.
+</p>
+
+<p>
+Note that this routine converts MJD (on the UTC timescale, as output
+by ULTRACAM) to either BMJD (i.e. the MJD at the solar system
+barycentre) on the TDB timescale or HJD (i.e. the MJD at the centre of
+the Sun) on the UTC timescale.
+</p>
+
+<!------------------------->
+<a name="UCAL"></a>
+<h3>UCAL</h3>
+
+<p>
+Routine to convert the ratio of target to comparison star counts into
+calibrated SDSS <em>u'g'r'i'z'</em> fluxes or magnitudes, given an
+input calibrated comparison star magnitude. Typical ULTRACAM input
+data are assumed, i.e.:
+<ol>
+<li><em>y</em>-axis is target/comparison star counts.
+<li>Calibrated comparison star magnitude is known.
+<li>The data are taken with an SDSS filter (<em>u'g'r'i'z'</em>).
+</ol>
+Note that it doesn't matter what filter the data have been recorded
+in, as long as it is an SDSS <em>u', g', r', i'</em> or <em>z'</em>
+filter. The conversion uses the formula given in Eqn. 1 of Fukugita et
+al. (1996). The output units of flux are ergs/s/cm<sup>2</sup>/Hz.
+</p>
+
+<!------------------------->
+<a name="UINPUT"></a>
+<h3>UINPUT</h3>
+
+<p>
+Loads data from the log files output by the <em>reduce</em> program of
+the
+<a href=http://deneb.astro.warwick.ac.uk/phsaap/software/ultracam/html/index.html target="_blank">ULTRACAM pipeline data reduction software</a>. This
+routine automatically skips the headers and determines the number of
+frames and the number of apertures (i.e. stars) on each of the CCDs. As
+a check, it outputs the first and last MJD values read from the file
+and also offers the user the option of viewing both the non-fatal and
+fatal
+<em>reduce</em> errors (indicated by the <em>** WARNING:</em>
+and <em>** ERROR:</em> strings, respectively). The meanings of the
+error codes are given in
+<a href="#Data format and storage: ULTRACAM">Data format and storage</a>.
+Note that it
+is possible to load multiple log files
+using <a href=#UINPUT>UINPUT</a>, concatenating the light curve into a
+single slot.
+</p>
+
+<!------------------------->
+<a name="UNBLUE"></a>
+<h3>UNBLUE</h3>
+
+<p>
+Routine to correct ULTRACAM data for <em>NBLUE</em>>1, which means that
+only 1 in <em>NBLUE</em> <em>u'-</em>band frames has valid data. This
+is indicated by <a href="#Data format and storage: ULTRACAM">error code</a> 12
+in the <em>reduce</em> log file, and by the fact that the flux and error are recorded
+as 0, -1 respectively.
+</p>
+
+<!------------------------->
+<a name="USLOTS"></a>
+<h3>USLOTS</h3>
+
+<p>
+Loads slots with data input from the <em>reduce</em> log files output
+by the
+<a href=http://deneb.astro.warwick.ac.uk/phsaap/software/ultracam/html/index.html target="_blank">ULTRACAM pipeline data reduction software</a>.  The
+ULTRACAM data must have previously been successfully loaded using
+the <a href=#UINPUT>UINPUT</a> command.  Prompts the user for which
+variables to use as the <em>x</em>- and <em>y</em>-axes and for which
+aperture and CCD numbers to load.  This routine is necessary because a
+single <em>reduce</em> log file contains a great deal of information
+and the user must select the relevant items for processing within
+PERIOD from the list given in 
+<a href="#Data format and storage: ULTRACAM">Data format and storage</a>.
+</p>
+
+<!------------------------->
+<a name="WINDOW"></a>
+<h3>WINDOW</h3>
+
+<p>
+One of the main problems with the classical periodogram (see Scargle
+1982 for a definition), is <em>spectral leakage</em>, of which there
+are several forms. Leakage to nearby frequencies (sidelobes) is due to
+the finite total interval over which the data are sampled. Leakage to
+distant frequencies is due to the finite size of the interval between
+samples. The WINDOW option sets all the <em>y</em>-axis data points to
+unity. A discrete Fourier transform of the resulting data (using, for
+example, the <a href=#FT>FT</a> option) yields the window function (or
+spectrum), which shows the effects of spectral leakage.
+</p>
+
+<!------------------------->
+<a name="XCOR"></a>
+<h3>XCOR</h3>
+
+<p>
+Cross correlate two slots using the Discrete Correlation Function
+(DCF) of Edelson & Krolik (1988). The output slot contains the
+correlation coefficient between the first and second slot. A
+correlation peak at positive lag implies that the second dataset lags
+the first.
+</p>
+
+<p>
+The user is prompted for three input parameters. First, the bin size
+(in <em>x</em>-axis units). The bin size should ideally be set so that
+it includes at least one data point, on average. The mean interval of
+the first input slot is given for guidance. Second, the user is
+prompted for the maximum shift. This is the largest delay time to
+calculate the DCF at. This should obviously depend on the amount by
+which the datasets overlap, as calculating the DCF at delays where no
+dataset overlap occurs is not going to give sensible answers. The
+overlap between the two datasets is given for guidance. Third, the
+user is asked whether or not to eliminate zero-lag
+pairs. Typically, the DCF will show a lot of power at a delay of
+zero if you don't reject points with a zero time lag. It is therefore
+recommended that users respond with a <em>Y</em>.
+</p>
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="Classified list of commands">
+<h2>Classified list of commands</h2>
+
+<p>
+The list below classifies PERIOD commands according to their function.
+The same command may appear in more than one class.
+</p>
+
+<ul>
+<table>
+
+<tr><td>calibration</td><td>--</td><td><a href=#TIME>TIME</a>, <a href=#UCAL>UCAL</a></td>
+
+<tr><td>errors</td><td>--</td><td><a href=#BOOT>BOOT</a>, <a href=#ERRORS>ERRORS</a>, <a href=#FAKE>FAKE</a>, <a href=#JIGGLE>JIGGLE</a>, <a href=#NOISE>NOISE</a></td>
+  
+<tr><td>fitting</td><td>--</td><td><a href=#FIT>FIT</a>, <a href=#PLT>PLT</a>, <a href=#POLY>POLY</a></td>
+
+<tr><td>information</td><td>--</td><td><a href=#AIRMASS>AIRMASS</a>, <a href=#CLOSE>CLOSE</a>, <a href=#HELP>HELP</a>, <a href=#HIST>HIST</a>, <a href=#OPEN>OPEN</a>, <a href=#SHOW>SHOW</a></td>
+
+<tr><td>input/output</td><td>--</td><td><a href=#FAKE>FAKE</a>, <a href=#INPUT>INPUT</a>, <a href=#OUTPUT>OUTPUT</a>, <a href=#UINPUT>UINPUT</a>, <a href=#USLOTS>USLOTS</a></td>
+
+<tr><td>manipulation</td><td>--</td><td><a href=#ARITH>ARITH</a>, <a href=#BIN>BIN</a>, <a href=#CLIP>CLIP</a>, <a href=#DERIV>DERIV</a>, <a href=#DETREND>DETREND</a>, <a href=#FOLD>FOLD</a>, <a href=#HIST>HIST</a>, <a href=#INTEG>INTEG</a>, <a href=#SINE>SINE</a>, <a href=#SMOOTH>SMOOTH</a>, <a href=#UNBLUE>UNBLUE</a>, <a href=#WINDOW>WINDOW</a>, <a href=#XCOR>XCOR</a></td>
+
+<tr><td>plotting</td><td>--</td><td><a href=#BASE>BASE</a>, <a href=#OFF>OFF</a>, <a href=#OVERPLOT>OVERPLOT</a>, <a href=#PLT>PLT</a>, <a href=#QDP>QDP</a></td>
+
+<tr><td>slots</td><td>--</td><td><a href=#APPEND>APPEND</a>, <a href=#COPY>COPY</a>, <a href=#DEL>DEL</a></td>
+
+<tr><td>time series</td><td>--</td><td><a href=#AMPLITUDE>AMPLITUDE</a>, <a href=#CHISQ>CHISQ</a>, <a href=#CLEAN>CLEAN</a>, <a href=#FREQ>FREQ</a>, <a href=#FT>FT</a>, <a href=#PDM>PDM</a>, <a href=#PEAKS>PEAKS</a>, <a href=#PERIOD>PERIOD</a>, <a href=#SCARGLE>SCARGLE</a>, <a href=#SELECT>SELECT</a>, <a href=#SIG>SIG</a>, <a href=#SLIDE>SLIDE</a>, <a href=#STRING>STRING</a></td>
+
+</table>
+</ul>
+  
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="A simple recipe">
+<h2>A simple recipe</h2>
+
+<p>
+A simple guide designed to introduce inexperienced users to the steps
+involved in detecting periodicities is outlined below. Detailed
+descriptions of the individual PERIOD commands can be found in
+the <a href="#Alphabetical list of commands">Alphabetical list of
+commands</a> and in the program's help facility (which also gives help
+on the individual prompts one is confronted with).
+</p>
+
+<ol>
+<li> Create an ASCII data file containing the time-series.
+<li> Read the ASCII data into PERIOD using <a href=#INPUT>INPUT</a>.
+<li> Open a log file using <a href=#OPEN>OPEN</a>. 
+<li> Enter the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu by typing PERIOD.
+<li> Select the slot which contain the time-series data and specify the output
+slot for the periodogram using <a href=#SELECT>SELECT</a>.
+<li> Set the frequency search limits using <a href=#FREQ>FREQ</a>. If
+you have no idea what the period is, accept the default values by
+typing 0 (or alternatively, by not typing <a href=#FREQ>FREQ</a> in
+the first place).
+<li> Calculate the Lomb-Scargle periodogram by typing <a href=#SCARGLE>SCARGLE</a>.
+<li> Plot the periodogram using <a href=#PLT>PLT</a>. Check to see if there
+is a clear peak.
+<li> Now run <a href=#PEAKS>PEAKS</a> on the periodogram,
+specifying the frequency range which contains the peak you wish to
+measure (you may enter 0,0 if you wish to process the entire
+range). Write the results to the log file.
+<li> Now quit the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu by
+typing <a href=#QUIT>QUIT</a>.  
+<li> Fold the time-series data on the period output 
+by <a href=#PEAKS>PEAKS</a> using <a href=#FOLD>FOLD</a>.
+<li> Plot the folded data using <a href=#PLT>PLT</a>. If this looks
+sensible, the period may well be correct, but it can be easy to fool
+oneself. Best to do a significance determination. 
+<li> So, re-enter the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu by
+typing PERIOD.
+<li> Enable the significance calculation by
+typing <a href=#SIG>SIG</a> and specifying, say, 100 permutations.
+<li> Now reselect the time-series and periodogram slots
+using <a href=#SELECT>SELECT</a>.
+<li> Re-calculate the Lomb-Scargle periodogram by
+  typing <a href=#SCARGLE>SCARGLE</a>. This will take much longer than
+  the first time, as it has to calculate it 101 times (once for the
+  time-series data and 100 times for the randomised datasets).
+<li> Re-run <a href=#PEAKS>PEAKS</a> on the periodogram, this time
+looking closely at the false alarm probabilities for your chosen
+peak. Store the results in the log file.
+<li> Now quit the <a href=#PERIOD_PERIOD>PERIOD_PERIOD</a> sub-menu again by
+typing <a href=#QUIT>QUIT</a>.  
+<li> Output the periodogram and folded data to an ASCII file on disk
+using <a href=#OUTPUT>OUTPUT</a>.
+<li> Exit PERIOD by typing <a href=#QUIT>QUIT</a>.
+</ol>
+
+<p>
+The above description is intended only as a very brief guide, designed
+to show the main features of PERIOD. Clearly, a great deal more
+experimentation is required before it can definitely be said that a
+period has been detected. For example, you should look at the window
+function, investigate other large peaks in the periodogram, try
+smaller or larger frequency ranges, or try one of the other
+periodicity-finding options (a useful comparison of a number of
+different techniques is given by Carbonell, Oliver and Ballester 1992
+and Heck, Manfroid and Mersch 1985). Other analysis techniques might
+also be attempted, such as subtracting a sine curve from the data in
+order to investigate its effects on the harmonics and enable the
+detection of less-dominant periods. The noise level can also be
+investigated by injecting sine curves of known periods.
+</p>
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="Automating things">
+<h2>Automating things</h2>
+
+<p>
+PERIOD can be automated in a roundabout manner, allowing one to avoid tedious
+re-entry of commands. Simply create an ASCII file containing a list of the
+PERIOD commands that you wish to run, including responses to all of the user
+prompts. To execute the commands in this file, type:
+<pre>
+period < input
+</pre>
+where <em>input</em> is the name of the ASCII file.
+</p>
+
+<p>
+A common situation when such automation is useful is when one is
+observing with ULTRACAM and a plot of the data (in the example below,
+the <em>reduce</em> log files run022.log and run023.log) is
+required. In this case, the ASCII input file would look like this:
+</p>
+
+<pre>
+# input the two reduce log files, viewing the various errors and warnings.
+uinput
+run022.log
+y
+y
+run023.log
+y
+y  
+
+# load the object counts versus MJD for all of the apertures on all
+# three CCDs, putting the light curves in slot 1 onwards. If each
+# of the three ULTRACAM CCDs has two apertures - one for the target star and
+# one for the comparison star - then slots 1 to 6 will be filled as follows:
+# slot 1: light curve of the target in CCD1 (red)
+# slot 2: light curve of the target in CCD2 (green)
+# slot 3: light curve of the target in CCD3 (blue)
+# slot 4: light curve of the comparison in CCD1 (red)
+# slot 5: light curve of the comparison in CCD2 (green)
+# slot 6: light curve of the comparison in CCD3 (blue)
+uslots
+1,1
+0
+0
+1
+
+# divide slot 1, which contains the target-star light curve in the red arm, by 
+# slot 4, which contains the comparison-star light curve in the red arm.
+# put the result in slot 11.
+arith
+s
+d
+1
+4
+11
+
+# divide slot 2, which contains the target-star light curve in the green arm, by 
+# slot 5, which contains the comparison-star light curve in the green arm.
+# put the result in slot 12.
+arith
+s
+d
+2
+5
+12
+
+# divide slot 3, which contains the target-star light curve in the blue arm, by 
+# slot 6, which contains the comparison-star light curve in the blue arm.
+# put the result in slot 13.
+arith
+s
+d
+3
+6
+13
+
+# subtract the integer part of the MJD for the plots.
+base
+
+# enable plotting of multiple slots in the same plot window.
+overplot
+
+# enter some PLT commands to format the plot nicely.
+# "pl vert" makes a three-panel plot with the red light curve at
+# the top, the green light curve in the middle and the blue
+# light curve at the bottom.
+# the "la" commands add labels to the axes.
+# "dev target.ps/cps" plots the light curve to a colour postscript
+# file (if this command is omitted, the plot will appear in an xwindow
+# instead).
+# the "win 2" and "win 3" commands move to the middle and bottom plot
+# panels, respectively.
+qdp
+pl vert
+la x MJD (52946+)
+la y target/comparison
+la t GJ896 in u'g'r' on 2003/11/03
+win 2
+la y target/comparison
+win 3
+la y target/comparison
+dev gj896.ps/cps
+pl
+q
+
+# now plot the light curves.
+pl 11 13
+
+# and quit PERIOD.
+q
+y
+</pre>
+
+<p>
+A file containing the above commands can be downloaded <a href=input target="_blank">here</a>. If you run it on <a href=run012.log target="_blank">this <em>reduce</em> log file</a> you should get <a href=gj896.pdf target="_blank">this plot</a> (showing a large stellar flare on the M dwarf GJ896).
+</a>
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+<a name="References and further reading">
+<h2>References and further reading</h2>
+
+<p>
+I wrote PERIOD a long time ago and there have been significant
+developments in time-series analysis since then which are not
+incorporated in PERIOD. For example, the Lomb-Scargle periodogram has
+been generalised for floating means (Zechmeister and Kurster 2009),
+and written in a Bayesian form (Mortier et al. 2015). A Box-fitting
+Least Squares (BLS) method has been introduced for seaching for
+periodic transits by exoplanets (Kovacs et al. 2002). A detailed
+comparison of various period finding algorithms is presented by Graham
+et al. (2013).
+</p>  
+
+<p>
+<ul>
+<li>Carbonell M, Oliver R & Ballester J L, 1992, A&A, 264, 350
+<li>Crowther P A et al, 2010, MNRAS, 403, L41
+<li>Deeming T J, 1975, Ap&SS, 36, 137
+<li>Dhillon V S et al, 2011, MNRAS, 416, L16
+<li>Dworetsky M M, 1983, MNRAS, 203, 917
+<li>Edelson R A & Krolik J H, 1988, ApJ, 333, 646
+<li>Friend M T, Martin J S, Smith R C & Jones D H P, 1990, MNRAS, 246, 637
+<li>Fukugita M et al, 1996, AJ, 111, 1748
+<li>Graham M J et al, 2013, MNRAS, 434, 3423
+<li>Heck A, Manfroid J & Mersch G, 1985, A&AS, 59, 63
+<li>Horne J H & Baliunas S L, 1986, ApJ, 302, 757
+<li>Horne K, Wade R A & Szkody P, 1986, MNRAS, 219, 791
+<li>Kovacs G, Zucker S & Mazeh T, 2002, A&A, 391, 369
+<li>Lomb N R, 1976, Ap&SS, 39, 447
+<li>Mortier A et al, 2015, A&A, 573, 101
+<li>Nemec A F L & Nemec J M, 1985, AJ, 90, 2317
+<li>Press W H & Rybicki G B, 1989, ApJ, 338, 277
+<li>Roberts D H, Lehar J & Dreher J W, 1987, AJ, 93, 968
+<li>Scargle J D, 1982, ApJ, 263, 835
+<li>Scargle J D, 1990a, ApJ, 359, 469
+<li>Scargle J D, 1990b, Errors, Bias & Uncertainties in Astronomy, Jaschek C & Murtagh F, CUP, Cambridge
+<li>Schwarzenberg-Czerny A, 1991, MNRAS, 253, 198
+<li>Stellingwerf R F, 1978, ApJ, 224, 953
+<li>Zechmeister M & Kurster M, 2009, A&A, 496, 577
+</ul>
+</p>
+
+<!------------------------------------------------------------------------->
+
+<hr noshade>
+
+</body>
+</html>

@@ -5,19 +5,22 @@
 
                         Command: USLOTS
 
-BRIEF DESCRIPTION: Loads slots with ULTRACAM data. The ULTRACAM data
-must have previously been successfully loaded using the UINPUT command.
-This routine is necessary because a single ULTRACAM data file contains
-a great deal of information and the user must select the relevant items
-for processing within PERIOD from the following list:
+BRIEF DESCRIPTION: Loads slots with data input from the reduce log
+files output by the ULTRACAM pipeline data reduction software. The
+ULTRACAM data must have previously been successfully loaded using the
+UINPUT command. Prompts the user for which variables to use as the x-
+and y-axes and for which aperture and CCD numbers to load. This
+routine is necessary because a single reduce log file contains a great
+deal of information and the user must select the relevant items for
+processing within PERIOD from the following list:
 
 x-axis options
 --------------
 
-1. MJD -  Modified Julian Date (UTC) at the centre of the exposure, 
-          i.e. MJD = JD-2400000.5. No correction for light travel, etc, 
-          is made on the basis that the key thing is to have a 
-          well-understood, correct time. 
+1. MJD  -  Modified Julian Date (UTC) at the centre of the exposure, 
+           i.e. MJD = JD-2400000.5. No correction for light travel, etc, 
+           is made on the basis that the key thing is to have a 
+           well-understood, correct time. 
 2. Run number  -  The frame number for data from the ULTRACAM .dat 
                   files.
  
@@ -27,46 +30,53 @@ y-axis options
 1.  Object counts (with errors)  -  Estimate of the target counts and
                                     the associated 1-sigma uncertainties.
 2.  Sky counts  -  Sky background in counts.
-3.  x-position of aperture actually used
-4.  y-position of aperture actually used
-5.  Number of sky pixels rejected
-6.  FWHM for profile fits
-7.  Beta exponent for Moffat fits
+3.  x-position of aperture used  -  x-position of aperture actually used,
+                                    in pixels
+4.  x-position of aperture used  -  y-position of aperture actually used,
+                                    in pixels
+5.  Number of sky pixels rejected  -  Number of sky pixels rejected
+6.  FWHM for profile fits  -  The fitted FWHM of the PSF; 0 if no fit is
+                              made.
+7.  Beta exponent for Moffat fits  -  The fitted Moffat exponent; 0 if no
+                                      Moffat fit is made.
 8.  Number of GPS satellites detected  -  The number of satellites 
                                           associated with the timestamp.
                                           (Not quite true in drift mode).
-9.  Measured x-position of aperture (with 1-sigma uncertainties) - 0 for
-                                     invalid and/or linked apertures.
-10. Measured y-position of aperture (with 1-sigma uncertainties) - 0 for
-                                     invalid and/or linked apertures.
-11. Number of sky pixels available
+9.  Exposure time  -  The exposure time in seconds.
+10. x-position of aperture measured  -  The measured x aperture position
+                                        and the associated 1σ
+                                        uncertainties, in pixels; 0 for
+                                        invalid and/or linked apertures.
+11. y-position of aperture measured  -  The measured y aperture position
+                                        and the associated 1σ
+                                        uncertainties, in pixels; 0 for
+                                        invalid and/or linked apertures.
+12. Number of sky pixels available  -  The number of sky pixels
+                                       available.
+13. Worst bad pixel value  -  The value of the worst bad pixel within
+                              the star aperture (0 is OK).
 
-Note that y-axis options 9-11 are only available if version 3.0.0 of
-the ULTRACAM pipeline data reduction system has been used to reduce the
-data. 
+Note that not all of the above options will be available - it depends
+on when the ULTRACAM data were obtained and what version of the
+pipeline is being used to reduce the data.
 
-It is possible to load just one slot containing the light curve
-(or the x-position of the aperture, etc) of just one star (i.e. one 
-aperture) in one particular filter (i.e. CCD). Alternatively, either 
-the light curves of all the stars on one particular CCD, or the light 
-curves of a single star on all three CCDs can be loaded. If no data is 
-present for a particular CCD (for example, if no light is detected in
-the blue channel), then it is only possible to load data for a single 
-CCD at a time. Similarly, if there are a different number of apertures
-of each of the three CCDs, then it is only possible to load data for
-a single CCD at a time.
-
-For information on the PERIOD slot system, type HELP INPUT. Note that 
-the input file MUST contain x-axis values which are in ascending order.
-Because this should always be true if inputting ULTRACAM data, the user
-is simply warned to check the input file and allowed to continue. (The
-user is not forced to resort the x-axis data, as occurs in INPUT).
+It is possible to load one or all of the apertures and one or all of
+the CCDs present in the reduce log file. Note that the input file MUST
+contain x-axis values which are in ascending order. Because this
+should always be true if inputting ULTRACAM data, if non-ascending
+data are input the user is simply warned to check the input file and
+allowed to continue. (The user is not forced to sort the x-axis data,
+as occurs when running INPUT). Care should therefore be taken with the
+unreliable times sometimes reported for the first frame in an ULTRACAM
+.dat file, or in the first few frames in the case of drift mode. If
+present, the offending lines should be removed from the reduce log
+file prior to inputting to PERIOD.
 
 PROMPT1: Enter desired axes [x,y] :
 TYPE   : INTEGER
-OPTIONS: Any pair of integers lying in the range [1-2,1-8]
+OPTIONS: Any pair of integers lying in the range [1-2,1-13]
 DEFAULT: None
-PURPOSE: Determines which ULTRACAM data to load into slots.
+PURPOSE: Determines which ULTRACAM data to load into slots
 
 PROMPT2: Enter CCD number to load (0 for all) :
 TYPE   : INTEGER
@@ -75,7 +85,7 @@ DEFAULT: None
 PURPOSE: Specifies which of the three ULTRACAM CCDs are loaded, 
          where 1=RED CHANNEL, 2=GREEN CHANNEL, 3=BLUE CHANNEL 
          and 0=RED+GREEN+BLUE. Note that this is not prompted for 
-         if y=8 for PROMPT1. 
+         all of the y-axis options 
 
 PROMPT3: Enter aperture number to load (0 for all) :
 TYPE   : INTEGER
@@ -84,7 +94,7 @@ DEFAULT: None
 PURPOSE: Specifies which ULTRACAM apertures to load. Each aperture
          contains the light curve of one star on the selected CCD.
          If 0 is entered, all apertures are loaded. Note that this 
-         is not prompted for if y=8 for PROMPT1. 
+         is not prompted for all of the y-axis options
 
 PROMPT4: Enter starting slot for input (0 to quit) :
 TYPE   : INTEGER
@@ -93,5 +103,5 @@ DEFAULT: None
 PURPOSE: Specifies the starting location of the input data. The total
          number of slots which are written is determined by the 
          responses given to PROMPT2 and PROMPT3 and is output
-         on the screen just prior to this prompt.
+         on the screen just prior to this prompt
 ------------------------------------------------------------------------

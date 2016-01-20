@@ -47,24 +47,26 @@ C-----------------------------------------------------------------------------
 	WRITE(*,*)'   INTEG    --  Integrate data.'
 	WRITE(*,*)'   JIGGLE   --  Jiggle data.'
 	WRITE(*,*)'   NOISE    --  Randomise data.'
+	IF (OVERPLOT) THEN
+	   WRITE(*,*)'   OFF      --  Add y-offset to plots = ',OFFSET
+	END IF
 	IF (.NOT. LOG) THEN
 	   WRITE(*,*)'   OPEN     --  Open log file.'
 	END IF
 	WRITE(*,*)'   OUTPUT   --  Output data.'
 	IF (OVERPLOT) THEN
-	   WRITE(*,*)'   OFF      --  Add y-offset to plots = ',OFFSET
 	   WRITE(*,*)'   OVERPLOT --  Overplotting ON.'
 	ELSE
 	   WRITE(*,*)'   OVERPLOT --  Overplotting OFF.'
 	END IF
 	WRITE(*,*)'   PERIOD   --  Find periodicities.'
 	WRITE(*,*)'   PLT      --  Call PLT.'
+	WRITE(*,*)'   POLY     --  Polynomial fit to data.'
 	IF (QDP) THEN
 	   WRITE(*,*)'   QDP      --  QDP functionality ON.'
 	ELSE
 	   WRITE(*,*)'   QDP      --  QDP functionality OFF.'
 	END IF
-	WRITE(*,*)'   POLY     --  Polynomial fit to data.'
 	WRITE(*,*)'   QUIT     --  Quit PERIOD.'
 	WRITE(*,*)'   SHOW     --  Slot information.'
 	WRITE(*,*)'   SINE     --  +, -, /, * sine curves.'
