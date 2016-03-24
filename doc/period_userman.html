@@ -9,7 +9,7 @@
 <h1>PERIOD: A time-series analysis package</h1>
 </p>
 
-<h2>Vik Dhillon, 19 January 2016</h2>
+<h2>Vik Dhillon, 24 March 2016</h2>
 
 <hr noshade>
 
@@ -199,7 +199,7 @@ sub-directories <em>bin</em> (containing the <em>period</em>
 executable and the startup script <em>period_start</em>), <em>doc</em>
 (containing this user guide), <em>hlp</em> (containing the program's
 help files) and <em>src</em> (containing the makefile and f77 source
-files).
+files). You'll need to rename the 
 <li>Edit the following lines in the <em>period/bin/period_start</em>
 script: <em>set PERIOD_DIR=/Users/vsd/period</em> and <em>setenv
 XANTOP /Users/vsd/period/qdp</em>. Replace the paths with the full
@@ -223,6 +223,8 @@ SOFA = -L/Users/vsd/period/sofa/20150209_a/f77/src -lsofa
 the <em>period/src</em> directory. A <em>period_vxx.x</em>
 executable should now appear in the <em>period/bin</em> directory,
 where <em>xx.x</em> is the version number. PERIOD is now installed.
+(If this fails, try renaming the <em>period/period/</em> directory to
+<em>period/period_vxx.x/</em>, where <em>xx.x</em> is the version number.)
 </ol>
 
 <!------------------------------------------------------------------------->
