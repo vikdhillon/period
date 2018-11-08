@@ -915,7 +915,39 @@ C-----------------------------------------------------------------------------
 550	WRITE(*,*)ACHAR(7)
 	WRITE(*,*)'** ERROR: Could not open file ',FILENAME(1:ILEN2)
 	GOTO 999
-	
+
+	ELSE IF( PERIOD_PARSE( COMMAND, 'HELP HINPUT') ) THEN
+	WRITE(FILENAME,'(A)')HELP_DIR
+	WRITE(FILENAME(ILEN:),'(A)')'/period_hinput.hlp'
+	DO ILEN2 = 1, 100
+	IF (FILENAME(ILEN2:ILEN2) .EQ. ' ') THEN	      
+	OPEN (UNIT=10, FILE=FILENAME(1:ILEN2), STATUS='OLD', ERR=560)
+	END IF
+	END DO
+	DO I = 1, 1000000000
+	READ(10,'(A)',END=999)STRING
+	WRITE(*,*)STRING
+	END DO
+560	WRITE(*,*)ACHAR(7)
+	WRITE(*,*)'** ERROR: Could not open file ',FILENAME(1:ILEN2)
+	GOTO 999
+
+	ELSE IF( PERIOD_PARSE( COMMAND, 'HELP HSLOTS') ) THEN
+	WRITE(FILENAME,'(A)')HELP_DIR
+	WRITE(FILENAME(ILEN:),'(A)')'/period_hslots.hlp'
+	DO ILEN2 = 1, 100
+	IF (FILENAME(ILEN2:ILEN2) .EQ. ' ') THEN	      
+	OPEN (UNIT=10, FILE=FILENAME(1:ILEN2), STATUS='OLD', ERR=570)
+	END IF
+	END DO
+	DO I = 1, 1000000000
+	READ(10,'(A)',END=999)STRING
+	WRITE(*,*)STRING
+	END DO
+570	WRITE(*,*)ACHAR(7)
+	WRITE(*,*)'** ERROR: Could not open file ',FILENAME(1:ILEN2)
+	GOTO 999
+		
 	ELSE 
 	WRITE(*,*)ACHAR(7)
 	WRITE(*,*)'** ERROR: HELP command not recognised = ',COMMAND

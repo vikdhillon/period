@@ -137,6 +137,7 @@ C-----------------------------------------------------------------------------
        WRITE(*,*)'   CHISQ     --  Chi-squared of sine fit vs freq.'
        WRITE(*,*)'   CLEAN     --  CLEANed power spectrum.'
        WRITE(*,*)'   FT        --  Discrete Fourier power spectrum.'
+       WRITE(*,*)'   INTERM    --  Period of intermittent signal.'
        WRITE(*,*)'   PDM       --  Phase dispersion minimization.'
        WRITE(*,*)'   SCARGLE   --  Lomb-Scargle normalized periodogram.'
        WRITE(*,*)'   SLIDE     --  Sliding Scargle periodogram.'

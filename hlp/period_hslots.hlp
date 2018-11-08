@@ -1,0 +1,93 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2017-NOV-02)
+------------------------------------------------------------------------
+
+                        Command: HSLOTS
+
+BRIEF DESCRIPTION: Loads slots with data input from the reduce log
+files output by the HiPERCAM pipeline data reduction software. The
+HiPERCAM data must have previously been successfully loaded using the
+HINPUT command. Prompts the user for which variables to use as the x-
+and y-axes and for which aperture and CCD numbers to load. This
+routine is necessary because a single reduce log file contains a great
+deal of information and the user must select the relevant items for
+processing within PERIOD from the following list:
+
+x-axis options
+--------------
+
+1. MJD  -  Modified Julian Date (UTC) at the centre of the exposure, 
+           i.e. MJD = JD-2400000.5. No correction for light travel, etc, 
+           is made on the basis that the key thing is to have a 
+           well-understood, correct time. 
+2. Run number  -  The frame number for data from the HiPERCAM .fits
+                  cube.
+ 
+y-axis options
+--------------
+
+1. Object counts (with errors) - Estimate of the target counts and
+                                 the associated 1-sigma uncertainties.
+2. Sky counts (with errors) - Sky background in counts
+3. x-position of aperture (with errors) - x-posn of aperture in pixels
+4. y-position of aperture (with errors) - y-posn of aperture in pixels
+5. Number of sky pixels rejected - Number of sky pixels rejected
+6. FWHM for profile fits (with errors) - The fitted FWHM of the PSF;
+                                         0 if no fit is made.
+7. Beta exponent for Moffat fits (with errors) - The fitted Moffat 
+                                                 exponent; 0 if no fit
+                                                 is made.
+8. Number of sky pixels available - The number of sky pixels
+                                    available.
+9. Exposure time - The exposure time in seconds.
+10. Mean FWHM for profile fits - the mean FWHM used to determine the
+                                 aperture scale (-1 if none)
+11. Mean Beta exponent for Moffat fits - the mean Moffat beta
+                                         exponent (-1 if none) 
+
+Note that not all of the above options will be available - it depends
+on when the HiPERCAM data were obtained and what version of the
+pipeline is being used to reduce the data.
+
+It is possible to load one or all of the apertures and one or all of
+the CCDs present in the reduce log file. Note that the input file MUST
+contain x-axis values which are in ascending order. Because this
+should always be true if inputting HiPERCAM data, if non-ascending
+data are input the user is simply warned to check the input file and
+allowed to continue. (The user is not forced to sort the x-axis data,
+as occurs when running INPUT). Care should therefore be taken with any
+unreliable times that may be reported.
+
+PROMPT1: Enter desired axes [x,y] :
+TYPE   : INTEGER
+OPTIONS: Any pair of integers lying in the range [1-2,1-11]
+DEFAULT: None
+PURPOSE: Determines which HiPERCAM data to load into slots
+
+PROMPT2: Enter CCD number to load (0 for all) :
+TYPE   : INTEGER
+OPTIONS: Any integer lying in the range 0-5
+DEFAULT: None
+PURPOSE: Specifies which of the five HiPERCAM CCDs are loaded, 
+         where 1=u_s, 2=g_s, 3=r_s, 4=i_s and 5=z_s. Note that this
+         is not prompted for all of the y-axis options 
+
+PROMPT3: Enter aperture number to load (0 for all) :
+TYPE   : INTEGER
+OPTIONS: Any integer lying in the range 0-MAXAPER
+DEFAULT: None
+PURPOSE: Specifies which HiPERCAM apertures to load. Each aperture
+         contains the light curve of one star on the selected CCD.
+         If 0 is entered, all apertures are loaded. Note that this 
+         is not prompted for all of the y-axis options
+
+PROMPT4: Enter starting slot for input (0 to quit) :
+TYPE   : INTEGER
+OPTIONS: Any integer between 1 and MXSLOT
+DEFAULT: None
+PURPOSE: Specifies the starting location of the input data. The total
+         number of slots which are written is determined by the 
+         responses given to PROMPT2 and PROMPT3 and is output
+         on the screen just prior to this prompt
+------------------------------------------------------------------------

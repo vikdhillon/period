@@ -15,7 +15,7 @@ setenv  EXT lnx
 setenv  XANTOP /Users/vsd/period/qdp
 source  $XANTOP/tools/qinitu.csh
 source  $XANTOP/tools/qinitp.csh
-
+	  
 # Settings for pulsar
 #set PERIOD_DIR=/local/vsd/backed_up_on_astro3/period
 # Initialize QDP/PLT

@@ -22,6 +22,8 @@ C
 C At long last, I've modified PERIOD_PLT to overplot data with differing 
 C numbers of x-axis points (such as when NBLUE>1). 
 C Vik Dhillon @ING 18-October-2007. 
+C Now determines BASE from first slot to be plotted and applies the same
+C base to all subsequent plotted slots, if overplotted, VSD @Oxford 21-Oct-16.
 C=============================================================================
 
 	IMPLICIT NONE
@@ -138,15 +140,26 @@ c	   END IF
 	IF (QDP) THEN
 	   NCMD = 5
 	END IF
-
 	IF (OVERPLOT) THEN
-	   CMD(6) = 'CO 2 ON 1'
-	   CMD(7) = 'CO 3 ON 2'
-	   CMD(8) = 'CO 4 ON 3'
-	   CMD(9) = 'SKIP SINGLE'
-	   IF (QDP) THEN
-	      NCMD = 9
-	   END IF
+	   IF (LASTSLOT-FIRSTSLOT .GE. 3) THEN
+	      CMD(6) = 'CO 12 ON 1'
+	      CMD(7) = 'CO 4 ON 2'
+	      CMD(8) = 'CO 3 ON 3'
+	      CMD(9) = 'CO 8 ON 4'
+	      CMD(10) = 'CO 2 ON 5'
+	      CMD(11) = 'SKIP SINGLE'
+	      IF (QDP) THEN
+		 NCMD = 11
+	      END IF
+	   ELSE
+	      CMD(6) = 'CO 2 ON 1'
+	      CMD(7) = 'CO 3 ON 2'
+	      CMD(8) = 'CO 4 ON 3'
+	      CMD(9) = 'SKIP SINGLE'
+	      IF (QDP) THEN
+		 NCMD = 9
+	      END IF
+	   END IF	   
 	ELSE
 	   NPTS = NPTSARRAY(J)
 	END IF
@@ -168,8 +181,8 @@ C-----------------------------------------------------------------------------
 	   END IF
 	   DO K = 1, NPTSARRAY(J)
 	      IF (BASE) THEN
-		 DBASE = AINT(Y(1,1,J))
-		 PDATA(K,1) = REAL(Y(K,1,J) - DBASE)
+		    DBASE = AINT(Y(1,1,J))
+		    PDATA(K,1) = REAL(Y(K,1,J) - DBASE)
 	      ELSE
 		 PDATA(K,1) = REAL(Y(K,1,J))
 	      END IF
@@ -194,7 +207,9 @@ C-----------------------------------------------------------------------------
 	      DO K = 1, NPTSARRAY(J)
 		 COUNTER = COUNTER + 1
 		 IF (BASE) THEN
-		    DBASE = AINT(Y(1,1,J)) 
+		    IF (J .EQ. FIRSTSLOT) THEN
+		       DBASE = AINT(Y(1,1,J))
+		    END IF
 		    PDATA(COUNTER,1) = REAL(Y(K,1,J) - DBASE)
 		 ELSE
 		    PDATA(COUNTER,1) = REAL(Y(K,1,J))

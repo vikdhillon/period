@@ -1,0 +1,47 @@
+
+------------------------------------------------------------------------
+                        PERIOD ON-LINE HELP            (VSD 2017-NOV-02)
+------------------------------------------------------------------------
+
+                        Command: HINPUT
+
+BRIEF DESCRIPTION: Loads data from the log files output by the reduce
+program of the HiPERCAM pipeline data reduction software. This routine
+automatically skips the headers and determines the number of frames
+and the number of apertures (i.e. stars) on each of the CCDs. As a
+check, it outputs the first and last MJD values read from the file and
+also offers the user the option of viewing both the non-fatal and
+fatal reduce errors (indicated by the ** WARNING: and ** ERROR:
+strings, respectively). The error codes have the following meanings:
+
+Error code = 0: All OK
+Error code = 1 etc: TBC
+
+Note that the maximum number of frames in the log file is set by MXROW
+and the maximum number of apertures on each CCD is MAXAPER (see the
+web-based user guide for how to increase these). Note also that it is
+possible to load multiple log files using this option, concatenating
+the light curve into a single slot.
+
+PROMPT1: Enter name of data file (<CR> to quit)
+TYPE   : CHARACTER*72
+OPTIONS: Any valid unix filename
+DEFAULT: Quit HINPUT and return to PERIOD menu
+PURPOSE: Specifies name of HiPERCAM reduce log file on disk. Prompted
+         for repeatedly (so that multiple log files can be appended)
+         until <CR> is given to quit
+
+PROMPT2: Do you want to see a listing of the fatal errors? [N]
+TYPE   : CHARACTER*1
+OPTIONS: y or y
+DEFAULT: n
+PURPOSE: Gives the user the option of seeing the fatal errors 
+         in the reduce log file
+
+PROMPT3: Do you want to see a listing of the non-fatal errors? [N]
+TYPE   : CHARACTER*1
+OPTIONS: y or n
+DEFAULT: n
+PURPOSE: Gives the user the option of seeing the non-fatal errors 
+         in the reduce log file. 
+------------------------------------------------------------------------

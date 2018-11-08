@@ -32,7 +32,7 @@ y-axis options
 2.  Sky counts  -  Sky background in counts.
 3.  x-position of aperture used  -  x-position of aperture actually used,
                                     in pixels
-4.  x-position of aperture used  -  y-position of aperture actually used,
+4.  y-position of aperture used  -  y-position of aperture actually used,
                                     in pixels
 5.  Number of sky pixels rejected  -  Number of sky pixels rejected
 6.  FWHM for profile fits  -  The fitted FWHM of the PSF; 0 if no fit is

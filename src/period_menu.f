@@ -42,7 +42,9 @@ C-----------------------------------------------------------------------------
 	WRITE(*,*)'   FIT      --  Fit sine curve to folded data.'
 	WRITE(*,*)'   FOLD     --  Fold data on given period.'
 	WRITE(*,*)'   HELP     --  On-line help.'
+	WRITE(*,*)'   HINPUT   --  Input HiPERCAM data.'
 	WRITE(*,*)'   HIST     --  Histogram or CDF of data.'
+	WRITE(*,*)'   HSLOTS   --  Loads slots with HiPERCAM data.'
 	WRITE(*,*)'   INPUT    --  Input ASCII data.'
 	WRITE(*,*)'   INTEG    --  Integrate data.'
 	WRITE(*,*)'   JIGGLE   --  Jiggle data.'
@@ -68,6 +70,7 @@ C-----------------------------------------------------------------------------
 	   WRITE(*,*)'   QDP      --  QDP functionality OFF.'
 	END IF
 	WRITE(*,*)'   QUIT     --  Quit PERIOD.'
+	WRITE(*,*)'   RESAMPLE --  Resample data.'
 	WRITE(*,*)'   SHOW     --  Slot information.'
 	WRITE(*,*)'   SINE     --  +, -, /, * sine curves.'
 	WRITE(*,*)'   SMOOTH   --  Smooth data.'

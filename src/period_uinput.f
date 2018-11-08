@@ -572,8 +572,10 @@ C-----------------------------------------------------------------------------
 	   IF (LNONFATAL) THEN
 	      IF (FLAG(I) .EQ. 0) WRITE(*,*)
      + '** WARNING: MJD unreliable at run = ',RUN(I)
-	      IF (NSAT(I) .LT. 4) WRITE(*,*)	      
+	      IF (LNSAT) THEN
+		 IF (NSAT(I) .LT. 4) WRITE(*,*)	      
      + '** WARNING: NSAT < 4 at run = ',RUN(I)
+	      END IF
 	      DO J = 1, NUM_APER(1)
 		 IF (ERROR_FLAG(1,I,J) .GT. 0 .AND. 
      +               ERROR_FLAG(1,I,J) .LT. 9) THEN

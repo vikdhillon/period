@@ -39,12 +39,13 @@ C-----------------------------------------------------------------------------
 C Determine whether constant-slot or slot-slot operations are to be performed.
 C-----------------------------------------------------------------------------
 
-        WRITE(*,'(A,$)')
+ 5      WRITE(*,'(A,$)')
      + 'Constant-slot [c] or slot-slot'//
      + ' [s] operations? [s] : '
         READ(*,'(A)')REPLY
         IF (REPLY .EQ. ' ') REPLY = 's'
         CALL PERIOD_CASE (REPLY, .TRUE.)
+        IF (REPLY .NE. 'S' .AND. REPLY .NE. 'C') GOTO 5
         IF (REPLY .EQ. 'S') THEN 
            LCONSTANT = .FALSE.
         ELSE 

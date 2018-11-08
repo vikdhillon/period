@@ -24,7 +24,7 @@ PERIOD_DIR = /Users/vsd/period
 PGPLOT = -L/usr/local/lib -lpgplot -L/usr/local/Cellar/libpng -lpng -L/opt/X11/lib -lX11
 SLALIB = -L/Users/vsd/period/qdp/lnx/lib -lsla
 QDP = -L/Users/vsd/period/qdp/lnx/lib -lxanlib
-SOFA = -L/Users/vsd/period/sofa/20150209_a/f77/src -lsofa
+SOFA = -L/Users/vsd/period/sofa/20170420/f77/src -lsofa
 
 # Settings for pulsar
 #COMPILER = gfortran
@@ -67,7 +67,9 @@ OBJ =   period_airmass.o \
 	period_ft.o \
 	period_gasdev.o \
 	period_help.o \
+	period_hinput.o \
 	period_hist.o \
+	period_hslots.o \
 	period_input.o \
 	period_integ.o \
 	period_intro.o \
@@ -92,6 +94,7 @@ OBJ =   period_airmass.o \
 	period_ran1.o \
 	period_readfree.o \
 	period_realft.o \
+	period_resamp.o \
 	period_scargle.o \
 	period_select.o \
 	period_shellsort.o \

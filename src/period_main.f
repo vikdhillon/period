@@ -48,31 +48,35 @@ C-----------------------------------------------------------------------------
 	DATA OVERPLOT, QDP, BASE /.FALSE., .TRUE., .FALSE./
 
 C-----------------------------------------------------------------------------
-C Declarations for PERIOD_UINPUT and PERIOD_USLOTS.
+C Declarations for PERIOD_U/HINPUT and PERIOD_U/HSLOTS
 C Adjust MAXAPER to change the maximum number of apertures in the reduce log 
 C file.
 C Adjust MAXHEADER to change the maximum number of header lines in the reduce
 C log file.
 C-----------------------------------------------------------------------------
 
-	INTEGER NUM_APER(3), NDATA, MAXAPER, MAXCHARS
+	INTEGER NUM_APER(5), NDATA, NHDATA(5), MAXAPER, MAXCHARS
 	INTEGER MAXLINES, IFAIL, MAXHEADER, IVERSION
 	PARAMETER (MAXAPER=10, MAXCHARS=MAXAPER*103+70)
-	PARAMETER (MAXHEADER=200, MAXLINES=MXROW*3+MAXHEADER)
+	PARAMETER (MAXHEADER=433, MAXLINES=MXROW*5+MAXHEADER)
 	INTEGER RUN(MXROW), NSAT(MXROW)
-        INTEGER NREJ(3,MXROW,MAXAPER)
-        DOUBLE PRECISION MJD(3,MXROW)
-        DOUBLE PRECISION COUNTS(3,MXROW,MAXAPER), SIGMA(3,MXROW,MAXAPER)
-	REAL FWHM(3,MXROW), BETA(3,MXROW)
-        REAL EXPOSE(3,MXROW), WORST(3,MXROW,MAXAPER) 
+        INTEGER NREJ(5,MXROW,MAXAPER)
+        DOUBLE PRECISION MJD(5,MXROW)
+        DOUBLE PRECISION COUNTS(5,MXROW,MAXAPER), SIGMA(5,MXROW,MAXAPER)
+	REAL FWHM(5,MXROW), BETA(5,MXROW)
+        REAL EXPOSE(5,MXROW), WORST(3,MXROW,MAXAPER) 
         REAL XPOS(3,MXROW,MAXAPER), YPOS(3,MXROW,MAXAPER)
-	REAL XMPOS(3,MXROW,MAXAPER), YMPOS(3,MXROW,MAXAPER)
-	REAL EXMPOS(3,MXROW,MAXAPER), EYMPOS(3,MXROW,MAXAPER)
-        REAL SKY(3,MXROW,MAXAPER), NSKY(3,MXROW,MAXAPER)
+	REAL XMPOS(5,MXROW,MAXAPER), YMPOS(5,MXROW,MAXAPER)
+	REAL EXMPOS(5,MXROW,MAXAPER), EYMPOS(5,MXROW,MAXAPER)
+        REAL SKY(5,MXROW,MAXAPER), NSKY(5,MXROW,MAXAPER)
+        REAL HBETA(5,MXROW,MAXAPER), HFWHM(5,MXROW,MAXAPER)
+        REAL EBETA(5,MXROW,MAXAPER), EFWHM(5,MXROW,MAXAPER)
+        REAL ESKY(5,MXROW,MAXAPER)
+	REAL MFWHM(5,MXROW), MBETA(5,MXROW)
         CHARACTER*(MAXCHARS) STRING(MAXLINES)
-	CHARACTER*72 UINFILE
-	LOGICAL LUINPUT
-	DATA LUINPUT /.FALSE./
+	CHARACTER*72 UINFILE, HINFILE
+	LOGICAL LUINPUT, LHINPUT
+	DATA LUINPUT, LHINPUT /.FALSE., .FALSE./
 
 C-----------------------------------------------------------------------------
 C Declarations for PERIOD_PERIOD.
@@ -144,6 +148,9 @@ C-----------------------------------------------------------------------------
 	IF( PERIOD_PARSE( COMMAND, 'AIRMASS')  )GOTO 3400
 	IF( PERIOD_PARSE( COMMAND, 'INTEG')    )GOTO 3500
 	IF( PERIOD_PARSE( COMMAND, 'UCAL')     )GOTO 3600
+	IF( PERIOD_PARSE( COMMAND, 'HINPUT')   )GOTO 3700
+	IF( PERIOD_PARSE( COMMAND, 'HSLOTS')   )GOTO 3800
+	IF( PERIOD_PARSE( COMMAND, 'RESAMPLE') )GOTO 3900
 	IF( PERIOD_PARSE( COMMAND, 'QUIT')     )GOTO 11111
 	IF( PERIOD_PARSE( COMMAND, 'EXIT')     )GOTO 11111
 	IF( PERIOD_PARSE( COMMAND, '?')        )GOTO 50
@@ -551,6 +558,53 @@ C-----------------------------------------------------------------------------
      +			  INFILEARRAY, DETRENDARRAY)
 	GOTO 10
 
+C-----------------------------------------------------------------------------
+C Input HiPERCAM data.
+C-----------------------------------------------------------------------------
+
+
+3700	CALL PERIOD_HINPUT (NHDATA, MAXAPER, RUN, MJD, 
+     +                      EXPOSE, MFWHM, MBETA, XMPOS, EXMPOS, 
+     +                      YMPOS, EYMPOS, HFWHM, EFWHM, HBETA,
+     +                      EBETA, COUNTS, SIGMA, SKY, ESKY,
+     +                      NSKY, NREJ, NUM_APER, HINFILE, 
+     +                      MXROW, MAXCHARS, STRING, IFAIL, 
+     +                      MAXHEADER, IVERSION)
+	IF (IFAIL .EQ. 0) THEN
+	   LHINPUT = .TRUE.
+	ELSE
+	   LHINPUT = .FALSE.
+	END IF
+        GOTO 10                
+
+C-----------------------------------------------------------------------------
+C Load slots with HiPERCAM data.
+C-----------------------------------------------------------------------------
+
+3800	IF (LHINPUT) THEN
+	CALL PERIOD_HSLOTS (NHDATA, MAXAPER, RUN, MJD, 
+     +                      EXPOSE, MFWHM, MBETA, XMPOS, EXMPOS, 
+     +                      YMPOS, EYMPOS, HFWHM, EFWHM, HBETA,
+     +                      EBETA, COUNTS, SIGMA, SKY, ESKY,
+     +                      NSKY, NREJ, NUM_APER, HINFILE, 
+     +                      Y, MXROW, MXSLOT,
+     +                      NPTSARRAY, YERRORARRAY, 
+     +                      INFILEARRAY, DETRENDARRAY)
+	ELSE
+	   WRITE(*,*)ACHAR(7)
+	   WRITE(*,*)'** ERROR: No HiPERCAM data has been input.'
+	END IF
+	GOTO 10
+
+C-----------------------------------------------------------------------------
+C Resample data
+C-----------------------------------------------------------------------------
+
+3900	CALL PERIOD_RESAMP (Y, MXROW, MXSLOT,
+     +	 		    NPTSARRAY, YERRORARRAY, 
+     +			    INFILEARRAY, DETRENDARRAY)
+	GOTO 10
+	
 C-----------------------------------------------------------------------------
 C Exit period.
 C-----------------------------------------------------------------------------
