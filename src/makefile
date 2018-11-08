@@ -28,11 +28,12 @@ SOFA = -L/Users/vsd/period/sofa/20170420/f77/src -lsofa
 
 # Settings for pulsar
 #COMPILER = gfortran
-#OPTIONS = -Wall -Wno-character-truncation -Wtabs 
+#OPTIONS = -Wall -Wno-character-truncation -Wno-tabs 
 #PERIOD_DIR = /local/vsd/backed_up_on_astro3/period
-#PGPLOT = -L/usr/local/pgplot-5.2.2 -lpgplot -L/usr/lib -lX11
+#PGPLOT = -L/usr/local/pgplot-5.2.2 -lpgplot -L/usr/lib -lX11 -lpng
 #SLALIB = -L/local/vsd/backed_up_on_astro3/period/qdp/lnx/lib -lsla
 #QDP = -L/local/vsd/backed_up_on_astro3/period/qdp/lnx/lib -lxanlib
+#SOFA = -L/local/vsd/backed_up_on_astro3/period/sofa/20180130/f77/src -lsofa
 
 # Settings for ULTRACAM data reduction PC
 #COMPILER = gfortran
